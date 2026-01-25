@@ -87,6 +87,12 @@ function Navbar() {
                 Features
               </a>
               <a
+                href="/pricing"
+                className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              >
+                Pricing
+              </a>
+              <a
                 href="#faqs"
                 className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
               >
