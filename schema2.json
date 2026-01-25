@@ -1,0 +1,2038 @@
+{
+ 
+  "items": {
+    "type": "object",
+    "properties": {
+      "script_suggestion": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rank": {
+              "type": "number"
+            },
+            "topic_title": {
+              "type": "string"
+            },
+            "script_title": {
+              "type": "string"
+            },
+            "viral_potential_score": {
+              "type": "number"
+            },
+            "estimated_duration": {
+              "type": "string"
+            },
+            "full_script": {
+              "type": "string"
+            },
+            "script_breakdown": {
+              "type": "object",
+              "properties": {
+                "hook": {
+                  "type": "string"
+                },
+                "buildup": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "cta": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "hook",
+                "buildup",
+                "value",
+                "cta"
+              ]
+            },
+            "caption": {
+              "type": "object",
+              "properties": {
+                "full_caption": {
+                  "type": "string"
+                },
+                "first_line_hook": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "full_caption",
+                "first_line_hook"
+              ]
+            },
+            "visual_storyboard": {
+              "type": "object",
+              "properties": {
+                "opening_frame": {
+                  "type": "string"
+                },
+                "main_visual_style": {
+                  "type": "string"
+                },
+                "b_roll_suggestions": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "opening_frame",
+                "main_visual_style",
+                "b_roll_suggestions"
+              ]
+            },
+            "hashtags": {
+              "type": "object",
+              "properties": {
+                "primary": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "trending": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "primary",
+                "trending"
+              ]
+            },
+            "audio_vibe": {
+              "type": "string"
+            },
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "target_audience": {
+                  "type": "string"
+                },
+                "emotional_trigger": {
+                  "type": "string"
+                },
+                "content_gap_addressed": {
+                  "type": "string"
+                },
+                "why_this_works": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "target_audience",
+                "emotional_trigger",
+                "content_gap_addressed",
+                "why_this_works"
+              ]
+            }
+          },
+          "required": [
+            "rank",
+            "topic_title",
+            "script_title",
+            "viral_potential_score",
+            "estimated_duration",
+            "full_script",
+            "script_breakdown",
+            "caption",
+            "visual_storyboard",
+            "hashtags",
+            "audio_vibe",
+            "metadata"
+          ]
+        }
+      },
+      "overall_strategy": {
+        "type": "object",
+        "properties": {
+          "instagram_niche_insights": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "insight": {
+                  "type": "string"
+                },
+                "evidence": {
+                  "type": "string"
+                },
+                "action": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "insight",
+                "evidence",
+                "action"
+              ]
+            }
+          },
+          "twitter_trend_analysis": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "trend_topic": {
+                  "type": "string"
+                },
+                "sentiment": {
+                  "type": "string"
+                },
+                "twitter_evidence": {
+                  "type": "string"
+                },
+                "adaptation_angle": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "trend_topic",
+                "sentiment",
+                "twitter_evidence",
+                "adaptation_angle"
+              ]
+            }
+          },
+          "competitor_reverse_engineering": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "competitor_name": {
+                  "type": "string"
+                },
+                "tactic_observed": {
+                  "type": "string"
+                },
+                "why_it_worked": {
+                  "type": "string"
+                },
+                "differentiation_plan": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "competitor_name",
+                "tactic_observed",
+                "why_it_worked",
+                "differentiation_plan"
+              ]
+            }
+          },
+          "viral_triggers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "trigger": {
+                  "type": "string"
+                },
+                "why_works": {
+                  "type": "string"
+                },
+                "example": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "trigger",
+                "why_works",
+                "example"
+              ]
+            }
+          },
+          "content_gap": {
+            "type": "object",
+            "properties": {
+              "gap": {
+                "type": "string"
+              },
+              "opportunity": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "gap",
+              "opportunity",
+              "evidence"
+            ]
+          },
+          "posting_strategy": {
+            "type": "object",
+            "properties": {
+              "best_times": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "best_days": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "frequency": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "best_times",
+              "best_days",
+              "frequency",
+              "evidence"
+            ]
+          },
+          "viral_hook_formula": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string"
+              },
+              "examples": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "why_works": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "examples",
+              "why_works"
+            ]
+          }
+        },
+        "required": [
+          "instagram_niche_insights",
+          "twitter_trend_analysis",
+          "competitor_reverse_engineering",
+          "viral_triggers",
+          "content_gap",
+          "posting_strategy",
+          "viral_hook_formula"
+        ]
+      },
+      "user_research_json": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "fullName": {
+                "type": "string"
+              },
+              "totalReels": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "username",
+              "fullName",
+              "totalReels"
+            ]
+          },
+          "aggregates": {
+            "type": "object",
+            "properties": {
+              "totalViews": {
+                "type": "number"
+              },
+              "totalLikes": {
+                "type": "number"
+              },
+              "totalComments": {
+                "type": "number"
+              },
+              "totalShares": {
+                "type": "number"
+              },
+              "totalSaves": {
+                "type": "number"
+              },
+              "avgViews": {
+                "type": "number"
+              },
+              "avgLikes": {
+                "type": "number"
+              },
+              "avgComments": {
+                "type": "number"
+              },
+              "avgDuration": {
+                "type": "number"
+              },
+              "avgEngagement": {
+                "type": "number"
+              },
+              "avgWPM": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "totalViews",
+              "totalLikes",
+              "totalComments",
+              "totalShares",
+              "totalSaves",
+              "avgViews",
+              "avgLikes",
+              "avgComments",
+              "avgDuration",
+              "avgEngagement",
+              "avgWPM"
+            ]
+          },
+          "reels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "thumbnail": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": "string"
+                },
+                "spokenHook": {
+                  "type": "string"
+                },
+                "transcript": {
+                  "type": "string"
+                },
+                "hasTranscript": {
+                  "type": "boolean"
+                },
+                "hashtags": {
+                  "type": "array",
+                  "items": {}
+                },
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "views": {
+                  "type": "number"
+                },
+                "likes": {
+                  "type": "number"
+                },
+                "commentsCount": {
+                  "type": "number"
+                },
+                "saves": {
+                  "type": "number"
+                },
+                "shares": {
+                  "type": "number"
+                },
+                "duration": {
+                  "type": "number"
+                },
+                "engagementRate": {
+                  "type": "number"
+                },
+                "commentRatio": {
+                  "type": "number"
+                },
+                "isQualityEngagement": {
+                  "type": "boolean"
+                },
+                "wordsPerMinute": {
+                  "type": "number"
+                },
+                "detectedLanguage": {
+                  "type": "string"
+                },
+                "finalScore": {
+                  "type": "number"
+                },
+                "rank": {
+                  "type": "number"
+                },
+                "views_over_expected": {
+                  "type": "number"
+                },
+                "is_punching_above_weight": {
+                  "type": "boolean"
+                },
+                "age_label": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string"
+                },
+                "ageInDays": {
+                  "type": "number"
+                },
+                "postDay": {
+                  "type": "string"
+                },
+                "audio": {
+                  "type": "object",
+                  "properties": {
+                    "songName": {
+                      "type": "string"
+                    },
+                    "artistName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "songName",
+                    "artistName"
+                  ]
+                },
+                "performanceTier": {
+                  "type": "string"
+                },
+                "performanceMultiplier": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "thumbnail",
+                "caption",
+                "spokenHook",
+                "transcript",
+                "hasTranscript",
+                "hashtags",
+                "comments",
+                "views",
+                "likes",
+                "commentsCount",
+                "saves",
+                "shares",
+                "duration",
+                "engagementRate",
+                "commentRatio",
+                "isQualityEngagement",
+                "wordsPerMinute",
+                "detectedLanguage",
+                "finalScore",
+                "rank",
+                "views_over_expected",
+                "is_punching_above_weight",
+                "age_label",
+                "timestamp",
+                "ageInDays",
+                "postDay",
+                "audio",
+                "performanceTier",
+                "performanceMultiplier"
+              ]
+            }
+          },
+          "top_keywords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyword": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "keyword",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "best_posting_times": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string"
+                },
+                "posts": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                },
+                "avgEngagement": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "time",
+                "posts",
+                "avgViews",
+                "avgEngagement"
+              ]
+            }
+          },
+          "best_posting_days": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string"
+                },
+                "posts": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                },
+                "avgEngagement": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "day",
+                "posts",
+                "avgViews",
+                "avgEngagement"
+              ]
+            }
+          },
+          "duration_performance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "duration": {
+                  "type": "string"
+                },
+                "posts": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                },
+                "avgEngagement": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "duration",
+                "posts",
+                "avgViews",
+                "avgEngagement"
+              ]
+            }
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "profile",
+          "aggregates",
+          "reels",
+          "top_keywords",
+          "best_posting_times",
+          "best_posting_days",
+          "duration_performance",
+          "insights"
+        ]
+      },
+      "competitor_research_json": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "reelsAnalyzed": {
+                "type": "number"
+              },
+              "competitorsTracked": {
+                "type": "number"
+              },
+              "totalViews": {
+                "type": "number"
+              },
+              "totalLikes": {
+                "type": "number"
+              },
+              "totalComments": {
+                "type": "number"
+              },
+              "avgViews": {
+                "type": "number"
+              },
+              "avgLikes": {
+                "type": "number"
+              },
+              "avgComments": {
+                "type": "number"
+              },
+              "avgDuration": {
+                "type": "number"
+              },
+              "avgEngagement": {
+                "type": "number"
+              },
+              "transcriptCoverage": {
+                "type": "number"
+              },
+              "avgWPM": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "reelsAnalyzed",
+              "competitorsTracked",
+              "totalViews",
+              "totalLikes",
+              "totalComments",
+              "avgViews",
+              "avgLikes",
+              "avgComments",
+              "avgDuration",
+              "avgEngagement",
+              "transcriptCoverage",
+              "avgWPM"
+            ]
+          },
+          "reels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "thumbnail": {
+                  "type": "string"
+                },
+                "creator": {
+                  "type": "string"
+                },
+                "creatorName": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": "string"
+                },
+                "spokenHook": {
+                  "type": "string"
+                },
+                "hookSource": {
+                  "type": "string"
+                },
+                "hasTranscript": {
+                  "type": "boolean"
+                },
+                "transcript": {
+                  "type": "string"
+                },
+                "hashtags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "views": {
+                  "type": "number"
+                },
+                "likes": {
+                  "type": "number"
+                },
+                "commentsCount": {
+                  "type": "number"
+                },
+                "saves": {
+                  "type": "number"
+                },
+                "shares": {
+                  "type": "number"
+                },
+                "duration": {
+                  "type": "number"
+                },
+                "engagementRate": {
+                  "type": "number"
+                },
+                "isQualityEngagement": {
+                  "type": "boolean"
+                },
+                "wordsPerMinute": {
+                  "type": "number"
+                },
+                "finalScore": {
+                  "type": "number"
+                },
+                "rank": {
+                  "type": "number"
+                },
+                "views_over_expected": {
+                  "type": "number"
+                },
+                "is_punching_above_weight": {
+                  "type": "boolean"
+                },
+                "age_label": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string"
+                },
+                "ageInDays": {
+                  "type": "number"
+                },
+                "postHour": {
+                  "type": "number"
+                },
+                "postDay": {
+                  "type": "string"
+                },
+                "audio": {
+                  "type": "object",
+                  "properties": {
+                    "songName": {
+                      "type": "string"
+                    },
+                    "artistName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "songName",
+                    "artistName"
+                  ]
+                },
+                "performanceTier": {
+                  "type": "string"
+                },
+                "performanceScore": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "thumbnail",
+                "creator",
+                "creatorName",
+                "caption",
+                "spokenHook",
+                "hookSource",
+                "hasTranscript",
+                "transcript",
+                "hashtags",
+                "comments",
+                "views",
+                "likes",
+                "commentsCount",
+                "saves",
+                "shares",
+                "duration",
+                "engagementRate",
+                "isQualityEngagement",
+                "wordsPerMinute",
+                "finalScore",
+                "rank",
+                "views_over_expected",
+                "is_punching_above_weight",
+                "age_label",
+                "timestamp",
+                "ageInDays",
+                "postHour",
+                "postDay",
+                "audio",
+                "performanceTier",
+                "performanceScore"
+              ]
+            }
+          },
+          "top_hashtags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hashtag": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "hashtag",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "top_keywords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyword": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "keyword",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "top_audio": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "songName": {
+                  "type": "string"
+                },
+                "artistName": {
+                  "type": "string"
+                },
+                "isOriginal": {
+                  "type": "boolean"
+                },
+                "avgViews": {
+                  "type": "number"
+                },
+                "count": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "songName",
+                "artistName",
+                "isOriginal",
+                "avgViews",
+                "count"
+              ]
+            }
+          },
+          "competitors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "fullName": {
+                  "type": "string"
+                },
+                "avgViews": {
+                  "type": "number"
+                },
+                "avgEngagement": {
+                  "type": "number"
+                },
+                "avgDuration": {
+                  "type": "number"
+                },
+                "topHashtags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "topHook": {
+                  "type": "string"
+                },
+                "topSpokenHook": {
+                  "type": "string"
+                },
+                "totalViews": {
+                  "type": "number"
+                },
+                "reelCount": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "username",
+                "fullName",
+                "avgViews",
+                "avgEngagement",
+                "avgDuration",
+                "topHashtags",
+                "topHook",
+                "topSpokenHook",
+                "totalViews",
+                "reelCount"
+              ]
+            }
+          },
+          "posting_strategy": {
+            "type": "object",
+            "properties": {
+              "best_times": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "number"
+                    },
+                    "avgViews": {
+                      "type": "number"
+                    },
+                    "avgEngagement": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "time",
+                    "posts",
+                    "avgViews",
+                    "avgEngagement"
+                  ]
+                }
+              },
+              "best_days": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "day": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "number"
+                    },
+                    "avgViews": {
+                      "type": "number"
+                    },
+                    "avgEngagement": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "day",
+                    "posts",
+                    "avgViews",
+                    "avgEngagement"
+                  ]
+                }
+              },
+              "duration_performance": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "duration": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "number"
+                    },
+                    "avgViews": {
+                      "type": "number"
+                    },
+                    "avgEngagement": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "duration",
+                    "posts",
+                    "avgViews",
+                    "avgEngagement"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "best_times",
+              "best_days",
+              "duration_performance"
+            ]
+          },
+          "content_strategy": {
+            "type": "object",
+            "properties": {
+              "content_pillars": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "pillar": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "number"
+                    },
+                    "percentage": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "pillar",
+                    "count",
+                    "percentage"
+                  ]
+                }
+              },
+              "cta_usage": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "number"
+                    },
+                    "percentage": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "count",
+                    "percentage"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "content_pillars",
+              "cta_usage"
+            ]
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "reels",
+          "top_hashtags",
+          "top_keywords",
+          "top_audio",
+          "competitors",
+          "posting_strategy",
+          "content_strategy",
+          "insights"
+        ]
+      },
+      "niche_research_json": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "reelsAnalyzed": {
+                "type": "number"
+              },
+              "sourceHashtagsCount": {
+                "type": "number"
+              },
+              "creatorsTracked": {
+                "type": "number"
+              },
+              "crossHashtagViralCount": {
+                "type": "number"
+              },
+              "crossHashtagViralPct": {
+                "type": "number"
+              },
+              "totalViews": {
+                "type": "number"
+              },
+              "totalLikes": {
+                "type": "number"
+              },
+              "totalComments": {
+                "type": "number"
+              },
+              "avgViews": {
+                "type": "number"
+              },
+              "avgLikes": {
+                "type": "number"
+              },
+              "avgComments": {
+                "type": "number"
+              },
+              "avgDuration": {
+                "type": "number"
+              },
+              "avgEngagement": {
+                "type": "number"
+              },
+              "transcriptCoverage": {
+                "type": "number"
+              },
+              "avgWPM": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "reelsAnalyzed",
+              "sourceHashtagsCount",
+              "creatorsTracked",
+              "crossHashtagViralCount",
+              "crossHashtagViralPct",
+              "totalViews",
+              "totalLikes",
+              "totalComments",
+              "avgViews",
+              "avgLikes",
+              "avgComments",
+              "avgDuration",
+              "avgEngagement",
+              "transcriptCoverage",
+              "avgWPM"
+            ]
+          },
+          "source_hashtags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hashtag": {
+                  "type": "string"
+                },
+                "reelsFound": {
+                  "type": "number"
+                },
+                "totalViews": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "hashtag",
+                "reelsFound",
+                "totalViews",
+                "avgViews"
+              ]
+            }
+          },
+          "reels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "thumbnail": {
+                  "type": "string"
+                },
+                "creator": {
+                  "type": "string"
+                },
+                "creatorName": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": "string"
+                },
+                "spokenHook": {
+                  "type": "string"
+                },
+                "hasTranscript": {
+                  "type": "boolean"
+                },
+                "transcript": {
+                  "type": "string"
+                },
+                "hashtags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "comments": {
+                  "type": "array",
+                  "items": {}
+                },
+                "views": {
+                  "type": "number"
+                },
+                "likes": {
+                  "type": "number"
+                },
+                "commentsCount": {
+                  "type": "number"
+                },
+                "saves": {
+                  "type": "number"
+                },
+                "shares": {
+                  "type": "number"
+                },
+                "duration": {
+                  "type": "number"
+                },
+                "durationBucket": {
+                  "type": "string"
+                },
+                "isQualityEngagement": {
+                  "type": "boolean"
+                },
+                "wordsPerMinute": {
+                  "type": "number"
+                },
+                "detectedLanguage": {
+                  "type": "string"
+                },
+                "finalScore": {
+                  "type": "number"
+                },
+                "rank": {
+                  "type": "number"
+                },
+                "views_over_expected": {
+                  "type": "number"
+                },
+                "is_punching_above_weight": {
+                  "type": "boolean"
+                },
+                "age_label": {
+                  "type": "string"
+                },
+                "foundInHashtags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "hashtagAppearances": {
+                  "type": "number"
+                },
+                "isCrossHashtagViral": {
+                  "type": "boolean"
+                },
+                "timestamp": {
+                  "type": "string"
+                },
+                "ageInDays": {
+                  "type": "number"
+                },
+                "postHour": {
+                  "type": "number"
+                },
+                "postDay": {
+                  "type": "string"
+                },
+                "audio": {
+                  "type": "object",
+                  "properties": {
+                    "songName": {
+                      "type": "string"
+                    },
+                    "artistName": {
+                      "type": "string"
+                    },
+                    "isOriginal": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "songName",
+                    "artistName",
+                    "isOriginal"
+                  ]
+                },
+                "performanceTier": {
+                  "type": "string"
+                },
+                "performanceScore": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "thumbnail",
+                "creator",
+                "creatorName",
+                "caption",
+                "spokenHook",
+                "hasTranscript",
+                "hashtags",
+                "comments",
+                "views",
+                "likes",
+                "commentsCount",
+                "saves",
+                "shares",
+                "duration",
+                "durationBucket",
+                "isQualityEngagement",
+                "wordsPerMinute",
+                "finalScore",
+                "rank",
+                "views_over_expected",
+                "is_punching_above_weight",
+                "age_label",
+                "foundInHashtags",
+                "hashtagAppearances",
+                "isCrossHashtagViral",
+                "timestamp",
+                "ageInDays",
+                "postHour",
+                "postDay",
+                "audio",
+                "performanceTier",
+                "performanceScore"
+              ]
+            }
+          },
+          "top_hashtags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hashtag": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "hashtag",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "top_keywords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyword": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "keyword",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "top_audio": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "songName": {
+                  "type": "string"
+                },
+                "artistName": {
+                  "type": "string"
+                },
+                "isOriginal": {
+                  "type": "boolean"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "songName",
+                "artistName",
+                "isOriginal",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "posting_strategy": {
+            "type": "object",
+            "properties": {
+              "best_times": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "number"
+                    },
+                    "avgViews": {
+                      "type": "number"
+                    },
+                    "avgEngagement": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "time",
+                    "posts",
+                    "avgViews",
+                    "avgEngagement"
+                  ]
+                }
+              },
+              "best_days": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "day": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "number"
+                    },
+                    "avgViews": {
+                      "type": "number"
+                    },
+                    "avgEngagement": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "day",
+                    "posts",
+                    "avgViews",
+                    "avgEngagement"
+                  ]
+                }
+              },
+              "duration_performance": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "duration": {
+                      "type": "string"
+                    },
+                    "posts": {
+                      "type": "number"
+                    },
+                    "avgViews": {
+                      "type": "number"
+                    },
+                    "avgEngagement": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "duration",
+                    "posts",
+                    "avgViews",
+                    "avgEngagement"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "best_times",
+              "best_days",
+              "duration_performance"
+            ]
+          },
+          "content_strategy": {
+            "type": "object",
+            "properties": {
+              "content_formats": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "format": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "number"
+                    },
+                    "percentage": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "format",
+                    "count",
+                    "percentage"
+                  ]
+                }
+              },
+              "cta_usage": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "number"
+                    },
+                    "percentage": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "count",
+                    "percentage"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "content_formats",
+              "cta_usage"
+            ]
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "source_hashtags",
+          "reels",
+          "top_hashtags",
+          "top_keywords",
+          "top_audio",
+          "posting_strategy",
+          "content_strategy",
+          "insights"
+        ]
+      },
+      "twitterLatest_research_json": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "tweets": {
+                "type": "number"
+              },
+              "totalViews": {
+                "type": "number"
+              },
+              "avgViews": {
+                "type": "number"
+              },
+              "avgLikes": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tweets",
+              "totalViews",
+              "avgViews",
+              "avgLikes"
+            ]
+          },
+          "tweets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "hashtags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "views": {
+                  "type": "number"
+                },
+                "likes": {
+                  "type": "number"
+                },
+                "rts": {
+                  "type": "number"
+                },
+                "replies": {
+                  "type": "number"
+                },
+                "eng": {
+                  "type": "number"
+                },
+                "engRate": {
+                  "type": "number"
+                },
+                "ageHours": {
+                  "type": "number"
+                },
+                "ageLabel": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string"
+                },
+                "lang": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "viewsVsAvg": {
+                  "type": "number"
+                },
+                "rank": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "text",
+                "author",
+                "hashtags",
+                "views",
+                "likes",
+                "rts",
+                "replies",
+                "eng",
+                "engRate",
+                "ageHours",
+                "ageLabel",
+                "timestamp",
+                "lang",
+                "score",
+                "viewsVsAvg",
+                "rank"
+              ]
+            }
+          },
+          "hashtags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tag": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "tag",
+                "count",
+                "avgViews"
+              ]
+            }
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kw": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "kw",
+                "count",
+                "avgViews"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "tweets",
+          "hashtags",
+          "keywords"
+        ]
+      },
+      "twitterTop_research_json": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "tweets": {
+                "type": "number"
+              },
+              "totalViews": {
+                "type": "number"
+              },
+              "avgViews": {
+                "type": "number"
+              },
+              "avgLikes": {
+                "type": "number"
+              },
+              "avgViralScore": {
+                "type": "number"
+              },
+              "topViralScore": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tweets",
+              "totalViews",
+              "avgViews",
+              "avgLikes",
+              "avgViralScore",
+              "topViralScore"
+            ]
+          },
+          "tweets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "hashtags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "views": {
+                  "type": "number"
+                },
+                "likes": {
+                  "type": "number"
+                },
+                "rts": {
+                  "type": "number"
+                },
+                "replies": {
+                  "type": "number"
+                },
+                "quotes": {
+                  "type": "number"
+                },
+                "bookmarks": {
+                  "type": "number"
+                },
+                "eng": {
+                  "type": "number"
+                },
+                "engRate": {
+                  "type": "number"
+                },
+                "viralScore": {
+                  "type": "number"
+                },
+                "ageDays": {
+                  "type": "number"
+                },
+                "ageLabel": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string"
+                },
+                "lang": {
+                  "type": "string"
+                },
+                "rank": {
+                  "type": "number"
+                },
+                "score": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "text",
+                "author",
+                "hashtags",
+                "views",
+                "likes",
+                "rts",
+                "replies",
+                "quotes",
+                "bookmarks",
+                "eng",
+                "engRate",
+                "viralScore",
+                "ageDays",
+                "ageLabel",
+                "timestamp",
+                "lang",
+                "rank",
+                "score"
+              ]
+            }
+          },
+          "hashtags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tag": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                },
+                "avgLikes": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "tag",
+                "count",
+                "avgViews",
+                "avgLikes"
+              ]
+            }
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kw": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "number"
+                },
+                "avgViews": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "kw",
+                "count",
+                "avgViews"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "tweets",
+          "hashtags",
+          "keywords"
+        ]
+      }
+    },
+    "required": [
+      "script_suggestion",
+      "overall_strategy",
+      "user_research_json",
+      "competitor_research_json",
+      "niche_research_json",
+      "twitterLatest_research_json",
+      "twitterTop_research_json"
+    ]
+  }
+}

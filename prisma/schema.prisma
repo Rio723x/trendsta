@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -8,7 +7,9 @@ datasource db {
   provider = "postgresql"
 }
 
-// User Model
+// ============================================
+// AUTH TABLES (Unchanged)
+// ============================================
 
 model User {
   id             String          @id @default(uuid())
@@ -23,317 +24,6 @@ model User {
   accounts       Account[]
 
   @@map("user")
-}
-
-// Social Account Model (for Agency Mode)
-model SocialAccount {
-  id         String     @id @default(uuid())
-  userId     String
-  user       User       @relation(fields: [userId], references: [id])
-  username   String // The handle/identifier for this account
-  researches Research[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-}
-
-// Research Model
-
-model Research {
-  id              String        @id @default(uuid())
-  socialAccountId String
-  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id])
-  createdAt       DateTime      @default(now())
-
-  scriptIdeas       ScriptIdea[]
-  researchSummaries ResearchSummary[]
-  tweets            Tweet[]
-  performanceReport PerformanceReport?
-}
-
-// Maps to LLM_script_ideas
-
-model ScriptIdea {
-  id         String   @id @default(uuid())
-  researchId String
-  research   Research @relation(fields: [researchId], references: [id])
-
-  type                String
-  rank                Int
-  topicTitle          String
-  scriptTitle         String
-  viralPotentialScore Float
-  estimatedDuration   String
-  fullText            String
-  scriptWordCount     Int
-  scriptHook          String
-  scriptBuildup       String
-  scriptValue         String
-  scriptCta           String
-  captionFull         String
-  captionFirstLine    String
-  hashtagsPrimary     String[]
-  hashtagsNiche       String[]
-  hashtagsTrending    String[]
-  hashtagsAll         String[]
-  hashtagsCount       Int
-  targetAudience      String
-  emotionalTrigger    String
-  contentGapAddressed String
-  whyThisWorks        String
-  competitorReference String
-  generatedAt         DateTime @default(now())
-}
-
-// Maps to llm_research_summary
-
-model ResearchSummary {
-  id         String   @id @default(uuid())
-  researchId String
-  research   Research @relation(fields: [researchId], references: [id])
-
-  type                     String
-  instagramInsights        String
-  twitterInsights          String
-  competitorInsights       String
-  viralTriggers            String
-  contentGap               String
-  postingTimes             String
-  hookFormula              String
-  instagramSummaryResearch String
-  generatedAt              DateTime @default(now())
-}
-
-// Maps to latest_tweets_data and top_tweets_data
-
-model Tweet {
-  id         String        @id
-  researchId String
-  research   Research      @relation(fields: [researchId], references: [id])
-  category   TweetCategory
-
-  url              String
-  text             String
-  hook             String?
-  wordCount        Int?
-  charCount        Int?
-  hasQuestion      Boolean?
-  hasEmoji         Boolean?
-  hasNumbers       Boolean?
-  contentFormat    String?
-  author           String
-  authorName       String?
-  authorFollowers  Int?
-  isVerified       Boolean?
-  isBlueVerified   Boolean?
-  authorProfilePic String?
-  likes            Int
-  retweets         Int
-  replies          Int
-  quotes           Int?
-  bookmarks        Int?
-  views            Int?
-  totalEngagement  Int?
-  engagementRate   Float?
-  viralScore       Float?
-  postedAt         DateTime?
-  postDate         DateTime?
-  ageHours         Float?
-  ageDays          Float?
-  postHour         Int?
-  postDay          String?
-  language         String?
-  hashtags         String[]
-  mentions         String[]
-  mediaType        String?
-  mediaUrl         String?
-  hasMedia         Boolean?
-  hasLinks         Boolean?
-  linkedDomains    Json?
-  isReply          Boolean?
-  isPinned         Boolean?
-  rank             Int?
-  hasEarlyTraction Boolean?
-  isThread         Boolean?
-}
-
-enum TweetCategory {
-  LATEST
-  TOP
-}
-
-// Maps to user_performance_research
-
-model PerformanceReport {
-  id         String   @id @default(uuid())
-  researchId String   @unique
-  research   Research @relation(fields: [researchId], references: [id])
-
-  // Profile
-  profileUsername   String?
-  profileFullName   String?
-  profileTotalReels Int?
-
-  // Aggregates
-  totalViews         Int?
-  totalLikes         Int?
-  totalComments      Int?
-  totalShares        Int?
-  totalSaves         Int?
-  avgViews           Float?
-  avgLikes           Float?
-  avgComments        Float?
-  avgDuration        Float?
-  avgEngagement      Float?
-  transcriptCoverage Float?
-  avgWPM             Float?
-
-  // Comments Summary
-  commentsTotal            Int?
-  commentsUniqueCommenters Int?
-
-  // Benchmarks
-  benchmarkViewsToBeat       Int?
-  benchmarkLikesToBeat       Int?
-  benchmarkEngagementToBeat  Float?
-  benchmarkDurationSweetSpot Float?
-  benchmarkSpeakingPace      Float?
-  benchmarkTopPerformerScore Float?
-
-  // Arrays/Relations
-  reels               Reel[]
-  topHooks            TopHook[]
-  topCaptions         TopCaption[]
-  topKeywords         TopKeyword[]
-  topAudio            TopAudio[]
-  comments            Comment[]
-  bestPostingTimes    BestPostingTime[]
-  bestPostingDays     BestPostingDay[]
-  durationPerformance DurationPerformance[]
-
-  topHashtags Json?
-  insights    String[]
-}
-
-model Reel {
-  id                  String            @id
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-
-  url                   String
-  thumbnail             String?
-  rank                  Int?
-  velocityScore         Float?
-  finalScore            Float?
-  ageHours              Float?
-  ageLabel              String?
-  engagementRate        Float?
-  commentToLikeRatio    Float?
-  isQualityEngagement   Boolean?
-  viewsOverExpected     Float?
-  isPunchingAboveWeight Boolean?
-  foundInHashtags       String[]
-  hashtagAppearances    Int?
-  isCrossHashtagViral   Boolean?
-  caption               String?
-  captionHook           String?
-  spokenHook            String?
-  hasTranscript         Boolean?
-  transcript            String?
-  wordsPerMinute        Float?
-  detectedLanguage      String?
-  hashtags              String[]
-  hashtagCount          Int?
-  views                 Int?
-  likes                 Int?
-  comments              Int?
-  shares                Int?
-  saves                 Int?
-  duration              Float?
-  captionLength         Int?
-
-  // Audio flattened
-  audioSongName   String?
-  audioArtistName String?
-  audioIsOriginal Boolean?
-
-  postedAt         DateTime?
-  postDay          String?
-  performanceTier  String?
-  performanceScore Float?
-}
-
-model TopHook {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  hook                String
-  reelId              String
-}
-
-model TopCaption {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  captionHook         String
-  fullCaption         String
-  reelId              String
-}
-
-model TopKeyword {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  keyword             String
-  count               Int
-  reels               String[]
-}
-
-model TopAudio {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  songName            String
-  artistName          String
-  isOriginal          Boolean
-}
-
-model Comment {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  text                String
-  reelId              String
-  isFirstComment      Boolean?
-}
-
-model BestPostingTime {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  time                String
-  posts               Int
-  avgViews            Float
-  avgEngagement       Float
-}
-
-model BestPostingDay {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  day                 String
-  posts               Int
-  avgViews            Float
-  avgEngagement       Float
-}
-
-model DurationPerformance {
-  id                  String            @id @default(uuid())
-  performanceReportId String
-  performanceReport   PerformanceReport @relation(fields: [performanceReportId], references: [id])
-  duration            String
-  posts               Int
-  avgViews            Float
-  avgEngagement       Float
 }
 
 model Session {
@@ -382,4 +72,118 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// ============================================
+// SOCIAL ACCOUNT
+// ============================================
+
+model SocialAccount {
+  id         String     @id @default(uuid())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username   String
+  researches Research[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("social_account")
+}
+
+// ============================================
+// RESEARCH CONTAINER
+// ============================================
+
+model Research {
+  id              String        @id @default(uuid())
+  socialAccountId String
+  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+
+  // Relations to research data containers
+  scriptSuggestions  ScriptSuggestions?
+  overallStrategy    OverallStrategy?
+  userResearch       UserResearch?
+  competitorResearch CompetitorResearch?
+  nicheResearch      NicheResearch?
+  twitterResearch    TwitterResearch?
+
+  @@map("research")
+}
+
+// ============================================
+// RESEARCH DATA CONTAINERS (JSON Storage)
+// ============================================
+
+// AI-generated script suggestions
+model ScriptSuggestions {
+  id         String   @id @default(uuid())
+  researchId String   @unique
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  scripts   Json // Array of script suggestion objects
+  createdAt DateTime @default(now())
+
+  @@map("script_suggestions")
+}
+
+// Overall strategy insights
+model OverallStrategy {
+  id         String   @id @default(uuid())
+  researchId String   @unique
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full overall_strategy object
+  createdAt DateTime @default(now())
+
+  @@map("overall_strategy")
+}
+
+// User's own Instagram research
+model UserResearch {
+  id         String   @id @default(uuid())
+  researchId String   @unique
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full user_research_json object
+  createdAt DateTime @default(now())
+
+  @@map("user_research")
+}
+
+// Competitor analysis research
+model CompetitorResearch {
+  id         String   @id @default(uuid())
+  researchId String   @unique
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full competitor_research_json object
+  createdAt DateTime @default(now())
+
+  @@map("competitor_research")
+}
+
+// Niche/FYP research
+model NicheResearch {
+  id         String   @id @default(uuid())
+  researchId String   @unique
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full niche_research_json object
+  createdAt DateTime @default(now())
+
+  @@map("niche_research")
+}
+
+// Twitter research (both latest and top)
+model TwitterResearch {
+  id         String   @id @default(uuid())
+  researchId String   @unique
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  latestData Json // twitterLatest_research_json
+  topData    Json // twitterTop_research_json
+  createdAt  DateTime @default(now())
+
+  @@map("twitter_research")
 }

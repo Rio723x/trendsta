@@ -1,7 +1,7 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
+import { authClient, useSession } from "@/lib/auth-client";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -11,6 +11,14 @@ export default function SignIn() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const { data: session } = useSession();
+
+    // Redirect to dashboard if already logged in
+    useEffect(() => {
+        if (session?.user) {
+            router.push("/dashboard");
+        }
+    }, [session, router]);
 
     const handleGoogleSignIn = async () => {
         setIsLoading(true);

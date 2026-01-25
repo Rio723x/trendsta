@@ -77,7 +77,7 @@ export function VelocityChart({ data }: { data: ReelData[] }) {
                                 strokeWidth="2"
                                 className="hover:opacity-90 transition-opacity cursor-pointer"
                             >
-                                <title>{s.label}: {s.value.toFixed(1)}</title>
+                                <title>{`${s.label}: ${s.value.toFixed(1)}`}</title>
                             </path>
                         ))}
                         {/* Inner Circle for Doughnut effect */}
