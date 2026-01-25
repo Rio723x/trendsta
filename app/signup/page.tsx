@@ -4,6 +4,7 @@ import { authClient, useSession } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SignUp() {
     const [isLoading, setIsLoading] = useState(false);
@@ -77,18 +78,29 @@ export default function SignUp() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] p-5">
-            <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-12 max-w-md w-full shadow-2xl">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-100 via-slate-50 to-white p-5">
+            {/* Centered Logo */}
+            <div className="mb-8">
+                <Image
+                    src="/logo3.png"
+                    alt="TrendSta"
+                    width={180}
+                    height={50}
+                    priority
+                />
+            </div>
+
+            {/* Card */}
+            <div className="bg-white rounded-2xl border border-slate-200 p-10 max-w-md w-full shadow-xl shadow-slate-200/50">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-white mb-3 tracking-tight">Join Trendsta</h1>
-                    <p className="text-base text-white/60">
-                        Create viral content with AI-powered insights
+                    <h1 className="text-2xl font-bold text-[#1e3a5f] mb-2">Create your account</h1>
+                    <p className="text-sm text-slate-500">
+                        Get AI-powered insights to grow your content
                     </p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-6 flex items-center gap-2 text-red-300 text-sm">
-                        <span>⚠️</span>
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-6 text-red-600 text-sm">
                         {error}
                     </div>
                 )}
@@ -96,11 +108,11 @@ export default function SignUp() {
                 <button
                     onClick={handleGoogleSignIn}
                     disabled={isLoading}
-                    className={`w-full flex items-center justify-center gap-3 px-6 py-4 text-base font-semibold text-gray-800 bg-white border-0 rounded-xl transition-all duration-200 shadow-md ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-gray-50 active:scale-[0.98]"
+                    className={`w-full flex items-center justify-center gap-3 px-6 py-3.5 text-base font-medium text-slate-700 bg-white border-2 border-slate-200 rounded-xl transition-all duration-200 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98]"
                         }`}
                 >
                     {isLoading ? (
-                        <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                        <div className="w-5 h-5 border-2 border-slate-300 border-t-[#f97316] rounded-full animate-spin"></div>
                     ) : (
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
                             <path
@@ -124,11 +136,11 @@ export default function SignUp() {
                     <span>{isLoading ? "Signing in..." : "Continue with Google"}</span>
                 </button>
 
-                <div className="my-8 flex items-center justify-center relative">
+                <div className="my-6 flex items-center justify-center relative">
                     <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10"></div>
+                        <div className="w-full border-t border-slate-200"></div>
                     </div>
-                    <div className="relative z-10 bg-[#141424] px-4 text-sm text-white/40 uppercase tracking-wider">
+                    <div className="relative z-10 bg-white px-4 text-xs text-slate-400 uppercase tracking-wider">
                         Or continue with email
                     </div>
                 </div>
@@ -140,7 +152,7 @@ export default function SignUp() {
                             placeholder="Full Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-colors"
+                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#1e3a5f] focus:bg-white transition-all duration-200"
                         />
                     </div>
                     <div>
@@ -149,7 +161,7 @@ export default function SignUp() {
                             placeholder="Email address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-colors"
+                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#1e3a5f] focus:bg-white transition-all duration-200"
                         />
                     </div>
                     <div>
@@ -158,30 +170,30 @@ export default function SignUp() {
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-colors"
+                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#1e3a5f] focus:bg-white transition-all duration-200"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full py-3.5 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 active:scale-[0.98] transition-all duration-200 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110"
+                        className={`w-full py-3.5 rounded-xl font-semibold bg-gradient-to-r from-[#f97316] to-[#ea580c] text-white shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-300 active:scale-[0.98] transition-all duration-200 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-105"
                             }`}
                     >
                         {isLoading ? "Creating account..." : "Create account"}
                     </button>
                 </form>
 
-                <p className="mt-6 text-xs text-center text-white/50 leading-relaxed">
+                <p className="mt-6 text-xs text-center text-slate-500 leading-relaxed">
                     By continuing, you agree to our{" "}
-                    <a href="/terms" className="text-blue-400 hover:text-blue-300 transition-colors">Terms of Service</a>
+                    <a href="/terms" className="text-[#1e3a5f] hover:text-[#f97316] transition-colors font-medium">Terms of Service</a>
                     {" "}and{" "}
-                    <a href="/privacy" className="text-blue-400 hover:text-blue-300 transition-colors">Privacy Policy</a>
+                    <a href="/privacy" className="text-[#1e3a5f] hover:text-[#f97316] transition-colors font-medium">Privacy Policy</a>
                 </p>
 
-                <div className="mt-8 pt-6 border-t border-white/10 text-center">
-                    <p className="text-sm text-white/40">
+                <div className="mt-8 pt-6 border-t border-slate-200 text-center">
+                    <p className="text-sm text-slate-500">
                         Already have an account?{" "}
-                        <Link href="/signin" className="text-blue-400 font-medium hover:text-blue-300 transition-colors ml-1">
+                        <Link href="/signin" className="text-[#f97316] font-semibold hover:text-[#ea580c] transition-colors">
                             Sign in
                         </Link>
                     </p>

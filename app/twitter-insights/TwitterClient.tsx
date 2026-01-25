@@ -236,7 +236,7 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fadeInUp">
                         <div>
                             <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
-                                {viewMode === 'tweets' ? 'X (Twitter) Intelligence' : 'Twitter AI Strategy'}
+                                {viewMode === 'tweets' ? 'X Intelligence' : 'X AI Strategy'}
                             </h1>
                             <p className="text-slate-500 mt-2">
                                 {viewMode === 'tweets'
@@ -273,7 +273,7 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
                     {viewMode === 'insights' ? (
                         <SmartInsightsView
                             insightText={researchSummary?.[0]?.twitter_insights || ""}
-                            title="X (Twitter) Strategy"
+                            title="X Strategy"
                             description="Actionable opportunities found in the latest Twitter discourse."
                             theme="twitter"
                         />

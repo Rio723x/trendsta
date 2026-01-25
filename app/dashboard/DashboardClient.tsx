@@ -55,11 +55,18 @@ export default function DashboardClient({ data }: DashboardClientProps) {
     const topScriptScore = scriptIdeas.length > 0 ? scriptIdeas[0].viral_potential_score : 0;
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-white relative selection:bg-blue-200">
+            {/* Background Effects */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] opacity-70" />
+                <div className="absolute top-[20%] right-0 w-[40%] h-[40%] bg-indigo-400/10 rounded-full blur-[100px] opacity-60" />
+                <div className="absolute bottom-0 left-[20%] w-[60%] h-[40%] bg-amber-200/20 rounded-full blur-[120px] opacity-50" />
+            </div>
+
             <Sidebar />
             <MobileHeader />
 
-            <main className={`transition-all duration-300 ease-in-out p-4 md:p-8 ${isCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
+            <main className={`relative z-10 transition-all duration-300 ease-in-out p-4 md:p-8 ${isCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
                 <div className="max-w-6xl mx-auto space-y-8">
 
                     {/* Page Header with Date Toggle */}

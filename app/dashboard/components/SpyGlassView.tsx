@@ -88,31 +88,31 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
                     </div>
 
                     {/* Viral Trigger Tip */}
-                    <div className="p-5 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl text-white relative overflow-hidden">
+                    <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl text-blue-900 relative overflow-hidden border border-blue-200">
                         <div className="flex items-center gap-2 mb-2 relative z-10">
-                            <Flame size={16} className="text-yellow-300" />
-                            <span className="text-xs font-bold text-indigo-100 uppercase">Viral Trigger</span>
+                            <Flame size={16} className="text-orange-500" />
+                            <span className="text-xs font-bold text-blue-600 uppercase">Viral Trigger</span>
                         </div>
-                        <h4 className="font-bold text-lg mb-1 relative z-10">Core insight</h4>
-                        <p className="text-indigo-100 text-sm leading-relaxed relative z-10 opacity-90">
+                        <h4 className="font-bold text-lg mb-1 relative z-10 text-blue-800">Core insight</h4>
+                        <p className="text-blue-700 text-sm leading-relaxed relative z-10">
                             {viralTriggerText}
                         </p>
                         {/* Decor */}
-                        <div className="absolute -right-4 -bottom-4 bg-white/10 w-24 h-24 rounded-full blur-xl" />
+                        <div className="absolute -right-4 -bottom-4 bg-blue-200/50 w-24 h-24 rounded-full blur-xl" />
                     </div>
 
                     {/* Content Gap Card */}
-                    <div className="p-5 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl text-white relative overflow-hidden mt-4">
+                    <div className="p-5 bg-gradient-to-br from-amber-50 to-yellow-100 rounded-xl text-amber-900 relative overflow-hidden mt-4 border border-amber-200">
                         <div className="flex items-center gap-2 mb-2 relative z-10">
-                            <TrendingUp size={16} className="text-emerald-100" />
-                            <span className="text-xs font-bold text-emerald-50 uppercase">Opportunity</span>
+                            <TrendingUp size={16} className="text-amber-600" />
+                            <span className="text-xs font-bold text-amber-600 uppercase">Opportunity</span>
                         </div>
-                        <h4 className="font-bold text-lg mb-1 relative z-10">Content Gap</h4>
-                        <p className="text-emerald-50 text-sm leading-relaxed relative z-10 opacity-90">
+                        <h4 className="font-bold text-lg mb-1 relative z-10 text-amber-800">Content Gap</h4>
+                        <p className="text-amber-700 text-sm leading-relaxed relative z-10">
                             {research.content_gap || "Analysis pending..."}
                         </p>
                         {/* Decor */}
-                        <div className="absolute -right-4 -bottom-4 bg-white/10 w-24 h-24 rounded-full blur-xl" />
+                        <div className="absolute -right-4 -bottom-4 bg-amber-200/50 w-24 h-24 rounded-full blur-xl" />
                     </div>
                 </div>
 
