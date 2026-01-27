@@ -1,32 +1,23 @@
+import DodoPayments from "dodopayments";
+
+const client = new DodoPayments({
+     bearerToken: process.env.DODO_PAYMENTS_API_KEY!,
+    environment: "test_mode",
+})
+
 export type Product = {
   product_id: string;
   name: string;
   description: string;
   price: number;
   features: string[];
+  is_recurring: boolean;
 };
 
-export const products: Product[] = [
- 
-  {
-    product_id: "pdt_0NWvdNgnGXCcADDk4MJDH",
-    name: "Stellas Bundle",
-    description: "A value packed bundle of 100 stellas for your needs.",
-    price: 2500, // in cents
-    features: [
-      "100 stellas"
-    ],
-  },
- 
-  {
-    product_id: "pdt_0NWyeKym8LDKoNKB9E7do",
-    name: "Trendsta Pro",
-    description: "Pro Plan Perfect for Creators",
-    price: 2500, // in cents
-    features: [
-      "Dashboard",
-      "IG insights",
-      "Competitor Analysis"
-    ],
-  },
-];
+export async function getProducts(page_size: number, page_number: number){
+  const pdts = await client.products.list({
+    page_size:page_size, page_number: page_number
+  });
+
+  return pdts;
+}

@@ -1,0 +1,410 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// AUTH TABLES (Unchanged)
+// ============================================
+
+model User {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email          String          @unique
+  name           String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  socialAccounts SocialAccount[]
+  emailVerified  Boolean         @default(false)
+  image          String?
+  sessions       Session[]
+  accounts       Account[]
+
+  // Plan & Stella relations
+  subscriptions      Subscription[]
+  stellaTransactions StellaTransaction[]
+  featureAllowances  FeatureAllowance[]
+  wallet             Wallet?
+  analysisJobs       AnalysisJob[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String    @db.Uuid
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ============================================
+// SOCIAL ACCOUNT
+// ============================================
+
+model SocialAccount {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String     @db.Uuid
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username   String
+  researches Research[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("social_account")
+}
+
+// ============================================
+// RESEARCH CONTAINER
+// ============================================
+
+model Research {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  socialAccountId String        @db.Uuid
+  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+
+  // Relations to research data containers
+  scriptSuggestions  ScriptSuggestions?
+  overallStrategy    OverallStrategy?
+  userResearch       UserResearch?
+  competitorResearch CompetitorResearch?
+  nicheResearch      NicheResearch?
+  twitterResearch    TwitterResearch?
+
+  @@map("research")
+}
+
+// ============================================
+// RESEARCH DATA CONTAINERS (JSON Storage)
+// ============================================
+
+// AI-generated script suggestions
+model ScriptSuggestions {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  researchId String   @unique @db.Uuid
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  scripts   Json // Array of script suggestion objects
+  createdAt DateTime @default(now())
+
+  @@map("script_suggestions")
+}
+
+// Overall strategy insights
+model OverallStrategy {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  researchId String   @unique @db.Uuid
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full overall_strategy object
+  createdAt DateTime @default(now())
+
+  @@map("overall_strategy")
+}
+
+// User's own Instagram research
+model UserResearch {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  researchId String   @unique @db.Uuid
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full user_research_json object
+  createdAt DateTime @default(now())
+
+  @@map("user_research")
+}
+
+// Competitor analysis research
+model CompetitorResearch {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  researchId String   @unique @db.Uuid
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full competitor_research_json object
+  createdAt DateTime @default(now())
+
+  @@map("competitor_research")
+}
+
+// Niche/FYP research
+model NicheResearch {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  researchId String   @unique @db.Uuid
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  data      Json // Full niche_research_json object
+  createdAt DateTime @default(now())
+
+  @@map("niche_research")
+}
+
+// Twitter research (both latest and top)
+model TwitterResearch {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  researchId String   @unique @db.Uuid
+  research   Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+
+  latestData Json // twitterLatest_research_json
+  topData    Json // twitterTop_research_json
+  createdAt  DateTime @default(now())
+
+  @@map("twitter_research")
+}
+
+// ============================================
+// ENUMS FOR PLANS & SUBSCRIPTIONS
+// ============================================
+
+
+enum BillingPeriod {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+  PENDING
+}
+
+enum StellaBucket {
+  MONTHLY // Expires at end of billing cycle
+  TOPUP // Never expires
+}
+
+enum StellaReason {
+  MONTHLY_GRANT // Monthly stellas from subscription
+  TOPUP_PURCHASE // Purchased top-up stellas
+  FEATURE_USAGE // Stellas consumed by feature usage
+  REFUND // Refunded stellas
+  ADMIN_ADJUSTMENT // Manual admin adjustment
+  EXPIRY // Monthly stellas expired
+}
+
+enum Feature {
+  AI_CONSULTANT
+  COMPETITOR_ANALYSIS
+  AUTO_ANALYSIS
+}
+
+enum AnalysisJobStatus {
+  PENDING    // Job created, waiting to start
+  PROCESSING // External service is processing
+  COMPLETED  // Analysis finished successfully
+  FAILED     // Analysis failed
+}
+
+// ============================================
+// ANALYSIS JOBS
+// ============================================
+
+// Tracks async analysis jobs for polling
+model AnalysisJob {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String            @db.Uuid
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  socialAccountId String            @db.Uuid
+  status          AnalysisJobStatus @default(PENDING)
+  stellaCost      Int               // Credits to deduct on completion
+  externalJobId   String?           // ID from external analysis service
+  errorMessage    String?           // Error details if failed
+  createdAt       DateTime          @default(now())
+  completedAt     DateTime?
+  billingFinalized Boolean @default(false)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("analysis_job")
+}
+
+// ============================================
+// PLANS & SUBSCRIPTIONS
+// ============================================
+
+// Predefined, static plans
+model Plan {
+  id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name String @unique // silver, gold, platinum
+  tier Int // Numeric tier, higher = more powerful
+
+  // Monthly stellas granted
+  monthlyStellasGrant Int
+
+  // Feature capabilities
+  competitorAnalysisAccess Boolean @default(false)
+  aiConsultantAccess       Boolean @default(false)
+  dailyAutoAnalysisEnabled Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  paymentProducts PaymentProduct[]
+  subscriptions   Subscription[]
+
+  @@map("plan")
+}
+
+// Maps external payment provider product to internal plan
+model PaymentProduct {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  planId String @db.Uuid
+  plan   Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  providerName      String // e.g. "dodo"
+  providerProductId String        @unique // Unique external product ID
+  billingPeriod     BillingPeriod
+  price             Int // Price in smallest currency unit (cents)
+  currency          String // e.g. "USD"
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payment_product")
+}
+
+// Tracks user's current subscription (webhook-driven)
+model Subscription {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  planId String @db.Uuid
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  providerName           String // e.g. "dodo"
+  providerSubscriptionId String             @unique // Unique external subscription ID
+  status                 SubscriptionStatus
+  currentPeriodEnd       DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("subscription")
+}
+
+// ============================================
+// STELLA CREDIT SYSTEM (Ledger-based)
+// ============================================
+
+// [NEW] THE READ OPTIMIZATION
+// This table is updated transactionally whenever a Transaction is created.
+// It serves as the "Fast Read" for the frontend.
+model Wallet {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId  String @unique @db.Uuid
+  user    User   @relation(fields: [userId], references: [id])
+
+  monthlyBalance Int @default(0) // Resets on cycle
+  topupBalance   Int @default(0) // Permanent
+
+  updatedAt      DateTime @updatedAt
+
+  @@map("wallet")
+}
+
+enum StellaTransactionStatus {
+  HELD       // reserved, not finalized
+  SETTLED    // finalized spend / grant
+  RELEASED   // reversed hold
+}
+
+// Ledger-based credit transactions - no balances stored
+model StellaTransaction {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  amount      Int // Positive for credits, negative for debits
+  bucket      StellaBucket // MONTHLY or TOPUP
+  reason      StellaReason
+
+  // [MODIFIED] METADATA FOR AUDIT
+  // Store specific details here: { "researchId": "...", "competitorsAnalyzed": 4 }
+  metadata Json?
+
+  referenceId String? // Optional reference (e.g. subscription ID, purchase ID)
+
+  createdAt DateTime @default(now())
+
+  status StellaTransactionStatus @default(SETTLED)
+
+  @@index([userId])
+  @@index([userId, bucket])
+  @@map("stella_transaction")
+}
+
+// ============================================
+// FEATURE ALLOWANCES
+// ============================================
+
+// Tracks free/promotional usage for specific features
+model FeatureAllowance {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  feature      Feature
+  totalAllowed Int // Total free uses allowed
+  consumedUses Int       @default(0) // Uses consumed
+  expiresAt    DateTime? // Optional expiry
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One allowance per user per feature
+  @@unique([userId, feature])
+  @@index([userId])
+  @@map("feature_allowance")
+}

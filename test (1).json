@@ -1,0 +1,110 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -736,
+        16
+      ],
+      "id": "split-batches-node",
+      "name": "Split In Batches"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.1.44:8002/transcribe",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $json.videoUrl, is_direct_audio: false }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -448,
+        16
+      ],
+      "id": "http-transcribe-single",
+      "name": "Transcribe Single Reel"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the original reel data from the batch input\nconst originalReel = $('Split In Batches').first().json;\n\n// Get the transcript response\nconst transcriptResponse = $input.first().json;\n\n// Merge transcript into reel data\nreturn [{\n  json: {\n    ...originalReel,\n    transcript: transcriptResponse.transcript || null,\n    segments: transcriptResponse.segments || [],\n    words: transcriptResponse.words || [],\n    transcriptStatus: transcriptResponse.status || 'success',\n    detectedLanguage: transcriptResponse.detectedLanguage || null\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "merge-single-result",
+      "name": "Merge Transcript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        64,
+        16
+      ],
+      "id": "done-node",
+      "name": "All Done"
+    }
+  ],
+  "connections": {
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Single Reel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "All Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Single Reel": {
+      "main": [
+        [
+          {
+            "node": "Merge Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Transcript": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

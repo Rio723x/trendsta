@@ -45,6 +45,11 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         }
     },
+    advanced: {
+        database: {
+            generateId: false, // Let PostgreSQL generate UUIDs via gen_random_uuid()
+        },
+    },
     plugins: [
         dodopayments({
             client: dodoPayments,

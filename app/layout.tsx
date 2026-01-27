@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SidebarProvider } from "./context/SidebarContext";
+import { QueryProvider } from "./providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Trendsta - Content Research Tool",
@@ -15,9 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <SidebarProvider>
-          {children}
-        </SidebarProvider>
+        <QueryProvider>
+          <SidebarProvider>
+            {children}
+          </SidebarProvider>
+        </QueryProvider>
       </body>
     </html>
   );
