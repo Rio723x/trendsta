@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Play, Eye, Heart, MessageCircle, Share2, Clock, ExternalLink, Zap } from "lucide-react";
+import { Play, Eye, Heart, MessageCircle, Share2, Clock, ExternalLink, Zap, TrendingUp } from "lucide-react";
 import { ReelData } from "../types/trendsta";
 
 // Helper for relative time (e.g. 2d ago) from hours
@@ -63,7 +63,12 @@ export default function ReelCard({ reel, index, onViewDetails }: ReelCardProps) 
                 <img
                     src={reel.thumbnail}
                     alt={displayTitle}
+                    referrerPolicy="no-referrer"
+                    crossOrigin="anonymous"
                     className={`w-full h-full object-cover transition-all duration-500 ${isHovered ? "scale-110 brightness-90" : "scale-100 brightness-100"}`}
+                    onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://via.placeholder.com/270x480/1e293b/94a3b8?text=Reel";
+                    }}
                 />
 
                 {/* Top badges */}
@@ -97,10 +102,7 @@ export default function ReelCard({ reel, index, onViewDetails }: ReelCardProps) 
                             <MessageCircle size={14} className="text-blue-400" />
                             {reel.comments}
                         </span>
-                        <span className="flex items-center gap-1">
-                            <Share2 size={14} className="text-green-400" />
-                            {reel.shares}
-                        </span>
+                        {/* Share removed as per request */}
                     </div>
                 </div>
             </a>

@@ -32,7 +32,7 @@ export default function PricingPage() {
             "Priority Support"
         ],
         platinum: [
-            "AI Consultant Access (Unlimited)",
+            "AI Consultant Access (2 Stellas/prompt)",
             "Deep Research Mode",
             "Scheduled Daily WhatsApp/Mail Updates",
             "Early Access to Beta Features"
@@ -41,8 +41,8 @@ export default function PricingPage() {
 
     const stellaCosts = [
         { action: "Dashboard Refresh", cost: "5 Stellas" },
-        { action: "Competitor Scan", cost: "15 Stellas" },
-        { action: "AI Consultant Query", cost: "10 Stellas" },
+        { action: "Competitor Scan", cost: "4-9 Stellas*" },
+        { action: "AI Consultant Query", cost: "2 Stellas (Plat. Only)" },
         { action: "Viral Script Gen", cost: "2 Stellas" },
     ];
 
@@ -129,13 +129,14 @@ export default function PricingPage() {
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-slate-600 font-medium text-sm">Stella Balance</span>
                                     <span className="text-amber-600 font-bold flex items-center gap-1">
-                                        <StellaCoin size={16} /> 100
+                                        <StellaCoin size={16} /> 120
                                     </span>
                                 </div>
                                 <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                                     <div className="bg-slate-500 w-[20%] h-full" />
                                 </div>
                                 <p className="text-[10px] text-slate-400 mt-2 text-right">Refreshes monthly</p>
+                                <p className="text-[10px] text-slate-500 mt-1 font-medium bg-slate-200/50 py-1 px-2 rounded-md inline-block">Research Cost: 4-7 Stellas</p>
                             </div>
 
                             <div className="space-y-4 flex-1 mb-8">
@@ -156,7 +157,8 @@ export default function PricingPage() {
                                 </div>
                             </div>
 
-                            <button className="w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold text-sm hover:bg-slate-200 transition-all border border-slate-200">
+                            <button
+                                className="w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold text-sm hover:bg-slate-200 transition-all border border-slate-200">
                                 Get Silver
                             </button>
                         </div>
@@ -167,13 +169,10 @@ export default function PricingPage() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="relative group scale-105 z-10 h-full"
+                        className="relative group h-full"
                     >
-                        <div className="absolute inset-0 bg-amber-200/40 opacity-50 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-2xl" />
-                        <div className="relative h-full p-8 bg-white border border-amber-200 rounded-3xl flex flex-col hover:border-amber-300 transition-all duration-300 shadow-2xl shadow-amber-900/5">
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wide shadow-md">
-                                Most Popular
-                            </div>
+                        <div className="absolute inset-0 bg-amber-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
+                        <div className="relative h-full p-8 bg-white border border-slate-200 rounded-3xl flex flex-col hover:border-amber-300 hover:shadow-xl transition-all duration-300">
                             <div className="mb-8">
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center mb-6">
                                     <Crown className="text-amber-700" size={24} fill="currentColor" />
@@ -191,13 +190,14 @@ export default function PricingPage() {
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-amber-900 font-medium text-sm">Stella Balance</span>
                                     <span className="text-amber-600 font-bold flex items-center gap-1">
-                                        <StellaCoin size={16} /> 200
+                                        <StellaCoin size={16} /> 220
                                     </span>
                                 </div>
                                 <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                                     <div className="bg-amber-500 w-[45%] h-full" />
                                 </div>
                                 <p className="text-[10px] text-amber-700/70 mt-2 text-right">Enough for 15+ Competitor Scans</p>
+                                <p className="text-[10px] text-amber-800/60 mt-1 font-medium bg-amber-100/50 py-1 px-2 rounded-md inline-block">Research Cost: 6-9 Stellas</p>
                             </div>
 
                             <div className="space-y-4 flex-1 mb-8">
@@ -214,7 +214,8 @@ export default function PricingPage() {
                                 </div>
                             </div>
 
-                            <button className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-sm hover:brightness-110 transition-all shadow-lg shadow-amber-500/20">
+                            <button
+                                className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-sm hover:brightness-110 transition-all shadow-lg shadow-amber-500/20">
                                 Get Gold
                             </button>
                         </div>
@@ -225,10 +226,13 @@ export default function PricingPage() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        className="relative group h-full"
+                        className="relative group scale-105 z-10 h-full"
                     >
-                        <div className="absolute inset-0 bg-purple-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
-                        <div className="relative h-full p-8 bg-white border border-slate-200 rounded-3xl flex flex-col hover:border-purple-300 hover:shadow-xl transition-all duration-300">
+                        <div className="absolute inset-0 bg-purple-200/40 opacity-50 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-2xl" />
+                        <div className="relative h-full p-8 bg-white border border-purple-200 rounded-3xl flex flex-col hover:border-purple-300 transition-all duration-300 shadow-2xl shadow-purple-900/5">
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-purple-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wide shadow-md">
+                                Best Seller
+                            </div>
                             <div className="mb-8">
                                 <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-6">
                                     <Zap className="text-purple-600" size={24} fill="currentColor" />
@@ -238,7 +242,7 @@ export default function PricingPage() {
                             </div>
 
                             <div className="mb-8 flex items-baseline gap-1">
-                                <span className="text-4xl font-bold text-slate-900">$85</span>
+                                <span className="text-4xl font-bold text-slate-900">$99</span>
                                 <span className="text-slate-500">/mo</span>
                             </div>
 
@@ -246,13 +250,14 @@ export default function PricingPage() {
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-purple-900 font-medium text-sm">Stella Balance</span>
                                     <span className="text-amber-600 font-bold flex items-center gap-1">
-                                        <StellaCoin size={16} /> 450
+                                        <StellaCoin size={16} /> 520
                                     </span>
                                 </div>
                                 <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                                     <div className="bg-purple-500 w-[100%] h-full" />
                                 </div>
                                 <p className="text-[10px] text-purple-700/70 mt-2 text-right">Massive capacity for daily use</p>
+                                <p className="text-[10px] text-purple-800/60 mt-1 font-medium bg-purple-100/50 py-1 px-2 rounded-md inline-block">Deep Research: 6-9 Stellas</p>
                             </div>
 
                             <div className="space-y-4 flex-1 mb-8">
@@ -265,7 +270,8 @@ export default function PricingPage() {
                                 ))}
                             </div>
 
-                            <button className="w-full py-4 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-all border border-slate-900 hover:shadow-lg">
+                            <button
+                                className="w-full py-4 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-all border border-slate-900 hover:shadow-lg">
                                 Get Platinum
                             </button>
                         </div>
@@ -312,6 +318,9 @@ export default function PricingPage() {
                                         <span className="font-mono text-amber-400 text-xs font-bold">{item.cost}</span>
                                     </div>
                                 ))}
+                                <div className="mt-4 pt-4 border-t border-slate-700/50 text-[10px] text-slate-400 italic">
+                                    * Research costs vary by plan (Silver: 4-7, Gold/Platinum: 6-9)
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -330,10 +339,11 @@ export default function PricingPage() {
                             <div className="mb-4">
                                 <StellaCoin size={48} />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-1">Starter Pack</h3>
+                            <h3 className="text-lg font-bold text-slate-900 mb-1">Small</h3>
                             <p className="text-slate-500 text-xs mb-4">100 Stellas</p>
-                            <div className="text-2xl font-bold text-slate-900 mb-6">$12</div>
-                            <button className="w-full py-2 rounded-lg bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm hover:border-slate-300 hover:bg-slate-50 transition-all">
+                            <div className="text-2xl font-bold text-slate-900 mb-6">$29</div>
+                            <button
+                                className="w-full py-2 rounded-lg bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm hover:border-slate-300 hover:bg-slate-50 transition-all">
                                 Buy Bundle
                             </button>
                         </div>
@@ -345,10 +355,11 @@ export default function PricingPage() {
                                 <StellaCoin size={56} />
                                 <StellaCoin size={24} className="absolute -bottom-1 -right-2" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-1">Creator Pack</h3>
+                            <h3 className="text-lg font-bold text-slate-900 mb-1">Growth</h3>
                             <p className="text-amber-700/70 text-xs mb-4">300 Stellas</p>
-                            <div className="text-2xl font-bold text-slate-900 mb-6">$25</div>
-                            <button className="w-full py-2 rounded-lg bg-amber-500 text-white font-bold text-sm hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20">
+                            <div className="text-2xl font-bold text-slate-900 mb-6">$69</div>
+                            <button
+                                className="w-full py-2 rounded-lg bg-amber-500 text-white font-bold text-sm hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20">
                                 Buy Bundle
                             </button>
                         </div>
@@ -360,10 +371,11 @@ export default function PricingPage() {
                                 <StellaCoin size={32} className="absolute -top-2 -right-4" />
                                 <StellaCoin size={20} className="absolute bottom-0 -left-2" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-1">Agency Pack</h3>
-                            <p className="text-slate-500 text-xs mb-4">750 Stellas</p>
-                            <div className="text-2xl font-bold text-slate-900 mb-6">$55</div>
-                            <button className="w-full py-2 rounded-lg bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm hover:border-slate-300 hover:bg-slate-50 transition-all">
+                            <h3 className="text-lg font-bold text-slate-900 mb-1">Pro</h3>
+                            <p className="text-slate-500 text-xs mb-4">600 Stellas</p>
+                            <div className="text-2xl font-bold text-slate-900 mb-6">$119</div>
+                            <button
+                                className="w-full py-2 rounded-lg bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm hover:border-slate-300 hover:bg-slate-50 transition-all">
                                 Buy Bundle
                             </button>
                         </div>

@@ -1,0 +1,902 @@
+[
+    {
+        "LLM_script_ideas": [],
+        "llm_research_summary": [],
+        "latest_tweets_data": [],
+        "top_tweets_data": [],
+        "user_performance_research": {
+            "profile": {
+                "username": "mock_user",
+                "fullName": "Mock User",
+                "totalReels": 0
+            },
+            "aggregates": {
+                "totalViews": 0,
+                "totalLikes": 0,
+                "totalComments": 0,
+                "totalShares": 0,
+                "totalSaves": 0,
+                "avgViews": 0,
+                "avgLikes": 0,
+                "avgComments": 0,
+                "avgDuration": 0,
+                "avgEngagement": 0,
+                "transcriptCoverage": 0,
+                "avgWPM": 0
+            },
+            "reels": []
+        },
+        "competitor_research": {
+            "summary": {
+                "competitorsTracked": 4,
+                "totalViews": 2295619,
+                "avgViews": 255069,
+                "avgLikes": 7587,
+                "avgWPM": 176,
+                "transcriptCoverage": 100
+            },
+            "reels": [
+                {
+                    "id": "3816344948329464295",
+                    "url": "https://www.instagram.com/p/DT2YYK5iMHn/",
+                    "thumbnail": "https://instagram.fman4-1.fna.fbcdn.net/v/t51.2885-15/619818324_17849962113628716_2861824333083011308_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fman4-1.fna.fbcdn.net&_nc_cat=100",
+                    "creator": "trakin.ai",
+                    "creatorName": "TrakinTech AI",
+                    "creatorFollowers": 250000,
+                    "rank": 1,
+                    "velocity_score": 100,
+                    "final_score": 100,
+                    "age_hours": 48,
+                    "age_label": "recent",
+                    "engagement_rate": 10.29,
+                    "comment_to_like_ratio": 1.68,
+                    "is_quality_engagement": true,
+                    "views_over_expected": 1.54,
+                    "is_punching_above_weight": true,
+                    "found_in_hashtags": [
+                        "republicday",
+                        "aihacks"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "Viral Republic Day WhatsApp Status🇮🇳\n\nComment REPUBLIC DAY to get the exact prompt.\nShare this reel in your family groups and status.\n\n#republicday #Whatsappstatus #Viralaiprompts #aihacks #aitricks",
+                    "captionHook": "Viral Republic Day WhatsApp Status🇮🇳",
+                    "spokenHook": "इस रिपब्लिक डे वही बोरिंग वाटसएप स्टेटस मत डालो इंस्टेड इंडियन फ्लैक के साथ अपनी ऐसे फोटो डालो",
+                    "hasTranscript": true,
+                    "transcript": "इस रिपब्लिक डे वही बोरिंग वाटसएप स्टेटस मत डालो इंस्टेड इंडियन फ्लैक के साथ अपनी ऐसे फोटो डालो आपको बस जैमिनाई पर जाना है क्रियेट इमेज आप्शन सेलेक्ट करना है",
+                    "wordsPerMinute": 116,
+                    "detectedLanguage": "hindi",
+                    "hashtags": [
+                        "republicday",
+                        "Whatsappstatus",
+                        "Viralaiprompts",
+                        "aihacks",
+                        "aitricks"
+                    ],
+                    "hashtagCount": 5,
+                    "views": 391674,
+                    "likes": 15038,
+                    "comments": 25246,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 40,
+                    "captionLength": 200,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "trakin.ai",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-23T10:29:15.000Z",
+                    "postDay": "Friday",
+                    "performanceTier": "viral",
+                    "performanceScore": 1.8
+                },
+                {
+                    "id": "3804859376179756220",
+                    "url": "https://www.instagram.com/p/DTNk3GRgjy8/",
+                    "thumbnail": "https://scontent-ord5-3.cdninstagram.com/v/t51.2885-15/611871791_1516304792928763_5675854653020835303_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ord5-3.cdninstagram.com&_nc_cat=107",
+                    "creator": "nivedan.ai",
+                    "creatorName": "Nivedan Rathi",
+                    "creatorFollowers": 180000,
+                    "rank": 2,
+                    "velocity_score": 95,
+                    "final_score": 95,
+                    "age_hours": 408,
+                    "age_label": "established",
+                    "engagement_rate": 4.45,
+                    "comment_to_like_ratio": 0.42,
+                    "is_quality_engagement": true,
+                    "views_over_expected": 4.92,
+                    "is_punching_above_weight": true,
+                    "found_in_hashtags": [
+                        "chatgpt",
+                        "aibranding"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": true,
+                    "caption": "He built a $3M brand in 30 days… using ChatGPT 🤯\n\nInstead of chasing random niches, he found one rising trend, dug into creator transcripts, and uncovered a product nobody had branded properly…",
+                    "captionHook": "He built a $3M brand in 30 days… using ChatGPT 🤯",
+                    "spokenHook": "This guy built a $3 million brand in just 30 days. Here's how he did it.",
+                    "hasTranscript": true,
+                    "transcript": "This guy built a $3 million brand in just 30 days. Here's how he did it. He searched a rising market and noticed Pilates was blowing up. Then he checked Google Trends to confirm the demand was actually growing.",
+                    "wordsPerMinute": 190,
+                    "detectedLanguage": "english",
+                    "hashtags": [],
+                    "hashtagCount": 0,
+                    "views": 1254069,
+                    "likes": 39178,
+                    "comments": 16587,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 49,
+                    "captionLength": 180,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "nivedan.ai",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-07T14:09:44.000Z",
+                    "postDay": "Wednesday",
+                    "performanceTier": "viral",
+                    "performanceScore": 3.76
+                },
+                {
+                    "id": "3815724878432290046",
+                    "url": "https://www.instagram.com/p/DT0LY9zk8T-/",
+                    "thumbnail": "https://scontent-atl3-1.cdninstagram.com/v/t51.2885-15/620375834_861583653388080_412689187967646731_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=100",
+                    "creator": "vaibhavsisinty",
+                    "creatorName": "Vaibhav Sisinty",
+                    "creatorFollowers": 320000,
+                    "rank": 3,
+                    "velocity_score": 85,
+                    "final_score": 85,
+                    "age_hours": 72,
+                    "age_label": "recent",
+                    "engagement_rate": 2.41,
+                    "comment_to_like_ratio": 0.02,
+                    "is_quality_engagement": false,
+                    "views_over_expected": 1.15,
+                    "is_punching_above_weight": true,
+                    "found_in_hashtags": [
+                        "aitools",
+                        "bytedance"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "This Chinese AI Beats Google Veo\n\nByteDance just dropped Waver 1.0 and it outperforms Google's Veo 3 in motion quality, visuals, and speed.",
+                    "captionHook": "This Chinese AI Beats Google Veo",
+                    "spokenHook": "The trap is perfectly set. China isn't selling AI, they're building addiction, free superior videos.",
+                    "hasTranscript": true,
+                    "transcript": "The trap is perfectly set. China isn't selling AI, they're building addiction, free superior videos. Wait till the end to know how to use it. I'm talking about Waiver 1.0 from ByteDance.",
+                    "wordsPerMinute": 187,
+                    "detectedLanguage": "english",
+                    "hashtags": [],
+                    "hashtagCount": 0,
+                    "views": 292526,
+                    "likes": 6892,
+                    "comments": 146,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 62,
+                    "captionLength": 140,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "vaibhavsisinty",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-22T13:53:27.000Z",
+                    "postDay": "Thursday",
+                    "performanceTier": "average",
+                    "performanceScore": 0.97
+                },
+                {
+                    "id": "3816437070595941141",
+                    "url": "https://www.instagram.com/p/DT2tUucgOMV/",
+                    "thumbnail": "https://scontent-mia3-2.cdninstagram.com/v/t51.2885-15/621237332_18552153943058899_6509999146163329661_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mia3-2.cdninstagram.com&_nc_cat=107",
+                    "creator": "vaibhavsisinty",
+                    "creatorName": "Vaibhav Sisinty",
+                    "creatorFollowers": 320000,
+                    "rank": 4,
+                    "velocity_score": 70,
+                    "final_score": 70,
+                    "age_hours": 48,
+                    "age_label": "recent",
+                    "engagement_rate": 1.49,
+                    "comment_to_like_ratio": 0.01,
+                    "is_quality_engagement": false,
+                    "views_over_expected": 0.56,
+                    "is_punching_above_weight": false,
+                    "found_in_hashtags": [
+                        "futurewarfare",
+                        "technology"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "Germany just went FULL sci‑fi 😰\n\nRussia's invasion of Ukraine pushed warfare into a new era — German labs are now testing cyborg cockroaches for stealth surveillance.",
+                    "captionHook": "Germany just went FULL sci‑fi 😰",
+                    "spokenHook": "Germany is using cockroaches to spy on enemies, real insects. With cameras, this isn't science fiction anymore.",
+                    "hasTranscript": true,
+                    "transcript": "Germany is using cockroaches to spy on enemies, real insects. With cameras, this isn't science fiction anymore. While everyone's focused on AI chatbots, Germany quietly funded the most insane military technology.",
+                    "wordsPerMinute": 167,
+                    "detectedLanguage": "english",
+                    "hashtags": [
+                        "Germany",
+                        "Russia",
+                        "UkraineWar",
+                        "CyborgCockroaches",
+                        "FutureWarfare"
+                    ],
+                    "hashtagCount": 5,
+                    "views": 143139,
+                    "likes": 2107,
+                    "comments": 21,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 93,
+                    "captionLength": 165,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "vaibhavsisinty",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-23T13:29:06.000Z",
+                    "postDay": "Friday",
+                    "performanceTier": "underperformer",
+                    "performanceScore": 0.5
+                },
+                {
+                    "id": "3815610235570677123",
+                    "url": "https://www.instagram.com/p/DTzxUsUiOWD/",
+                    "thumbnail": "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-15/620973252_17849843223628716_3262502055171526150_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=100",
+                    "creator": "trakin.ai",
+                    "creatorName": "TrakinTech AI",
+                    "creatorFollowers": 250000,
+                    "rank": 5,
+                    "velocity_score": 60,
+                    "final_score": 60,
+                    "age_hours": 72,
+                    "age_label": "recent",
+                    "engagement_rate": 4.2,
+                    "comment_to_like_ratio": 0.9,
+                    "is_quality_engagement": true,
+                    "views_over_expected": 0.35,
+                    "is_punching_above_weight": false,
+                    "found_in_hashtags": [
+                        "skyfall",
+                        "aitrends"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "Create Viral Skyfall AI Reels 🔥\n\nComment \"Sky\" and we will share the exact prompts with you in DM.\n\n#skyfall #aitrends #aihacks #aireels #viralreeĺs",
+                    "captionHook": "Create Viral Skyfall AI Reels 🔥",
+                    "spokenHook": "दोस्तों इंटरनेट पर ये ट्रेंड बहुत वायरल हो रहा है। आप भी इसे बना सकते हो बस एक मिनट में।",
+                    "hasTranscript": true,
+                    "transcript": "दोस्तों इंटरनेट पर ये ट्रेंड बहुत वायरल हो रहा है। आप भी इसे बना सकते हो बस एक मिनट में। सबसे पहले गूगल जेमिनाई ओपन करो।",
+                    "wordsPerMinute": 131,
+                    "detectedLanguage": "hindi",
+                    "hashtags": [
+                        "skyfall",
+                        "aitrends",
+                        "aihacks",
+                        "aireels",
+                        "viralreeĺs"
+                    ],
+                    "hashtagCount": 5,
+                    "views": 89449,
+                    "likes": 1978,
+                    "comments": 1778,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 52,
+                    "captionLength": 145,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "trakin.ai",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-22T10:04:53.000Z",
+                    "postDay": "Thursday",
+                    "performanceTier": "underperformer",
+                    "performanceScore": 0.54
+                },
+                {
+                    "id": "3817181921851490028",
+                    "url": "https://www.instagram.com/p/DT5WrvPAD7s/",
+                    "thumbnail": "https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-15/620824876_1627103858278530_2431549879765491667_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=106",
+                    "creator": "vaibhavsisinty",
+                    "creatorName": "Vaibhav Sisinty",
+                    "creatorFollowers": 320000,
+                    "rank": 6,
+                    "velocity_score": 45,
+                    "final_score": 45,
+                    "age_hours": 8,
+                    "age_label": "fresh",
+                    "engagement_rate": 1.83,
+                    "comment_to_like_ratio": 0.01,
+                    "is_quality_engagement": false,
+                    "views_over_expected": 0.16,
+                    "is_punching_above_weight": false,
+                    "found_in_hashtags": [
+                        "aivideo",
+                        "higgsfield"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "AI video generation just changed forever 🎬\n\nNo camera crew. No VFX team. Just me + Higgsfield AI's Cinema Studio creating 100% realistic cinematic content.",
+                    "captionHook": "AI video generation just changed forever 🎬",
+                    "spokenHook": "This is historical. We have officially reached the point where AI-generated videos are 100% realistic and cinematic.",
+                    "hasTranscript": true,
+                    "transcript": "This is historical. We have officially reached the point where AI-generated videos are 100% realistic and cinematic. And my job is to help you create better videos and keep you updated.",
+                    "wordsPerMinute": 196,
+                    "detectedLanguage": "english",
+                    "hashtags": [
+                        "AIVideo",
+                        "HiggsfieldAI",
+                        "CinematicAI",
+                        "AIFilmmaking",
+                        "AITools"
+                    ],
+                    "hashtagCount": 5,
+                    "views": 41584,
+                    "likes": 754,
+                    "comments": 8,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 68,
+                    "captionLength": 155,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "vaibhavsisinty",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-24T14:07:25.000Z",
+                    "postDay": "Saturday",
+                    "performanceTier": "underperformer",
+                    "performanceScore": 0.24
+                },
+                {
+                    "id": "3817071026979263289",
+                    "url": "https://www.instagram.com/p/DT49eAViNM5/",
+                    "thumbnail": "https://scontent-det1-1.cdninstagram.com/v/t51.2885-15/622011293_17850086211628716_2438000760385890551_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-det1-1.cdninstagram.com&_nc_cat=100",
+                    "creator": "trakin.ai",
+                    "creatorName": "TrakinTech AI",
+                    "creatorFollowers": 250000,
+                    "rank": 7,
+                    "velocity_score": 40,
+                    "final_score": 40,
+                    "age_hours": 24,
+                    "age_label": "fresh",
+                    "engagement_rate": 7.86,
+                    "comment_to_like_ratio": 0.8,
+                    "is_quality_engagement": true,
+                    "views_over_expected": 0.14,
+                    "is_punching_above_weight": false,
+                    "found_in_hashtags": [
+                        "chatgpt",
+                        "resume"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "Create Resume in 2 Minutes😱\n\nComment 'Resume' and we will send you the exact ChatGPT prompt to generate your customised CV in 2 min.\n\n#ChatGPTprompts #chatgpttricks #resumemaker #resume #chatgpthacks",
+                    "captionHook": "Create Resume in 2 Minutes😱",
+                    "spokenHook": "दोस्तो हर जॉब application में एक ही resume मत डालो अलग-अलग jobs के लिए इसे change किया करो",
+                    "hasTranscript": true,
+                    "transcript": "दोस्तो हर जॉब application में एक ही resume मत डालो अलग-अलग jobs के लिए इसे change किया करो इसे prompt से आप एक मिनट के अंदर अपना resume job role के according customize कर सकते हो",
+                    "wordsPerMinute": 183,
+                    "detectedLanguage": "hindi",
+                    "hashtags": [
+                        "ChatGPTprompts",
+                        "chatgpttricks",
+                        "resumemaker",
+                        "resume",
+                        "chatgpthacks"
+                    ],
+                    "hashtagCount": 5,
+                    "views": 34889,
+                    "likes": 1525,
+                    "comments": 1219,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 39,
+                    "captionLength": 195,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "trakin.ai",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-24T10:29:15.000Z",
+                    "postDay": "Saturday",
+                    "performanceTier": "underperformer",
+                    "performanceScore": 0.65
+                },
+                {
+                    "id": "3815728925238748222",
+                    "url": "https://www.instagram.com/p/DT0MT2sCeQ-/",
+                    "thumbnail": "https://scontent-iad3-2.cdninstagram.com/v/t51.2885-15/619493486_17979801395970771_7859523101462607865_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_cat=103",
+                    "creator": "nivedan.ai",
+                    "creatorName": "Nivedan Rathi",
+                    "creatorFollowers": 180000,
+                    "rank": 8,
+                    "velocity_score": 35,
+                    "final_score": 35,
+                    "age_hours": 48,
+                    "age_label": "recent",
+                    "engagement_rate": 3.52,
+                    "comment_to_like_ratio": 0.6,
+                    "is_quality_engagement": true,
+                    "views_over_expected": 0.09,
+                    "is_punching_above_weight": false,
+                    "found_in_hashtags": [
+                        "emergent",
+                        "portfolio"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "Someone on Reddit landed a dream job with ONE thing most people ignore 👀\n\nNot a degree. Not a fancy resume. A portfolio website.",
+                    "captionHook": "Someone on Reddit landed a dream job with ONE thing most people ignore 👀",
+                    "spokenHook": "This guy from Reddit landed his dream job with one trick that 99% of people think isn't important.",
+                    "hasTranscript": true,
+                    "transcript": "This guy from Reddit landed his dream job with one trick that 99% of people think isn't important. He got a high paying job because of his portfolio website.",
+                    "wordsPerMinute": 230,
+                    "detectedLanguage": "english",
+                    "hashtags": [
+                        "emergent",
+                        "emergentai"
+                    ],
+                    "hashtagCount": 2,
+                    "views": 24065,
+                    "likes": 530,
+                    "comments": 318,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 52,
+                    "captionLength": 125,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "nivedan.ai",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-22T14:00:20.000Z",
+                    "postDay": "Thursday",
+                    "performanceTier": "underperformer",
+                    "performanceScore": 0.31
+                },
+                {
+                    "id": "3816442332274933557",
+                    "url": "https://www.instagram.com/p/DT2uhSxAr81/",
+                    "thumbnail": "https://scontent-atl3-1.cdninstagram.com/v/t51.2885-15/622146370_880795631590452_3671713134494767153_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=100",
+                    "creator": "nivedan.ai",
+                    "creatorName": "Nivedan Rathi",
+                    "creatorFollowers": 180000,
+                    "rank": 9,
+                    "velocity_score": 30,
+                    "final_score": 30,
+                    "age_hours": 48,
+                    "age_label": "recent",
+                    "engagement_rate": 2.19,
+                    "comment_to_like_ratio": 0.86,
+                    "is_quality_engagement": true,
+                    "views_over_expected": 0.09,
+                    "is_punching_above_weight": false,
+                    "found_in_hashtags": [
+                        "aitrend",
+                        "gravity"
+                    ],
+                    "hashtag_appearances": 2,
+                    "is_cross_hashtag_viral": false,
+                    "caption": "How we made the Gravity AI trend for FREE 🔥\n\nNo paid tools. No shortcuts.\n\nComment \"AURA\" and we'll share the full workflow + prompts 📄✨",
+                    "captionHook": "How we made the Gravity AI trend for FREE 🔥",
+                    "spokenHook": "never lie head it up that's me",
+                    "hasTranscript": true,
+                    "transcript": "never lie head it up that's me",
+                    "wordsPerMinute": 253,
+                    "detectedLanguage": "english",
+                    "hashtags": [],
+                    "hashtagCount": 0,
+                    "views": 24224,
+                    "likes": 286,
+                    "comments": 245,
+                    "shares": 0,
+                    "saves": 0,
+                    "duration": 12,
+                    "captionLength": 135,
+                    "audio": {
+                        "songName": "Original audio",
+                        "artistName": "nivedan.ai",
+                        "isOriginal": true
+                    },
+                    "postedAt": "2026-01-23T13:37:34.000Z",
+                    "postDay": "Friday",
+                    "performanceTier": "underperformer",
+                    "performanceScore": 0.22
+                }
+            ],
+            "top_hooks": [
+                {
+                    "hook": "This guy built a $3 million brand in just 30 days. Here's how he did it.",
+                    "reelId": "3804859376179756220"
+                },
+                {
+                    "hook": "इस रिपब्लिक डे वही बोरिंग वाटसएप स्टेटस मत डालो",
+                    "reelId": "3816344948329464295"
+                },
+                {
+                    "hook": "The trap is perfectly set. China isn't selling AI, they're building addiction.",
+                    "reelId": "3815724878432290046"
+                }
+            ],
+            "top_captions": [
+                {
+                    "captionHook": "He built a $3M brand in 30 days… using ChatGPT 🤯",
+                    "fullCaption": "He built a $3M brand in 30 days… using ChatGPT 🤯",
+                    "reelId": "3804859376179756220"
+                },
+                {
+                    "captionHook": "Viral Republic Day WhatsApp Status🇮🇳",
+                    "fullCaption": "Viral Republic Day WhatsApp Status🇮🇳",
+                    "reelId": "3816344948329464295"
+                }
+            ],
+            "competitor_reverse_engineering": [
+                {
+                    "competitor_name": "@vaibhavsisinty",
+                    "tactic_observed": "Geopolitical Fear-Mongering ('The trap is set', 'China is building addiction')",
+                    "why_it_worked": "Triggers 'Us vs Them' tribalism and fear of missing out on hidden agendas.",
+                    "differentiation_plan": "Use the same geopolitical hook but pivot immediately to practical utility for the Indian user."
+                },
+                {
+                    "competitor_name": "@nivedan.ai",
+                    "tactic_observed": "Zero-to-Hero Case Studies ('$3M brand in 30 days')",
+                    "why_it_worked": "Provides tangible proof of concept rather than abstract tool features.",
+                    "differentiation_plan": "Break down a localized Indian business model using AI, similar to Sanidhya's 'Booking Page' video."
+                }
+            ],
+            "top_hashtags": [
+                {
+                    "hashtag": "#republicday",
+                    "count": 1,
+                    "avgViews": 391674
+                },
+                {
+                    "hashtag": "#whatsappstatus",
+                    "count": 1,
+                    "avgViews": 391674
+                },
+                {
+                    "hashtag": "#viralaiprompts",
+                    "count": 1,
+                    "avgViews": 391674
+                },
+                {
+                    "hashtag": "#aitricks",
+                    "count": 1,
+                    "avgViews": 391674
+                },
+                {
+                    "hashtag": "#aihacks",
+                    "count": 2,
+                    "avgViews": 240562
+                },
+                {
+                    "hashtag": "#germany",
+                    "count": 1,
+                    "avgViews": 143139
+                },
+                {
+                    "hashtag": "#russia",
+                    "count": 1,
+                    "avgViews": 143139
+                },
+                {
+                    "hashtag": "#ukrainewar",
+                    "count": 1,
+                    "avgViews": 143139
+                },
+                {
+                    "hashtag": "#cyborgcockroaches",
+                    "count": 1,
+                    "avgViews": 143139
+                },
+                {
+                    "hashtag": "#futurewarfare",
+                    "count": 1,
+                    "avgViews": 143139
+                },
+                {
+                    "hashtag": "#skyfall",
+                    "count": 1,
+                    "avgViews": 89449
+                },
+                {
+                    "hashtag": "#aitrends",
+                    "count": 1,
+                    "avgViews": 89449
+                },
+                {
+                    "hashtag": "#aireels",
+                    "count": 1,
+                    "avgViews": 89449
+                },
+                {
+                    "hashtag": "#viralreeĺs",
+                    "count": 1,
+                    "avgViews": 89449
+                },
+                {
+                    "hashtag": "#aivideo",
+                    "count": 1,
+                    "avgViews": 41584
+                },
+                {
+                    "hashtag": "#higgsfieldai",
+                    "count": 1,
+                    "avgViews": 41584
+                },
+                {
+                    "hashtag": "#cinematicai",
+                    "count": 1,
+                    "avgViews": 41584
+                },
+                {
+                    "hashtag": "#aifilmmaking",
+                    "count": 1,
+                    "avgViews": 41584
+                },
+                {
+                    "hashtag": "#aitools",
+                    "count": 1,
+                    "avgViews": 41584
+                },
+                {
+                    "hashtag": "#chatgptprompts",
+                    "count": 1,
+                    "avgViews": 34889
+                },
+                {
+                    "hashtag": "#chatgpttricks",
+                    "count": 1,
+                    "avgViews": 34889
+                },
+                {
+                    "hashtag": "#resumemaker",
+                    "count": 1,
+                    "avgViews": 34889
+                },
+                {
+                    "hashtag": "#resume",
+                    "count": 1,
+                    "avgViews": 34889
+                },
+                {
+                    "hashtag": "#chatgpthacks",
+                    "count": 1,
+                    "avgViews": 34889
+                },
+                {
+                    "hashtag": "#emergent",
+                    "count": 1,
+                    "avgViews": 24065
+                }
+            ],
+            "top_audio": [
+                {
+                    "songName": "Original audio",
+                    "artistName": "nivedan.ai",
+                    "isOriginal": true,
+                    "avgViews": 1254069,
+                    "count": 1
+                },
+                {
+                    "songName": "Original audio",
+                    "artistName": "trakin.ai",
+                    "isOriginal": true,
+                    "avgViews": 391674,
+                    "count": 1
+                },
+                {
+                    "songName": "Original audio",
+                    "artistName": "vaibhavsisinty",
+                    "isOriginal": true,
+                    "avgViews": 292526,
+                    "count": 1
+                },
+                {
+                    "songName": "Original audio",
+                    "artistName": "vaibhavsisinty",
+                    "isOriginal": true,
+                    "avgViews": 143139,
+                    "count": 1
+                },
+                {
+                    "songName": "Original audio",
+                    "artistName": "trakin.ai",
+                    "isOriginal": true,
+                    "avgViews": 89449,
+                    "count": 1
+                }
+            ],
+            "content_strategy": {
+                "content_pillars": [
+                    {
+                        "pillar": "educational",
+                        "count": 6,
+                        "percentage": 67
+                    },
+                    {
+                        "pillar": "news",
+                        "count": 4,
+                        "percentage": 44
+                    },
+                    {
+                        "pillar": "promotional",
+                        "count": 4,
+                        "percentage": 44
+                    },
+                    {
+                        "pillar": "storytelling",
+                        "count": 2,
+                        "percentage": 22
+                    },
+                    {
+                        "pillar": "motivational",
+                        "count": 1,
+                        "percentage": 11
+                    }
+                ],
+                "cta_usage": [
+                    {
+                        "type": "comment",
+                        "count": 6,
+                        "percentage": 67
+                    },
+                    {
+                        "type": "share",
+                        "count": 3,
+                        "percentage": 33
+                    }
+                ]
+            },
+            "insights": [
+                "Analyzed 9 competitor reels from 3 creators",
+                "Transcript coverage: 100% (9/9)",
+                "Avg speaking pace: 184 WPM (fast)",
+                "Best time: 14:00 (439,906 avg views)",
+                "Best day: Wednesday",
+                "Best duration: 30-60s",
+                "Audio: 100% original",
+                "2/9 reels are viral (1.5x+ avg)",
+                "1/9 punching above weight"
+            ]
+        },
+        "niche_research": {
+            "summary": {
+                "reelsAnalyzed": 0,
+                "totalViews": 0,
+                "avgViews": 0,
+                "avgLikes": 0,
+                "avgComments": 0,
+                "avgDuration": 0,
+                "avgEngagement": 0,
+                "avgWPM": 0
+            },
+            "source_hashtags": [],
+            "reels": []
+        },
+        "latest_research": [],
+        "top_research": [],
+        "dashboard_analytics": {
+            "trends_line": [
+                {
+                    "date": "Sat",
+                    "value1": 300,
+                    "value2": 500
+                },
+                {
+                    "date": "Sun",
+                    "value1": 450,
+                    "value2": 600
+                },
+                {
+                    "date": "Mon",
+                    "value1": 700,
+                    "value2": 400
+                },
+                {
+                    "date": "Tue",
+                    "value1": 400,
+                    "value2": 800
+                },
+                {
+                    "date": "Wed",
+                    "value1": 600,
+                    "value2": 500
+                },
+                {
+                    "date": "Thu",
+                    "value1": 550,
+                    "value2": 370
+                },
+                {
+                    "date": "Fri",
+                    "value1": 900,
+                    "value2": 650
+                }
+            ],
+            "growth_bar": [
+                {
+                    "month": "Jan",
+                    "value1": 400,
+                    "value2": 700
+                },
+                {
+                    "month": "Feb",
+                    "value1": 900,
+                    "value2": 300
+                },
+                {
+                    "month": "Mar",
+                    "value1": 600,
+                    "value2": 500
+                },
+                {
+                    "month": "Apr",
+                    "value1": 300,
+                    "value2": 800
+                },
+                {
+                    "month": "May",
+                    "value1": 800,
+                    "value2": 400
+                },
+                {
+                    "month": "Jun",
+                    "value1": 500,
+                    "value2": 1000
+                }
+            ],
+            "segmentation": [
+                {
+                    "name": "Paid Users",
+                    "value": 70,
+                    "color": "#10b981"
+                },
+                {
+                    "name": "Free Users",
+                    "value": 30,
+                    "color": "#f59e0b"
+                }
+            ],
+            "products": [
+                {
+                    "name": "EchoBot",
+                    "revenue": "$512.00",
+                    "date": "22 Aug 2025",
+                    "usage": 20,
+                    "limit": 100,
+                    "status": "active"
+                },
+                {
+                    "name": "Leadfeeder",
+                    "revenue": "$256.00",
+                    "date": "18 Aug 2025",
+                    "usage": 35,
+                    "limit": 100,
+                    "status": "active"
+                },
+                {
+                    "name": "TrendAI",
+                    "revenue": "$1,024.00",
+                    "date": "25 Aug 2025",
+                    "usage": 60,
+                    "limit": 100,
+                    "status": "active"
+                }
+            ],
+            "kpi": {
+                "active_users": "66k",
+                "new_signups": "357",
+                "churned": "95+"
+            }
+        }
+    }
+]

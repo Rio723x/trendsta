@@ -1,5 +1,5 @@
 import React from "react";
-import { Play, Eye, Heart, MessageCircle, Share2, X, Clock, ExternalLink } from "lucide-react";
+import { Play, Eye, Heart, MessageCircle, Share2, X, Clock, ExternalLink, TrendingUp } from "lucide-react";
 import { VelocityBadge } from "./ReelCard";
 import { ReelData } from "../types/trendsta";
 
@@ -101,12 +101,13 @@ export default function ReelModal({ reel, onClose }: ReelModalProps) {
                                 </div>
                                 <p className="text-xl font-bold text-slate-900">{reel.comments}</p>
                             </div>
+                            {/* Replaced Shares with Engagement Rate */}
                             <div className="p-3 bg-green-50 rounded-xl border border-green-100">
                                 <div className="flex items-center gap-2 text-green-600 mb-1">
-                                    <Share2 size={14} />
-                                    <span className="text-xs">Shares</span>
+                                    <TrendingUp size={14} />
+                                    <span className="text-xs">Engagement Rate</span>
                                 </div>
-                                <p className="text-xl font-bold text-slate-900">{reel.shares}</p>
+                                <p className="text-xl font-bold text-slate-900">{reel.engagement_rate?.toFixed(2)}%</p>
                             </div>
                         </div>
 

@@ -30,7 +30,7 @@ interface TopReelsClientProps {
 }
 
 export default function TopReelsClient({ data }: TopReelsClientProps) {
-    const [viewMode, setViewMode] = useState<'reels' | 'insights'>('reels');
+    const [viewMode, setViewMode] = useState<'reels' | 'insights'>('insights');
     const [activeFilter, setActiveFilter] = useState("all");
     const [selectedReel, setSelectedReel] = useState<ReelData | null>(null);
 

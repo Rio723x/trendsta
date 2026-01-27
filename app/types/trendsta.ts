@@ -148,6 +148,44 @@ export interface NicheResearch {
     // Add other fields from source if needed
 }
 
+export interface CompetitorReverseEngineering {
+    competitor_name: string;
+    tactic_observed: string;
+    why_it_worked: string;
+    differentiation_plan: string;
+}
+
+export interface HashtagStat {
+    hashtag: string;
+    count: number;
+    avgViews: number;
+}
+
+export interface AudioStat {
+    songName: string;
+    artistName: string;
+    isOriginal: boolean;
+    avgViews: number;
+    count: number;
+}
+
+export interface ContentPillar {
+    pillar: string;
+    count: number;
+    percentage: number;
+}
+
+export interface CTAUsage {
+    type: string;
+    count: number;
+    percentage: number;
+}
+
+export interface ContentStrategy {
+    content_pillars: ContentPillar[];
+    cta_usage: CTAUsage[];
+}
+
 export interface CompetitorResearch {
     summary: {
         competitorsTracked: number;
@@ -160,6 +198,11 @@ export interface CompetitorResearch {
     reels: ReelData[];
     top_hooks: { hook: string; reelId: string }[];
     top_captions: { captionHook: string; fullCaption: string; reelId: string }[];
+    competitor_reverse_engineering?: CompetitorReverseEngineering[];
+    top_hashtags?: HashtagStat[];
+    top_audio?: AudioStat[];
+    content_strategy?: ContentStrategy;
+    insights?: string[];
 }
 
 export interface UserPerformanceResearch {
@@ -200,4 +243,11 @@ export interface TrendstaData {
     niche_research: NicheResearch;
     latest_research: any[]; // Define if used
     top_research: any[];    // Define if used
+    dashboard_analytics: {
+        trends_line: { date: string; value1: number; value2: number }[];
+        growth_bar: { month: string; value1: number; value2: number }[];
+        segmentation: { name: string; value: number; color: string }[];
+        products: { name: string; revenue: string; date: string; usage: number; limit: number; status: string }[];
+        kpi: { active_users: string; new_signups: string; churned: string };
+    };
 }

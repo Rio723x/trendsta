@@ -16,7 +16,7 @@ export const MODEL_MODES = {
     thinking: {
         name: 'Thinking',
         description: 'Deep analysis, complex strategy',
-        model: 'google/gemini-3-pro-preview',
+        model: 'x-ai/grok-4.1-fast',
         icon: '🧠',
     },
 };
