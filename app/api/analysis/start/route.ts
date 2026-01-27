@@ -96,12 +96,66 @@ export async function POST(request: NextRequest) {
         // Calculate how to split the deduction (monthly first, then topup)
         const deductionSplit = calculateDeductionSplit(stellaCost, balances);
 
-        // 6. Call external analysis service (mocked for now)
-        // TODO: Replace with actual API call
-        const externalJobId = `mock-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+        // 6. Call n8n research webhook
+        const n8nUrl = process.env.N8N_WEBHOOK_URL!;
+        const n8nApiKey = process.env.N8N_API_KEY;
 
-        // Simulate successful API response
-        const externalApiSuccess = true;
+        const n8nPayload = {
+            creator_niche: "AI & Tech", // TODO: Get from user preferences
+            niche: "AI",
+            language_of_script: "English",
+            language_of_text: "English",
+            writing_style: "Let the Data/trend decide",
+            location: "India",
+            noOfReelsToScrape: 3,
+            reelsTill_Filter: 14,
+            minLikesReel_Filter: 0,
+            competitorListUsernames: "vaibhavsisinty", // TODO: Fetch from DB
+            reels_per_competitor: 3,
+            is_user_specific: true,
+            client_username: "100xengineers",
+            user_reels_to_scrape: 3,
+            use_apify_transcript: true,
+            apify_key: process.env.APIFY_API_KEY,
+            socialAccountId: socialAccountId,
+        };
+
+        let externalJobId: string;
+        let externalApiSuccess = false;
+
+        try {
+            const axios = (await import("axios")).default;
+
+            const n8nResponse = await axios.post(n8nUrl, n8nPayload, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": n8nApiKey,
+                },
+                timeout: 300000, // 5 minute timeout
+            });
+
+            //externalJobId = n8nResponse.data.jobId || `n8n-${Date.now()}`;
+            externalApiSuccess = true;
+
+        } catch (error: unknown) {
+            const { isAxiosError } = await import("axios");
+            if (isAxiosError(error)) {
+                if (error.code === "ECONNABORTED") {
+                    console.error("n8n API timeout");
+                    return NextResponse.json(
+                        { error: "Analysis service timeout. Please try again." },
+                        { status: 504 }
+                    );
+                }
+                console.error("n8n API error:", error.response?.status, error.response?.data);
+            } else {
+                console.error("n8n API request failed:", error);
+            }
+            return NextResponse.json(
+                { error: "Failed to start analysis. Please try again." },
+                { status: 500 }
+            );
+        }
 
         if (!externalApiSuccess) {
             return NextResponse.json(
@@ -119,7 +173,6 @@ export async function POST(request: NextRequest) {
                     socialAccountId,
                     status: "PENDING",
                     stellaCost,
-                    externalJobId,
                 },
             });
 
