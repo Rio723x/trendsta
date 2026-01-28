@@ -107,6 +107,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                         });
 
                         // c. Update wallet balances (deduct from correct buckets)
+                        // [MODIFIED] Wallet is now updated in start/route.ts when transactions are created (HELD).
+                        // We do NOT deduct again here. We just settle the transactions.
+                        /*
                         if (monthlyDeduction > 0 || topupDeduction > 0) {
                             await tx.wallet.update({
                                 where: { userId: job.userId },
@@ -116,6 +119,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                                 },
                             });
                         }
+                        */
 
                         // d. Mark billing as finalized
                         await tx.analysisJob.update({

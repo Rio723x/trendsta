@@ -80,7 +80,8 @@ export async function POST(request: NextRequest) {
         // 5. Calculate cost and check credits with bucket breakdown
         const stellaCost = calculateAnalysisCost(competitorIds.length);
         const balances = await getWalletBalances(userId);
-
+        console.log("balances", balances);
+        console.log("stellaCost", stellaCost);
         if (balances.total < stellaCost) {
             return NextResponse.json(
                 {
@@ -99,6 +100,7 @@ export async function POST(request: NextRequest) {
         // 6. Call n8n research webhook
         const n8nUrl = process.env.N8N_WEBHOOK_URL!;
         const n8nApiKey = process.env.N8N_API_KEY;
+        const apifyKey = process.env.APIFY_API_KEY;
 
         const n8nPayload = {
             creator_niche: "AI & Tech", // TODO: Get from user preferences
@@ -111,13 +113,13 @@ export async function POST(request: NextRequest) {
             reelsTill_Filter: 14,
             minLikesReel_Filter: 0,
             competitorListUsernames: "vaibhavsisinty", // TODO: Fetch from DB
-            reels_per_competitor: 3,
+            reels_per_competitor: 1,
             is_user_specific: true,
             client_username: "100xengineers",
-            user_reels_to_scrape: 3,
+            user_reels_to_scrape: 1,
             use_apify_transcript: true,
-            apify_key: process.env.APIFY_API_KEY,
             socialAccountId: socialAccountId,
+            apify_key: apifyKey,
         };
 
         let externalJobId: string;
@@ -135,7 +137,7 @@ export async function POST(request: NextRequest) {
             });
 
             //externalJobId = n8nResponse.data.jobId || `n8n-${Date.now()}`;
-            externalApiSuccess = true;
+            externalApiSuccess = n8nResponse.status === 200;
 
         } catch (error: unknown) {
             const { isAxiosError } = await import("axios");
@@ -208,6 +210,17 @@ export async function POST(request: NextRequest) {
                         referenceId: newJob.id,
                         status: "HELD",
                         metadata: transactionMetadata,
+                    },
+                });
+            }
+
+            // [NEW] Deduct from Wallet immediately
+            if (deductionSplit.fromMonthly > 0 || deductionSplit.fromTopup > 0) {
+                await tx.wallet.update({
+                    where: { userId },
+                    data: {
+                        ...(deductionSplit.fromMonthly > 0 && { monthlyBalance: { decrement: deductionSplit.fromMonthly } }),
+                        ...(deductionSplit.fromTopup > 0 && { topupBalance: { decrement: deductionSplit.fromTopup } }),
                     },
                 });
             }

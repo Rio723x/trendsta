@@ -19,7 +19,7 @@ export default function CheckoutExample() {
         setError(null);
 
         try {
-            const productId = "pdt_0NWvdNgnGXCcADDk4MJDH"; // Replace with your product ID
+            const productId = "pdt_0NWyeKym8LDKoNKB9E7do"; // Replace with your product ID
             const response = await fetch(
                 `/api/checkout?productId=${productId}&quantity=1&metadata_userId=123`
             );
@@ -53,13 +53,13 @@ export default function CheckoutExample() {
                 body: JSON.stringify({
                     productId: "pdt_0NWyeKym8LDKoNKB9E7do",
                     quantity: 1,
-                    email: "yashgoyalambk@gmail.com",
-                    name: "Yash Goyal",
+                    email: "aizendrio@gmail.com",
+                    name: "Rio Chatterjee",
                     metadata: {
-                        userId: "UQXLTezvXdI5CS4pcrslEghzbhRarACp",
-                        source: "dashboard",
+                        userId: "859825ff-b5ba-4c9f-8a87-b45ea833ea82",
+                        source: "checkout",
                     },
-                    
+
                 }),
             });
 
