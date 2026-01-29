@@ -19,7 +19,7 @@ export interface RawScriptCaption {
 export interface RawVisualStoryboard {
     opening_frame: string;
     main_visual_style: string;
-    b_roll_suggestions: string;
+    b_roll_suggestions: string | string[];
 }
 
 export interface RawScriptHashtags {
@@ -35,18 +35,18 @@ export interface RawScriptMetadata {
 }
 
 export interface RawScriptSuggestion {
-    rank: number;
-    topic_title: string;
-    script_title: string;
-    viral_potential_score: number;
-    estimated_duration: string;
-    full_script: string;
-    script_breakdown: RawScriptBreakdown;
-    caption: RawScriptCaption;
-    visual_storyboard: RawVisualStoryboard;
-    hashtags: RawScriptHashtags;
-    audio_vibe: string;
-    metadata: RawScriptMetadata;
+    rank?: number;
+    topic_title?: string;
+    script_title?: string;
+    viral_potential_score?: number;
+    estimated_duration?: string;
+    full_script?: string;
+    script_breakdown?: RawScriptBreakdown;
+    caption?: RawScriptCaption;
+    visual_storyboard?: RawVisualStoryboard;
+    hashtags?: RawScriptHashtags;
+    audio_vibe?: string;
+    metadata?: RawScriptMetadata;
 }
 
 // --- Overall Strategy ---
@@ -449,6 +449,7 @@ export interface RawTwitterResearch {
     latest: RawTwitterResearchSection;
     top: RawTwitterResearchSection;
 }
+
 
 // --- Full Research Data (API Response) ---
 export interface RawResearchData {

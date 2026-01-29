@@ -81,7 +81,7 @@ export default function AccountPage() {
     const [showTimezoneDropdown, setShowTimezoneDropdown] = useState(false);
     const [showPhoneCodeDropdown, setShowPhoneCodeDropdown] = useState(false);
 
-    // Pre-fill from session
+    // Pre-fill from session and fetch full profile
     useEffect(() => {
         if (session?.user) {
             const nameParts = (session.user.name || "").split(" ");
@@ -91,6 +91,18 @@ export default function AccountPage() {
             if (session.user.image) {
                 setProfileImage(session.user.image);
             }
+
+            // Try to fetch extended profile data
+            // Note: in a real app better-auth might need config to return these in session
+            // or we fetch from a separate endpoint. For now, we'll try to use what's available
+            // or default to placeholders if session doesn't have them yet.
+            // If we want to be robust, we'd add a GET /api/user/me endpoint.
+            // For this iteration, let's assume session might have them or we just defer to defaults for now
+            // until we add the GET endpoint.
+            if ((session.user as any).phoneNumber) setPhoneNumber((session.user as any).phoneNumber);
+            if ((session.user as any).language) setLanguage((session.user as any).language);
+            if ((session.user as any).timezone) setTimezone((session.user as any).timezone);
+            if ((session.user as any).phoneCode) setPhoneCode((session.user as any).phoneCode || "+1");
         }
     }, [session]);
 
@@ -111,11 +123,33 @@ export default function AccountPage() {
 
     const handleSave = async () => {
         setIsSaving(true);
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setIsSaving(false);
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 3000);
+        try {
+            const response = await fetch("/api/user/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email, // Email usually not updatable this way for security, but we send it
+                    phoneNumber,
+                    language,
+                    timezone,
+                    image: profileImage
+                }),
+            });
+
+            if (!response.ok) throw new Error("Failed to update");
+
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
+
+            // Optionally force session refresh here
+            // window.location.reload(); // Simple way to refresh session data
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const selectedLanguage = languages.find((l) => l.code === language);

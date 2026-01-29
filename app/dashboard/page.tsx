@@ -5,12 +5,24 @@ import { getTrendstaData } from '../lib/dataLoader';
 
 
 
-export default function DashboardPage() {
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
+export default async function DashboardPage() {
 
     // Fetch data on the server
     const data = getTrendstaData();
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
 
+    const isGuest = !session?.user;
 
+    // Inject Guest Status
+    const dashboardData = {
+        ...data,
+        isGuest
+    };
 
-    return <DashboardClient data={data} />;
+    return <DashboardClient data={dashboardData} />;
 }

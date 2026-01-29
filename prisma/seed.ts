@@ -1,181 +1,121 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient, PaymentType, BillingPeriod } from "../generated/prisma";
+
+import { PrismaClient } from "../generated/prisma";
+import path from "path";
+import fs from "fs";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    console.log("🌱 Seeding database...\n");
-
-    // ============================================
-    // 1. SUBSCRIPTION PLANS
-    // ============================================
-    console.log("📦 Creating Plans...");
-
-    const basicPlan = await prisma.plan.upsert({
-        where: { name: "Basic" },
-        update: {},
-        create: {
-            name: "Basic",
-            tier: 1,
-            monthlyStellasGrant: 100,
-            paymentType: PaymentType.SUBSCRIPTION,
-            competitorAnalysisAccess: false,
-            aiConsultantAccess: false,
-            dailyAutoAnalysisEnabled: false,
-        },
-    });
-    console.log(`  ✅ Basic Plan: ${basicPlan.id}`);
-
-    const creatorPlan = await prisma.plan.upsert({
-        where: { name: "Creator" },
-        update: {},
-        create: {
-            name: "Creator",
-            tier: 2,
-            monthlyStellasGrant: 200,
-            paymentType: PaymentType.SUBSCRIPTION,
-            competitorAnalysisAccess: true,
-            aiConsultantAccess: false,
-            dailyAutoAnalysisEnabled: false,
-        },
-    });
-    console.log(`  ✅ Creator Plan: ${creatorPlan.id}`);
-
-    const proPlan = await prisma.plan.upsert({
-        where: { name: "Pro" },
-        update: {},
-        create: {
-            name: "Pro",
-            tier: 3,
-            monthlyStellasGrant: 400,
-            paymentType: PaymentType.SUBSCRIPTION,
-            competitorAnalysisAccess: true,
-            aiConsultantAccess: true,
-            dailyAutoAnalysisEnabled: true,
-        },
-    });
-    console.log(`  ✅ Pro Plan: ${proPlan.id}`);
-
-    // ============================================
-    // 2. STELLA BUNDLE (One-time purchase)
-    // ============================================
-    console.log("\n💎 Creating Stella Bundle...");
-
-    const starterBundle = await prisma.stellaBundle.upsert({
-        where: { id: "00000000-0000-0000-0000-000000000001" }, // Use a fixed ID for upsert
-        update: {
-            name: "100 Stellas Pack",
-            stellaAmount: 100,
-            isActive: true,
-        },
-        create: {
-            name: "100 Stellas Pack",
-            stellaAmount: 100,
-            isActive: true,
-        },
-    });
-    console.log(`  ✅ 100 Stellas Pack: ${starterBundle.id}`);
-
-    // ============================================
-    // 3. PAYMENT PRODUCTS (Dodo mappings)
-    // ============================================
-    console.log("\n💳 Creating Payment Products...");
-
-    // Basic Plan - Monthly
-    await prisma.paymentProduct.upsert({
-        where: { providerProductId: "pdt_0NWyeKym8LDKoNKB9E7do" },
-        update: {
-            price: 2500, // $25.00
-            currency: "USD",
-        },
-        create: {
-            type: PaymentType.SUBSCRIPTION,
-            planId: basicPlan.id,
-            bundleId: null,
-            providerName: "dodo",
-            providerProductId: "pdt_0NWyeKym8LDKoNKB9E7do",
-            billingPeriod: BillingPeriod.MONTHLY,
-            price: 2500, // $25.00 in cents
-            currency: "USD",
-        },
-    });
-    console.log("  ✅ Basic Monthly (pdt_0NWyeKym8LDKoNKB9E7do)");
-
-    // Creator Plan - Monthly
-    await prisma.paymentProduct.upsert({
-        where: { providerProductId: "pdt_0NXHnRHE2WZEePYoiQlyI" },
-        update: {
-            price: 4500, // $45.00
-            currency: "USD",
-        },
-        create: {
-            type: PaymentType.SUBSCRIPTION,
-            planId: creatorPlan.id,
-            bundleId: null,
-            providerName: "dodo",
-            providerProductId: "pdt_0NXHnRHE2WZEePYoiQlyI",
-            billingPeriod: BillingPeriod.MONTHLY,
-            price: 4500, // $45.00 in cents
-            currency: "USD",
-        },
-    });
-    console.log("  ✅ Creator Monthly (pdt_0NXHnRHE2WZEePYoiQlyI)");
-
-    // Pro Plan - Monthly
-    await prisma.paymentProduct.upsert({
-        where: { providerProductId: "pdt_0NXHnX4Wd2XdAz47FRiof" },
-        update: {
-            price: 9900, // $99.00
-            currency: "USD",
-        },
-        create: {
-            type: PaymentType.SUBSCRIPTION,
-            planId: proPlan.id,
-            bundleId: null,
-            providerName: "dodo",
-            providerProductId: "pdt_0NXHnX4Wd2XdAz47FRiof",
-            billingPeriod: BillingPeriod.MONTHLY,
-            price: 9900, // $99.00 in cents
-            currency: "USD",
-        },
-    });
-    console.log("  ✅ Pro Monthly (pdt_0NXHnX4Wd2XdAz47FRiof)");
-
-    // 100 Stellas Pack - One-time
-    await prisma.paymentProduct.upsert({
-        where: { providerProductId: "pdt_0NWvdNgnGXCcADDk4MJDH" },
-        update: {
-            price: 5000, // $50.00
-            currency: "USD",
-        },
-        create: {
-            type: PaymentType.ONE_TIME,
-            planId: null,
-            bundleId: starterBundle.id,
-            providerName: "dodo",
-            providerProductId: "pdt_0NWvdNgnGXCcADDk4MJDH",
-            billingPeriod: null, // Not applicable for one-time
-            price: 5000, // $50.00 in cents
-            currency: "USD",
-        },
-    });
-    console.log("  ✅ 100 Stellas Pack (pdt_0NWvdNgnGXCcADDk4MJDH)");
-
-    console.log("\n✨ Seeding complete!\n");
-
-    // Summary
-    console.log("📊 Summary:");
-    console.log("─────────────────────────────────────────");
-    console.log("Plans:");
-    console.log("  • Basic:   $25/mo, 100 stellas, no features");
-    console.log("  • Creator: $45/mo, 200 stellas, competitor analysis");
-    console.log("  • Pro:     $99/mo, 400 stellas, all features");
-    console.log("\nBundles:");
-    console.log("  • 100 Stellas Pack: $50 one-time");
-    console.log("─────────────────────────────────────────\n");
+    const guestEmail = process.env.GUEST_EMAIL;
+    console.log(guestEmail);
+        if (!guestEmail) {
+            throw new Error("GUEST_EMAIL env var not set");
+        }
+    
+        console.log(`Seeding guest user: ${guestEmail}`);
+    
+        // 1. Upsert User
+        const user = await prisma.user.upsert({
+            where: { email: guestEmail },
+            update: {},
+            create: {
+                email: guestEmail,
+                name: "Guest User",
+                emailVerified: true,
+                image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Guest",
+            },
+        });
+    
+        console.log(`User ID: ${user.id}`);
+    
+        // 2. Upsert Social Account
+        const username = "chatgptricks";
+        const existingSocial = await prisma.socialAccount.findFirst({
+            where: { userId: user.id, username: username }
+        });
+    
+        let socialAccountId = existingSocial?.id;
+    
+        if (!existingSocial) {
+            const newSocial = await prisma.socialAccount.create({
+                data: {
+                    userId: user.id,
+                    username: username
+                }
+            });
+            socialAccountId = newSocial.id;
+            console.log(`Created SocialAccount: ${username}`);
+        } else {
+            console.log(`Found SocialAccount: ${username}`);
+        }
+    
+        if (!socialAccountId) throw new Error("Failed to get SocialAccountId");
+    
+        // 3. Read Data
+        const dataPath = path.join(process.cwd(), 'guest_data.json');
+        console.log(`Reading data from: ${dataPath}`);
+    
+        if (!fs.existsSync(dataPath)) {
+            throw new Error(`Data file not found at ${dataPath}`);
+        }
+    
+        const rawData = fs.readFileSync(dataPath, 'utf-8');
+        const jsonData = JSON.parse(rawData);
+    
+        // The JSON is an array, take the first item
+        const guestData = Array.isArray(jsonData) ? jsonData[0] : jsonData;
+    
+        // 4. Create Research
+        // Clear existing research for this account to avoid duplicates/confusion
+        console.log("Clearing old research...");
+        await prisma.research.deleteMany({
+            where: { socialAccountId: socialAccountId }
+        });
+    
+        console.log("Creating new research...");
+        const research = await prisma.research.create({
+            data: {
+                socialAccountId: socialAccountId,
+                // Create related data inline
+                scriptSuggestions: {
+                    create: {
+                        scripts: guestData.script_suggestion?.scripts || []
+                    }
+                },
+                overallStrategy: {
+                    create: {
+                        data: guestData.overall_strategy || {}
+                    }
+                },
+                userResearch: {
+                    create: {
+                        data: guestData.user_research_json || {}
+                    }
+                },
+                competitorResearch: {
+                    create: {
+                        data: guestData.competitor_research_json || {}
+                    }
+                },
+                nicheResearch: {
+                    create: {
+                        data: guestData.niche_research_json || {}
+                    }
+                },
+                twitterResearch: {
+                    create: {
+                        latestData: guestData.twitterLatest_research_json || {},
+                        topData: guestData.twitterTop_research_json || {}
+                    }
+                }
+            }
+        });
+    
+        console.log(`Successfully created Research Object! ID: ${research.id}`);
 }
 
 main()

@@ -78,6 +78,18 @@ export default function DashboardClient({ data }: DashboardClientProps) {
                             <p className="text-slate-500 mt-1">{formattedDate}</p>
                         </div>
 
+                        {/* Guest Banner */}
+                        {data.isGuest && (
+                            <div className="flex items-center gap-4 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-lg">
+                                <div className="text-indigo-700 text-sm font-medium">
+                                    Viewing as Guest Mode
+                                </div>
+                                <a href="/signin" className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-md hover:bg-indigo-700 transition-colors">
+                                    Log In to Save
+                                </a>
+                            </div>
+                        )}
+
                         {/* Date Range Toggle */}
                         <div className="flex items-center bg-white border border-slate-200 rounded-lg p-1 shadow-sm">
                             <button
