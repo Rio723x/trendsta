@@ -6,7 +6,7 @@ import {
     ExternalLink, Play, Award, Zap, Flame, User, Music, Calendar,
     ChevronDown, ChevronUp, Copy, Check, Bookmark, Share2
 } from "lucide-react";
-
+//import ReelCard from "@/app/components/ReelCard";
 // Competitor Reel Interface matching the provided data structure
 export interface CompetitorReel {
     id: string;
@@ -49,7 +49,7 @@ export interface CompetitorReel {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface CompetitorReelsViewProps {
-    reels: any[];
+    reels: CompetitorReel[];
 }
 
 // Helper to format numbers
@@ -146,18 +146,22 @@ const ReelCard = ({ reel, index }: { reel: CompetitorReel; index: number }) => {
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
             {/* Thumbnail Section */}
             <div className="relative aspect-[9/16] max-h-[280px] overflow-hidden bg-slate-900">
+                <a href={reel.url} target="_blank" rel="noopener noreferrer">
                 <img
                     src={reel.thumbnail}
                     alt={`Reel by ${reel.creatorName}`}
+                    crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                         (e.target as HTMLImageElement).src = "https://via.placeholder.com/270x480?text=Reel";
                     }}
                 />
-
+                </a>
                 {/* Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
+                
                 {/* Top badges */}
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
                     {/* Rank Badge */}
@@ -186,16 +190,16 @@ const ReelCard = ({ reel, index }: { reel: CompetitorReel; index: number }) => {
                 )}
 
                 {/* Play button */}
-                <a
+                {/* <a
                     href={reel.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
+                > */}
                     <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
                         <Play size={24} className="text-slate-800 ml-1" fill="currentColor" />
                     </div>
-                </a>
+                {/* </a> */}
 
                 {/* Bottom Stats Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-3">

@@ -14,11 +14,11 @@ export default function PerformanceDoctorView({ performance }: PerformanceDoctor
     // Derive WPM Data for graph
     // We want a list of { wpm: number, views: number }
     const wpmData = performance.reels
-        .filter(r => r.wordsPerMinute > 0)
-        .map(r => ({ wpm: Math.round(r.wordsPerMinute), views: r.views }))
+        .filter(r => r.wordsPerMinute !== undefined && r.wordsPerMinute > 0)
+        .map(r => ({ wpm: Math.round(r.wordsPerMinute!), views: r.views }))
         .slice(0, 10); // Limit to 10 points for graph
 
-    const maxViews = wpmData.length > 0 ? Math.max(...wpmData.map(d => d.views)) : 1000;
+    const maxViews = wpmData.length > 0 ? Math.max(...wpmData.map(d => d.views!)) : 1000;
 
     const transcriptCoverage = performance.aggregates.transcriptCoverage || 0;
 
@@ -68,7 +68,7 @@ export default function PerformanceDoctorView({ performance }: PerformanceDoctor
                             <div key={i} className="flex flex-col items-center gap-2 flex-1 h-full justify-end group cursor-pointer">
                                 <div
                                     className="w-full max-w-[30px] bg-rose-200 rounded-t-sm group-hover:bg-rose-500 transition-colors relative"
-                                    style={{ height: `${(data.views / maxViews) * 80}%` }}
+                                    style={{ height: `${(data.views! / maxViews) * 80}%` }}
                                 >
                                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                                         {data.views} Views
@@ -97,7 +97,7 @@ export default function PerformanceDoctorView({ performance }: PerformanceDoctor
                                 </div>
                                 <h4 className="font-bold text-slate-900 leading-tight mb-1 line-clamp-2">{topPunch.captionHook || topPunch.caption}</h4>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-2xl font-black text-amber-600">{topPunch.views_over_expected.toFixed(1)}x</span>
+                                    <span className="text-2xl font-black text-amber-600">{topPunch.views_over_expected!.toFixed(1)}x</span>
                                     <span className="text-xs text-amber-800/70 font-medium">ROI multiplier</span>
                                 </div>
                             </div>

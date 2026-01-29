@@ -3,7 +3,7 @@
 // Use these functions to transform data from useResearch hooks before passing to components.
 // =============================================================================
 
-import { ReelData, ResearchSummary, CompetitorResearch, NicheResearch, UserPerformanceResearch } from "@/app/types/trendsta";
+import { ReelData, ResearchSummary, CompetitorResearch, NicheResearch, UserPerformanceResearch, ScriptIdea } from "@/app/types/trendsta";
 import {
     RawCompetitorReel,
     RawNicheReel,
@@ -13,7 +13,8 @@ import {
     RawUserResearch,
     RawOverallStrategy,
     RawInstagramNicheInsight,
-    RawCompetitorReverseEngineering
+    RawCompetitorReverseEngineering,
+    RawScriptSuggestion
 } from "@/app/types/rawApiTypes";
 
 // =============================================================================
@@ -294,5 +295,68 @@ export function buildResearchSummary(
         hook_formula: strategy?.viral_hook_formula?.pattern || base?.hook_formula || "",
         instagram_summary_research: base?.instagram_summary_research || "",
         generatedAt: base?.generatedAt || new Date().toISOString()
+    };
+}
+
+// =============================================================================
+// SCRIPT SUGGESTION TRANSFORMERS
+// =============================================================================
+
+/**
+ * Transforms a raw script suggestion to UI-ready ScriptIdea.
+ */
+export function transformScriptSuggestion(raw: RawScriptSuggestion): ScriptIdea {
+    const primaryTags = raw.hashtags?.primary || [];
+    const trendingTags = raw.hashtags?.trending || [];
+    const allTags = [...primaryTags, ...trendingTags];
+
+    return {
+        type: "script_suggestion",
+        rank: raw.rank || 0,
+        topic_title: raw.topic_title || "Untitled Topic",
+        script_title: raw.script_title || "Untitled Script",
+        viral_potential_score: raw.viral_potential_score || 0,
+        estimated_duration: raw.estimated_duration || "0:00",
+        full_text: raw.full_script || "",
+        script_word_count: raw.full_script ? raw.full_script.split(/\s+/).length : 0,
+
+        // Script Breakdown
+        script_hook: raw.script_breakdown?.hook || "",
+        script_buildup: raw.script_breakdown?.buildup || "",
+        script_value: raw.script_breakdown?.value || "",
+        script_cta: raw.script_breakdown?.cta || "",
+
+        // Caption
+        caption_full: raw.caption?.full_caption || "",
+        caption_first_line: raw.caption?.first_line_hook || "",
+
+        // Hashtags
+        hashtags_primary: primaryTags.join(" "),
+        hashtags_niche: primaryTags.join(" "), // Fallback
+        hashtags_trending: trendingTags.join(" "),
+        hashtags_all: allTags.join(" "),
+        hashtags_count: allTags.length,
+
+        // Metadata
+        target_audience: raw.metadata?.target_audience || "",
+        emotional_trigger: raw.metadata?.emotional_trigger || "",
+        content_gap_addressed: raw.metadata?.content_gap_addressed || "",
+        why_this_works: raw.metadata?.why_this_works || "",
+
+        // New Fields
+        audio_vibe: raw.audio_vibe || "",
+        visual_storyboard: {
+            opening_frame: raw.visual_storyboard?.opening_frame || "",
+            main_visual_style: raw.visual_storyboard?.main_visual_style || "",
+            b_roll_suggestions: raw.visual_storyboard?.b_roll_suggestions ?
+                (typeof raw.visual_storyboard.b_roll_suggestions === 'string'
+                    ? [raw.visual_storyboard.b_roll_suggestions]
+                    : raw.visual_storyboard.b_roll_suggestions)
+                : []
+        },
+
+        // Misc
+        competitor_reference: "", // Not available in raw
+        generatedAt: new Date().toISOString()
     };
 }

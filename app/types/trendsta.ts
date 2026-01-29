@@ -23,6 +23,12 @@ export interface ScriptIdea {
     content_gap_addressed: string;
     why_this_works: string;
     competitor_reference: string;
+    visual_storyboard: {
+        opening_frame: string;
+        main_visual_style: string;
+        b_roll_suggestions: string[];
+    };
+    audio_vibe: string;
     generatedAt: string;
 }
 
@@ -250,4 +256,5 @@ export interface TrendstaData {
         products: { name: string; revenue: string; date: string; usage: number; limit: number; status: string }[];
         kpi: { active_users: string; new_signups: string; churned: string };
     };
+    isGuest?: boolean;
 }

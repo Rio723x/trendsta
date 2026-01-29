@@ -1,20 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import { FileText, Clock, Target, Hash, ChevronDown, ChevronUp, Copy, Check, Sparkles, Lightbulb, MessageCircle } from "lucide-react";
+import { FileText, Clock, Target, Hash, ChevronDown, ChevronUp, Copy, Check, Sparkles, Lightbulb, MessageCircle, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
-import { ScriptIdea } from "@/app/types/trendsta";
+import { useScriptSuggestions } from "@/hooks/useResearch";
+import { transformScriptSuggestion } from "@/lib/transformers";
 
-interface ScriptIdeasClientProps {
-    scripts: ScriptIdea[];
-}
+export default function ScriptIdeasClient() {
+    const { data: rawData, isLoading, error } = useScriptSuggestions();
 
-export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
     const [expandedScript, setExpandedScript] = useState<number | null>(null);
-    const [expandedCaptionId, setExpandedCaptionId] = useState<number | null>(null);
     const [copiedSection, setCopiedSection] = useState<string | null>(null);
+
+    const scripts = Array.isArray(rawData?.scripts) ? rawData.scripts.map(transformScriptSuggestion) : [];
 
     const copyToClipboard = (text: string, section: string) => {
         navigator.clipboard.writeText(text);
@@ -25,6 +25,38 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
     const toggleScript = (id: number) => {
         setExpandedScript(expandedScript === id ? null : id);
     };
+
+    // Loading State
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
+                    <div className="flex flex-col items-center gap-4">
+                        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+                        <p className="text-slate-500">Generating script ideas...</p>
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    // Error State
+    if (error) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
+                        <p className="text-red-600 font-medium">Failed to load scripts</p>
+                        <p className="text-red-500 text-sm mt-2">{(error as Error).message}</p>
+                    </div>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -50,12 +82,6 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                             const scriptId = index;
                             const isExpanded = expandedScript === scriptId;
                             const viralScore = script.viral_potential_score || 0;
-
-                            // Framer motion variants
-                            const cardVariants = {
-                                collapsed: { height: 'auto' },
-                                expanded: { height: 'auto' }
-                            };
 
                             return (
                                 <motion.div
@@ -88,7 +114,7 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                                                 </div>
 
                                                 <div className="relative w-28 h-28 mb-4">
-                                                    <svg viewBox="0 0 100 100" className="w-full h-full rotate-90">
+                                                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                                                         <circle cx="50" cy="50" r="40" fill="transparent" stroke="#e2e8f0" strokeWidth="8" />
                                                         <circle
                                                             cx="50" cy="50" r="40" fill="transparent" stroke="#9333ea" strokeWidth="8"
@@ -98,7 +124,7 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                                                             className="transition-all duration-1000 ease-out"
                                                         />
                                                     </svg>
-                                                    <div className="absolute inset-0 flex flex-col items-center justify-center -rotate-90">
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
                                                         <span className="text-3xl font-black text-slate-900">{viralScore}</span>
                                                     </div>
                                                 </div>
@@ -108,6 +134,18 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                                                     <p className="text-xs text-slate-600 leading-snug line-clamp-2">
                                                         {script.why_this_works}
                                                     </p>
+
+                                                    {/* Audio Vibe Badge */}
+                                                    {script.audio_vibe && (
+                                                        <div className="flex items-start gap-2 text-left bg-slate-100 p-2 rounded-lg">
+                                                            <div className="mt-0.5"><Sparkles size={10} className="text-purple-500" /></div>
+                                                            <div>
+                                                                <span className="text-[10px] font-bold text-slate-500 uppercase block">Audio Vibe</span>
+                                                                <p className="text-[10px] text-slate-700 font-medium leading-tight">{script.audio_vibe}</p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
                                                     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-lg shadow-sm w-full justify-center">
                                                         <Clock size={12} className="text-slate-400" />
                                                         <span className="text-[10px] font-bold text-slate-700">
@@ -119,7 +157,7 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
 
                                             {/* Right Col: Hook & Strategy */}
                                             <div className="lg:col-span-8 space-y-5 flex flex-col justify-center">
-                                                {/* Header & Title */}
+                                                {/* ... (Keep existing Header & Title ...) */}
                                                 <div className="flex items-start justify-between">
                                                     <h2 className="text-lg font-bold text-slate-900">{script.script_title}</h2>
                                                     <button className="text-sm font-semibold text-purple-600 flex items-center gap-1 hover:text-purple-700 transition-colors">
@@ -182,6 +220,7 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
 
                                                         {/* Full Script Text */}
                                                         <div className="lg:col-span-2 space-y-4">
+                                                            {/* ... (Keep existing script editor ...) */}
                                                             <div className="flex items-center justify-between">
                                                                 <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                                                                     <MessageCircle size={16} className="text-slate-400" />
@@ -246,7 +285,7 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                                                                     {script.caption_full}
                                                                 </p>
                                                                 <div className="flex flex-wrap gap-2">
-                                                                    {script.hashtags_all?.split(/[\s,]+/).filter(Boolean).map((tag, i) => (
+                                                                    {script.hashtags_all?.split(/[\s,]+/).filter(Boolean).map((tag: string, i: number) => (
                                                                         <span key={i} className="text-[10px] font-medium text-blue-600 bg-blue-100/50 px-2 py-1 rounded-md">
                                                                             #{tag.replace(/^#/, '')}
                                                                         </span>
@@ -280,6 +319,39 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                                                                 </div>
                                                             </div>
 
+                                                            {/* Visual Storyboard Section (NEW) */}
+                                                            {script.visual_storyboard && (
+                                                                <div className="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                                                                    <h3 className="text-xs font-bold text-amber-800 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                                                        <Sparkles size={14} /> Visual Storyboard
+                                                                    </h3>
+                                                                    <div className="space-y-3">
+                                                                        <div>
+                                                                            <span className="text-[10px] font-bold text-amber-600 uppercase block mb-1">Opening Frame</span>
+                                                                            <p className="text-xs text-amber-900 leading-relaxed font-medium">
+                                                                                {script.visual_storyboard.opening_frame}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span className="text-[10px] font-bold text-amber-600 uppercase block mb-1">Visual Style</span>
+                                                                            <p className="text-xs text-amber-900 leading-relaxed">
+                                                                                {script.visual_storyboard.main_visual_style}
+                                                                            </p>
+                                                                        </div>
+                                                                        {script.visual_storyboard.b_roll_suggestions?.length > 0 && (
+                                                                            <div>
+                                                                                <span className="text-[10px] font-bold text-amber-600 uppercase block mb-1">B-Roll Ideas</span>
+                                                                                <ul className="list-disc pl-3 space-y-1">
+                                                                                    {script.visual_storyboard.b_roll_suggestions.map((broll: string, i: number) => (
+                                                                                        <li key={i} className="text-[10px] text-amber-900 leading-tight">{broll}</li>
+                                                                                    ))}
+                                                                                </ul>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
                                                             <div className="bg-purple-50 p-5 rounded-xl border border-purple-100">
                                                                 <div className="flex items-start gap-3">
                                                                     <Lightbulb size={18} className="text-purple-600 mt-0.5" />
@@ -306,8 +378,10 @@ export default function ScriptIdeasClient({ scripts }: ScriptIdeasClientProps) {
                             <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-200">
                                 <FileText size={48} className="mx-auto text-slate-200 mb-4" />
                                 <h3 className="text-lg font-bold text-slate-900">No scripts generated yet</h3>
-                                <p className="text-slate-500">Check back after the AI completes its analysis.</p>
+                                <p className="text-slate-500">Run a new analysis to generate script ideas.</p>
+                                <p className="text-slate-500">{JSON.stringify(rawData)}</p>
                             </div>
+
                         )}
                     </div>
                 </div>

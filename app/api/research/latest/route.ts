@@ -8,22 +8,83 @@ import { headers } from "next/headers";
 export async function GET(request: Request) {
     try {
         // 1. Auth check
-        // const session = await auth.api.getSession({
-        //     headers: await headers(),
-        // });
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
 
-        // if (!session?.user) {
-        //     return NextResponse.json(
-        //         { error: "Unauthorized" },
-        //         { status: 401 }
-        //     );
-        // }
+        if (!session?.user) {
+            // Check for Guest Mode
+            const guestEmail = process.env.GUEST_EMAIL;
+            if (guestEmail) {
+                const guestUser = await prisma.user.findUnique({
+                    where: { email: guestEmail },
+                });
 
-        // const userId = session.user.id;
+                if (guestUser) {
+                    // Start Guest Logic - Find social account for guest
+                    const socialAccount = await prisma.socialAccount.findFirst({
+                        where: { userId: guestUser.id },
+                        orderBy: { createdAt: "desc" },
+                    });
+
+                    if (!socialAccount) {
+                        return NextResponse.json(
+                            { error: "Guest configurations incomplete." },
+                            { status: 500 }
+                        );
+                    }
+
+                    const research = await prisma.research.findFirst({
+                        where: { socialAccountId: socialAccount.id },
+                        orderBy: { createdAt: "desc" },
+                        include: {
+                            scriptSuggestions: true,
+                            overallStrategy: true,
+                            userResearch: true,
+                            competitorResearch: true,
+                            nicheResearch: true,
+                            twitterResearch: true,
+                        },
+                    });
+
+                    if (!research) {
+                        return NextResponse.json(
+                            { error: "Guest research not found." },
+                            { status: 404 }
+                        );
+                    }
+
+                    return NextResponse.json({
+                        id: research.id,
+                        socialAccountId: research.socialAccountId,
+                        createdAt: research.createdAt,
+                        isGuest: true, // Flag for UI
+                        scriptSuggestions: research.scriptSuggestions?.scripts ?? null,
+                        overallStrategy: research.overallStrategy?.data ?? null,
+                        userResearch: research.userResearch?.data ?? null,
+                        competitorResearch: research.competitorResearch?.data ?? null,
+                        nicheResearch: research.nicheResearch?.data ?? null,
+                        twitterResearch: research.twitterResearch
+                            ? {
+                                latest: research.twitterResearch.latestData,
+                                top: research.twitterResearch.topData,
+                            }
+                            : null,
+                    });
+                }
+            }
+
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+        }
+
+        const userId = session.user.id;
 
         // TESTING: Get userId from query params
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get("userId");
+        // const { searchParams } = new URL(request.url);
+        // const userId = searchParams.get("userId");
 
         if (!userId) {
             return NextResponse.json(

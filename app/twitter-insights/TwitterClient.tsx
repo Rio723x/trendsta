@@ -279,26 +279,6 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
                         />
                     ) : (
                         <div className="space-y-8 animate-fadeIn">
-                            {/* Stats Grid */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
-                                <div className="stat-card">
-                                    <p className="text-2xl font-bold text-slate-900">{topTweets.length}</p>
-                                    <p className="text-xs text-slate-500">Top Tweets</p>
-                                </div>
-                                <div className="stat-card">
-                                    <p className="text-2xl font-bold text-emerald-600">{(maxViews / 1000).toFixed(1)}K</p>
-                                    <p className="text-xs text-slate-500">Max Views</p>
-                                </div>
-                                <div className="stat-card">
-                                    <p className="text-2xl font-bold text-slate-900">{(maxFollowers / 1000).toFixed(1)}K</p>
-                                    <p className="text-xs text-slate-500">Top Followers</p>
-                                </div>
-                                <div className="stat-card">
-                                    <p className="text-2xl font-bold text-slate-900">{topScore.toFixed(1)}</p>
-                                    <p className="text-xs text-slate-500">Top Score</p>
-                                </div>
-                            </div>
-
                             {/* Two Panel Layout */}
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Left Panel - Trending Topics */}
@@ -309,7 +289,7 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
                                             <h2 className="font-semibold text-slate-900">Trending Topics</h2>
                                             <div className="live-indicator ml-2" />
                                         </div>
-                                        <div className="divide-y divide-slate-100 stagger-children">
+                                        <div className="divide-y divide-slate-100">
                                             {hashtags.map((topic, index) => (
                                                 <TrendingItem key={topic.rank} topic={topic} index={index} />
                                             ))}
@@ -347,7 +327,7 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
                                     </div>
 
                                     {activeTab === "top" ? (
-                                        <div className="space-y-4 stagger-children">
+                                        <div className="space-y-4">
                                             {sortedTopTweets.map((tweet, index) => (
                                                 <TweetCard key={tweet.id} tweet={tweet} index={index} />
                                             ))}
@@ -359,7 +339,7 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
                                                 <span className="text-sm font-medium text-slate-900">Live Feed</span>
                                                 <span className="text-xs text-slate-500">• Updates in real-time</span>
                                             </div>
-                                            <div className="stagger-children">
+                                            <div>
                                                 {latestTweets.map((tweet, index) => (
                                                     <LatestTweetItem key={tweet.id} tweet={tweet} index={index} />
                                                 ))}
