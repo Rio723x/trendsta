@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
+
 import { PrismaClient } from "../generated/prisma";
 import path from "path";
 import fs from "fs";
@@ -119,7 +120,7 @@ async function main() {
 
 main()
     .catch((e) => {
-        console.error("❌ Seed failed:", e);
+        console.error("❌ Seeding failed:", e);
         process.exit(1);
     })
     .finally(async () => {

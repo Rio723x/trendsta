@@ -2,7 +2,15 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
 import { prisma } from "@/lib/prisma";
-import { StellaBucket, StellaReason } from "../generated/prisma";
+
+import {
+    handlePaymentSucceeded,
+    handleSubscriptionActive,
+    handleSubscriptionRenewed,
+    handleSubscriptionExpired,
+    handleSubscriptionCancelled,
+    handleSubscriptionFailed,
+} from "@/lib/webhooks/handlers";
 
 import {
     dodopayments,
@@ -71,10 +79,14 @@ export const auth = betterAuth({
             use: [
                 checkout({
                     products: [
-                        {
-                            productId: "pdt_0NWyeKym8LDKoNKB9E7do",
-                            slug: "trendsta_pro",
-                        },
+                        // Basic Plan - $25/month
+                        { productId: "pdt_0NWyeKym8LDKoNKB9E7do", slug: "basic-monthly" },
+                        // Creator Plan - $45/month
+                        { productId: "pdt_0NXHnRHE2WZEePYoiQlyI", slug: "creator-monthly" },
+                        // Pro Plan - $99/month
+                        { productId: "pdt_0NXHnX4Wd2XdAz47FRiof", slug: "pro-monthly" },
+                        // 100 Stellas Pack - $50 one-time
+                        { productId: "pdt_0NWvdNgnGXCcADDk4MJDH", slug: "stellas-100" },
                     ],
                     successUrl: "/dashboard/success",
                     authenticatedUsersOnly: true,
@@ -82,70 +94,14 @@ export const auth = betterAuth({
                 portal(),
                 webhooks({
                     webhookKey: process.env.DODO_PAYMENTS_WEBHOOK_SECRET!,
-                    onPayload: async (payload: any) => {
-                        console.log("Received webhook:", payload.event_type);
-
-                        if (payload.event_type === "subscription_created") {
-                            const { data } = payload;
-                            // 1. Find the Plan via PaymentProduct
-                            const paymentProduct = await prisma.paymentProduct.findUnique({
-                                where: { providerProductId: data.product_id },
-                                include: { plan: true },
-                            });
-
-                            if (!paymentProduct) {
-                                console.error(`No PaymentProduct found for Dodo Product ID: ${data.product_id}`);
-                                return;
-                            }
-
-                            // 2. Find the User by email (assuming Dodo sends customer email)
-                            // Note: Dodo payload structure for customer might vary, verify if 'customer.email' exists
-                            const userEmail = data.customer.email;
-                            const user = await prisma.user.findUnique({ where: { email: userEmail } });
-
-                            if (!user) {
-                                console.error(`No user found for email: ${userEmail}`);
-                                return;
-                            }
-
-                            // 3. Grant Stellas Transactionally
-                            await prisma.$transaction(async (tx) => {
-                                // A. Add Transaction
-                                await tx.stellaTransaction.create({
-                                    data: {
-                                        userId: user.id,
-                                        amount: paymentProduct.plan.monthlyStellasGrant,
-                                        bucket: StellaBucket.MONTHLY,
-                                        reason: StellaReason.MONTHLY_GRANT,
-                                        status: "SETTLED", // Enum mapping if needed, or string if enum matches
-                                        referenceId: data.subscription_id,
-                                        metadata: {
-                                            dodoSubscriptionId: data.subscription_id,
-                                            dodoProductId: data.product_id,
-                                        },
-                                    },
-                                });
-
-                                // B. Update Wallet
-                                const wallet = await tx.wallet.findUnique({ where: { userId: user.id } });
-                                if (wallet) {
-                                    await tx.wallet.update({
-                                        where: { userId: user.id },
-                                        data: { monthlyBalance: { increment: paymentProduct.plan.monthlyStellasGrant } },
-                                    });
-                                } else {
-                                    await tx.wallet.create({
-                                        data: {
-                                            userId: user.id,
-                                            monthlyBalance: paymentProduct.plan.monthlyStellasGrant,
-                                            topupBalance: 0,
-                                        },
-                                    });
-                                }
-                            });
-                            console.log(`Granted ${paymentProduct.plan.monthlyStellasGrant} Stellas to ${userEmail}`);
-                        }
-                    },
+                    // One-time payments (stella bundle purchases)
+                    onPaymentSucceeded: handlePaymentSucceeded,
+                    // Subscription lifecycle events
+                    onSubscriptionActive: handleSubscriptionActive,
+                    onSubscriptionRenewed: handleSubscriptionRenewed,
+                    onSubscriptionExpired: handleSubscriptionExpired,
+                    onSubscriptionCancelled: handleSubscriptionCancelled,
+                    onSubscriptionFailed: handleSubscriptionFailed,
                 }),
                 usage(),
             ],

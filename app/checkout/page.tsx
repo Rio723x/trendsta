@@ -13,33 +13,7 @@ export default function CheckoutExample() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Example 1: Static Checkout (GET)
-    const handleStaticCheckout = async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const productId = "pdt_0NWyeKym8LDKoNKB9E7do"; // Replace with your product ID
-            const response = await fetch(
-                `/api/checkout?productId=${productId}&quantity=1&metadata_userId=123`
-            );
-
-            console.log("Static checkout response:", response.status);
-
-            if (!response.ok) {
-                const errorData = await response.text();
-                console.error("Checkout failed:", errorData);
-                throw new Error(`Checkout failed: ${response.status} - ${errorData}`);
-            }
-
-            const { checkout_url } = await response.json();
-            console.log("Checkout URL:", checkout_url);
-            window.location.href = checkout_url; // Redirect to checkout
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred");
-            setLoading(false);
-        }
-    };
+   
 
     // Example 2: Checkout Session (POST) - Recommended
     const handleSessionCheckout = async () => {
@@ -92,14 +66,6 @@ export default function CheckoutExample() {
             )}
 
             <div className="space-y-4">
-                {/* Static Checkout Button */}
-                <button
-                    onClick={handleStaticCheckout}
-                    disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    {loading ? "Processing..." : "Static Checkout (GET)"}
-                </button>
 
                 {/* Session Checkout Button */}
                 <button

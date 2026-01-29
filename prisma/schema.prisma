@@ -270,6 +270,27 @@ model AnalysisJob {
 // PLANS & SUBSCRIPTIONS
 // ============================================
 
+
+enum PaymentType {
+  SUBSCRIPTION // Recurring (Silver, Gold)
+  ONE_TIME     // Single charge (Credit Bundles)
+}
+
+// 2. ONE-TIME BUNDLES (The "Definition" of a top-up)
+model StellaBundle {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String // "Starter Pack", "Pro Pack"
+  stellaAmount Int    // 500
+  isActive     Boolean @default(true) 
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  paymentProducts PaymentProduct[]
+
+  @@map("stella_bundle")
+}
+
 // Predefined, static plans
 model Plan {
   id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -278,6 +299,9 @@ model Plan {
 
   // Monthly stellas granted
   monthlyStellasGrant Int
+
+  // Payment type
+  paymentType PaymentType @default(SUBSCRIPTION)
 
   // Feature capabilities
   competitorAnalysisAccess Boolean @default(false)
@@ -298,14 +322,22 @@ model Plan {
 model PaymentProduct {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  planId String @db.Uuid
-  plan   Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  type PaymentType // SUBSCRIPTION or ONE_TIME
 
-  providerName      String // e.g. "dodo"
-  providerProductId String        @unique // Unique external product ID
-  billingPeriod     BillingPeriod
-  price             Int // Price in smallest currency unit (cents)
-  currency          String // e.g. "USD"
+  // Polymorphic Relations (Only one should be set)
+  planId   String? @db.Uuid
+  plan     Plan?   @relation(fields: [planId], references: [id])
+  
+  bundleId String?       @db.Uuid
+  bundle   StellaBundle? @relation(fields: [bundleId], references: [id])
+
+  // External Payment Provider Details
+  providerName      String // "dodo"
+  providerProductId String @unique 
+  
+  billingPeriod     BillingPeriod? // Null for ONE_TIME
+  price             Int 
+  currency          String 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -339,9 +371,6 @@ model Subscription {
 // STELLA CREDIT SYSTEM (Ledger-based)
 // ============================================
 
-// [NEW] THE READ OPTIMIZATION
-// This table is updated transactionally whenever a Transaction is created.
-// It serves as the "Fast Read" for the frontend.
 model Wallet {
   id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId  String @unique @db.Uuid

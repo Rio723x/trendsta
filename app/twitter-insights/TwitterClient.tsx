@@ -2,18 +2,63 @@
 
 import React, { useState, useMemo } from "react";
 import Sidebar from "../components/Sidebar";
-import { TrendingUp, ArrowUp, Minus, Heart, Repeat2, MessageCircle, ExternalLink, Eye, Users, Zap, Menu, Clock, LayoutGrid, Sparkles } from "lucide-react";
+import { TrendingUp, ArrowUp, Minus, Heart, Repeat2, MessageCircle, ExternalLink, Eye, Users, Zap, Menu, Clock, LayoutGrid, Sparkles, Loader2 } from "lucide-react";
 import MobileHeader from "../components/MobileHeader";
 import { TweetData, ResearchSummary } from "@/app/types/trendsta";
 import SmartInsightsView from "../components/SmartInsightsView";
+import { useTwitterResearch, useOverallStrategy } from "@/hooks/useResearch";
+import { RawTweet, RawTwitterResearch } from "@/app/types/rawApiTypes";
 
 export const dynamic = 'force-dynamic';
 
-interface TwitterClientProps {
-    topTweets: TweetData[];
-    latestTweets: TweetData[];
-    researchSummary?: ResearchSummary[];
+// Transform RawTweet to TweetData format
+function transformTweet(raw: RawTweet): TweetData {
+    return {
+        id: raw.id,
+        url: raw.url,
+        text: raw.text,
+        hook: raw.text.slice(0, 100),
+        wordCount: raw.text.split(/\s+/).length,
+        charCount: raw.text.length,
+        hasQuestion: raw.text.includes("?"),
+        hasEmoji: /[\u{1F600}-\u{1F64F}]/u.test(raw.text),
+        hasNumbers: /\d/.test(raw.text),
+        contentFormat: "text",
+        author: raw.author,
+        authorName: raw.author, // API doesn't provide separate authorName
+        authorFollowers: 0, // Not in RawTweet
+        isVerified: false,
+        isBlueVerified: false,
+        authorProfilePic: `https://ui-avatars.com/api/?name=${raw.author}`,
+        likes: raw.likes,
+        retweets: raw.rts,
+        replies: raw.replies,
+        quotes: raw.quotes || 0,
+        bookmarks: raw.bookmarks || 0,
+        views: raw.views,
+        totalEngagement: raw.eng,
+        engagementRate: raw.engRate,
+        viralScore: raw.viralScore || raw.score || 0,
+        postedAt: raw.timestamp,
+        postDate: raw.timestamp,
+        ageHours: raw.ageHours || 0,
+        ageDays: raw.ageDays || 0,
+        postHour: 0,
+        postDay: "",
+        language: raw.lang,
+        hashtags: raw.hashtags || [],
+        mentions: [],
+        mediaType: "none",
+        mediaUrl: null,
+        hasMedia: false,
+        hasLinks: false,
+        linkedDomains: [],
+        isReply: false,
+        isPinned: false,
+        rank: raw.rank,
+    };
 }
+
 
 // Score Badge for Tweets
 function ScoreBadge({ score }: { score: number }) {
@@ -193,9 +238,32 @@ function LatestTweetItem({ tweet, index }: { tweet: TweetData; index: number }) 
 }
 
 // Main Twitter Insights Page
-export default function TwitterClient({ topTweets, latestTweets, researchSummary }: TwitterClientProps) {
+export default function TwitterClient() {
     const [viewMode, setViewMode] = useState<'tweets' | 'insights'>('tweets');
     const [activeTab, setActiveTab] = useState<"top" | "latest">("top");
+
+    // Fetch Twitter research data from cache
+    const { data: twitterData, isLoading, error } = useTwitterResearch();
+    const { data: overallStrategy } = useOverallStrategy();
+
+    // Transform raw tweets to TweetData format
+    const topTweets = useMemo(() => {
+        if (!twitterData?.top?.tweets) return [];
+        return twitterData.top.tweets.map(transformTweet);
+    }, [twitterData]);
+
+    const latestTweets = useMemo(() => {
+        if (!twitterData?.latest?.tweets) return [];
+        return twitterData.latest.tweets.map(transformTweet);
+    }, [twitterData]);
+
+    // Get Twitter insights from overall strategy
+    const twitterInsights = useMemo(() => {
+        if (!overallStrategy?.twitter_trend_analysis) return "";
+        return overallStrategy.twitter_trend_analysis
+            .map(t => `**${t.trend_topic}** (${t.sentiment}): ${t.adaptation_angle}`)
+            .join("\n\n");
+    }, [overallStrategy]);
 
     // Derive Trending Topics from hashtags
     const hashtags = useMemo(() => {
@@ -223,6 +291,42 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
 
     // Sort tweets by viral score for "Top Tweets" view
     const sortedTopTweets = [...topTweets].sort((a, b) => b.viralScore - a.viralScore);
+
+    // Loading state
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
+                    <div className="flex items-center justify-center h-[60vh]">
+                        <div className="text-center">
+                            <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
+                            <p className="text-slate-500">Loading Twitter insights...</p>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
+                    <div className="flex items-center justify-center h-[60vh]">
+                        <div className="text-center">
+                            <p className="text-red-500 mb-2">Failed to load Twitter data</p>
+                            <p className="text-slate-500 text-sm">Please run an analysis first or try again later.</p>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -272,7 +376,7 @@ export default function TwitterClient({ topTweets, latestTweets, researchSummary
 
                     {viewMode === 'insights' ? (
                         <SmartInsightsView
-                            insightText={researchSummary?.[0]?.twitter_insights || ""}
+                            insightText={twitterInsights || "No Twitter insights available yet. Run an analysis to generate insights."}
                             title="X Strategy"
                             description="Actionable opportunities found in the latest Twitter discourse."
                             theme="twitter"
