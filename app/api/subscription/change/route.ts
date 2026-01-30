@@ -108,7 +108,7 @@ export async function POST(req: Request) {
                             metadata: {
                                 event: "plan_upgrade",
                                 fromPlan: currentSubscription.plan.name,
-                                toPlan: targetPaymentProduct.plan.name,
+                                toPlan: targetPaymentProduct.plan!.name,
                                 daysRemaining,
                                 proratedAmount: stellasToGrant,
                             },

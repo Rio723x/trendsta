@@ -15,7 +15,7 @@ export default function ScriptIdeasClient() {
     const [expandedScript, setExpandedScript] = useState<number | null>(null);
     const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
-    const scripts = Array.isArray(rawData?.scripts) ? rawData.scripts.map(transformScriptSuggestion) : [];
+    const scripts = Array.isArray(rawData) ? rawData.map(transformScriptSuggestion) : [];
 
     const copyToClipboard = (text: string, section: string) => {
         navigator.clipboard.writeText(text);
