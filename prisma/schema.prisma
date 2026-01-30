@@ -26,13 +26,18 @@ model User {
   language       String          @default("en")
   timezone       String          @default("UTC+00:00")
 
+  // Onboarding fields
+  niche          String?
+  subNiche       String?
+  creatorProfile String?
+
   // Plan & Stella relations
   subscriptions      Subscription[]
   stellaTransactions StellaTransaction[]
   featureAllowances  FeatureAllowance[]
   wallet             Wallet?
   analysisJobs       AnalysisJob[]
-
+  payments           Payment[]
   @@map("user")
 }
 
@@ -365,6 +370,35 @@ model Subscription {
 
   @@index([userId])
   @@map("subscription")
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+// Immutable financial record of payments
+model Payment {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  providerPaymentId String @unique // pay_...
+  amount            Int // in cents/smallest unit (settlement_amount usually)
+  currency          String // USD, etc
+  status            PaymentStatus
+
+  // Optional links
+  subscriptionId String? // If linked to subscription
+  invoiceUrl     String?
+  
+  metadata Json? 
+
+  createdAt DateTime @default(now())
+
+  @@map("payment")
 }
 
 // ============================================

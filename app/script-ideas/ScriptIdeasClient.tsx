@@ -5,6 +5,7 @@ import { FileText, Clock, Target, Hash, ChevronDown, ChevronUp, Copy, Check, Spa
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
+import NoSocialAccount from "../components/NoSocialAccount";
 import { useScriptSuggestions } from "@/hooks/useResearch";
 import { transformScriptSuggestion } from "@/lib/transformers";
 
@@ -42,17 +43,25 @@ export default function ScriptIdeasClient() {
         );
     }
 
-    // Error State
+    // Error State - Check if it's a "no social account" error
     if (error) {
+        const errorMessage = (error as { message?: string })?.message || "";
+        const isNoAccountError = errorMessage.toLowerCase().includes("social account") ||
+            errorMessage.toLowerCase().includes("connect your instagram");
+
         return (
             <div className="min-h-screen bg-slate-50">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
-                        <p className="text-red-600 font-medium">Failed to load scripts</p>
-                        <p className="text-red-500 text-sm mt-2">{(error as Error).message}</p>
-                    </div>
+                    {isNoAccountError ? (
+                        <NoSocialAccount message="Connect your Instagram account to generate personalized script ideas." />
+                    ) : (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
+                            <p className="text-red-600 font-medium">Failed to load scripts</p>
+                            <p className="text-red-500 text-sm mt-2">{(error as Error).message}</p>
+                        </div>
+                    )}
                 </main>
             </div>
         );
@@ -379,7 +388,7 @@ export default function ScriptIdeasClient() {
                                 <FileText size={48} className="mx-auto text-slate-200 mb-4" />
                                 <h3 className="text-lg font-bold text-slate-900">No scripts generated yet</h3>
                                 <p className="text-slate-500">Run a new analysis to generate script ideas.</p>
-                                <p className="text-slate-500">{JSON.stringify(rawData)}</p>
+
                             </div>
 
                         )}

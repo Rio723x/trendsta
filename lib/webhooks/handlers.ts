@@ -20,6 +20,7 @@ import {
     StellaReason,
     SubscriptionStatus,
     PaymentType,
+    PaymentStatus,
 } from "../../generated/prisma";
 
 // ============================================
@@ -99,28 +100,6 @@ export async function handlePaymentSucceeded(payload: any) {
     const { data } = payload;
     console.log("[Webhook] Payment succeeded:", data.payment_id);
 
-    // Get first product from cart
-    const productCart = data.product_cart;
-    if (!productCart || productCart.length === 0) {
-        console.error("[Webhook] No products in payment cart");
-        return;
-    }
-
-    const productId = productCart[0].product_id;
-    const paymentProduct = await findPaymentProduct(productId);
-    if (!paymentProduct) return;
-
-    // Only handle ONE_TIME payments here (subscriptions use onSubscriptionActive)
-    if (paymentProduct.type !== PaymentType.ONE_TIME) {
-        console.log("[Webhook] Skipping non-one-time payment in handlePaymentSucceeded");
-        return;
-    }
-
-    if (!paymentProduct.bundle) {
-        console.error("[Webhook] ONE_TIME product has no bundle associated");
-        return;
-    }
-
     const customerEmail = data.customer?.email;
     if (!customerEmail) {
         console.error("[Webhook] No customer email in payment payload");
@@ -130,10 +109,58 @@ export async function handlePaymentSucceeded(payload: any) {
     const user = await findUserByEmail(customerEmail);
     if (!user) return;
 
+    // 1. Record the financial payment
+    try {
+        await prisma.payment.create({
+            data: {
+                userId: user.id,
+                providerPaymentId: data.payment_id,
+                amount: data.total_amount || 0, // Using total_amount from payload (check currency units)
+                currency: data.currency || 'USD',
+                status: PaymentStatus.SUCCESS,
+                subscriptionId: data.subscription_id || null,
+                invoiceUrl: data.invoice_url || null,
+                metadata: data.metadata || {},
+            }
+        });
+        console.log(`[Webhook] Recorded payment ${data.payment_id} for user ${user.id}`);
+    } catch (e) {
+        console.error("[Webhook] Failed to record payment:", e);
+        // Continue to grant credits even if logging fails? Maybe.
+    }
+
+    // 2. Check if this is a subscription payment
+    if (data.subscription_id) {
+        console.log("[Webhook] Payment linked to subscription. Credits handled by subscription events. Skipping bundle grant.");
+        return;
+    }
+
+    // 3. Handle One-Time Product Grants (Bundles)
+    const productCart = data.product_cart;
+    if (!productCart || productCart.length === 0) {
+        // If it's not a subscription and has no cart, it's ambiguous.
+        console.error("[Webhook] No products in payment cart and no subscription_id.");
+        return;
+    }
+
+    const productId = productCart[0].product_id;
+    const paymentProduct = await findPaymentProduct(productId);
+    if (!paymentProduct) return;
+
+    if (paymentProduct.type !== PaymentType.ONE_TIME) {
+        console.log("[Webhook] Product type is not ONE_TIME. Skipping.");
+        return;
+    }
+
+    if (!paymentProduct.bundle) {
+        console.error("[Webhook] ONE_TIME product has no bundle associated");
+        return;
+    }
+
     const stellaAmount = paymentProduct.bundle.stellaAmount;
 
     await prisma.$transaction(async (tx) => {
-        // 1. Create transaction record
+        // Create transaction record
         await tx.stellaTransaction.create({
             data: {
                 userId: user.id,
@@ -150,7 +177,7 @@ export async function handlePaymentSucceeded(payload: any) {
             },
         });
 
-        // 2. Update wallet topup balance
+        // Update wallet topup balance
         await upsertWallet(tx, user.id, { topupBalance: stellaAmount });
     });
 
@@ -274,13 +301,23 @@ export async function handleSubscriptionRenewed(payload: any) {
     const stellaGrant = plan.monthlyStellasGrant;
 
     await prisma.$transaction(async (tx) => {
-        // 1. Update subscription period
-        await tx.subscription.update({
+        // 1. Upsert subscription (in case renewed fires before active)
+        await tx.subscription.upsert({
             where: { providerSubscriptionId: data.subscription_id },
-            data: {
+            update: {
                 status: SubscriptionStatus.ACTIVE,
-                currentPeriodEnd: data.current_period_end
-                    ? new Date(data.current_period_end)
+                currentPeriodEnd: data.next_billing_date
+                    ? new Date(data.next_billing_date)
+                    : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            },
+            create: {
+                userId: user.id,
+                planId: plan.id,
+                providerName: "dodo",
+                providerSubscriptionId: data.subscription_id,
+                status: SubscriptionStatus.ACTIVE,
+                currentPeriodEnd: data.next_billing_date
+                    ? new Date(data.next_billing_date)
                     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             },
         });

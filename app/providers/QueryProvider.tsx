@@ -9,10 +9,14 @@ export function QueryProvider({ children }: { children: ReactNode }) {
             new QueryClient({
                 defaultOptions: {
                     queries: {
-                        // Don't refetch on window focus for research data
+                        // Don't refetch automatically
                         refetchOnWindowFocus: false,
-                        // Retry once on failure
-                        retry: 1,
+                        refetchOnMount: false,
+                        refetchOnReconnect: false,
+                        // Don't retry by default (individual hooks can override)
+                        retry: false,
+                        // Keep errors in cache to avoid refetching
+                        staleTime: Infinity,
                     },
                 },
             })

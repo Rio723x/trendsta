@@ -8,10 +8,15 @@ import MobileHeader from "../components/MobileHeader";
 import ReelCard from "../components/ReelCard";
 import ReelModal from "../components/ReelModal";
 import AIInsightsView from "../components/AIInsightsView";
+import NoResearchFound from "../components/NoResearchFound";
+import NoSocialAccount from "../components/NoSocialAccount";
+import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { ReelData, ResearchSummary } from "../types/trendsta";
 
 // Hooks & Transformers
 import { useNicheResearch, useOverallStrategy, useUserResearch } from "@/hooks/useResearch";
+import { useSocialAccount } from "@/hooks/useSocialAccount";
+import { useAnalysis } from "@/app/context/AnalysisContext";
 import { transformNicheResearch, transformUserResearch, buildResearchSummary } from "@/lib/transformers";
 
 // Filter Button
@@ -33,11 +38,14 @@ export default function TopReelsClient() {
     const [viewMode, setViewMode] = useState<'reels' | 'insights'>('insights');
     const [activeFilter, setActiveFilter] = useState("all");
     const [selectedReel, setSelectedReel] = useState<ReelData | null>(null);
+    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     // Fetch data via hooks
-    const { data: rawNicheData, isLoading: nicheLoading, error: nicheError } = useNicheResearch();
+    const { data: rawNicheData, isLoading: nicheLoading, isNoResearch, isError, error } = useNicheResearch();
     const { data: rawStrategyData, isLoading: strategyLoading } = useOverallStrategy();
     const { data: rawUserData, isLoading: userLoading } = useUserResearch();
+    const { data: socialAccount, isLoading: socialLoading, hasNoAccount } = useSocialAccount();
+    const { isAnalysing } = useAnalysis();
 
     // Transform raw data to UI types
     const nicheResearch = transformNicheResearch(rawNicheData);
@@ -47,7 +55,9 @@ export default function TopReelsClient() {
         : [];
 
     const reels = nicheResearch?.reels || [];
-    const isLoading = nicheLoading || strategyLoading || userLoading;
+
+    // Don't show loading if query has errored (404 or other) - isError means query completed with failure
+    const isLoading = !isNoResearch && !isError && (nicheLoading || strategyLoading || userLoading || socialLoading);
 
     const filters = [
         { id: "all", label: "All Reels" },
@@ -65,6 +75,22 @@ export default function TopReelsClient() {
             return true;
         })).slice(0, 7);
 
+    if(isNoResearch){
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
+                    <NoResearchFound onAnalyse={() => setShowAnalyseModal(true)} />
+                    <AnalyseConfirmModal
+                        open={showAnalyseModal}
+                        onOpenChange={setShowAnalyseModal}
+                        socialAccountId={socialAccount?.id || ""}
+                    />
+                </main>
+            </div>
+        )
+    }
     // Loading State
     if (isLoading) {
         return (
@@ -81,16 +107,50 @@ export default function TopReelsClient() {
         );
     }
 
-    // Error State
-    if (nicheError) {
+    // No Social Account State (user hasn't connected Instagram)
+    if (hasNoAccount) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8">
+                    <NoSocialAccount />
+                </main>
+            </div>
+        );
+    }
+
+    // Error State - check for 404 (no research) vs other errors
+    if (isError) {
+        const errorStatus = (error as { status?: number })?.status;
+        const is404 = errorStatus === 404;
+
+        if (is404 && !isAnalysing) {
+            return (
+                <div className="min-h-screen bg-slate-50">
+                    <Sidebar />
+                    <MobileHeader />
+                    <main className="md:ml-64 p-4 md:p-8">
+                        <NoResearchFound onAnalyse={() => setShowAnalyseModal(true)} />
+                        <AnalyseConfirmModal
+                            open={showAnalyseModal}
+                            onOpenChange={setShowAnalyseModal}
+                            socialAccountId={socialAccount?.id || ""}
+                        />
+                    </main>
+                </div>
+            );
+        }
+
+        // Other errors - show generic error
         return (
             <div className="min-h-screen bg-slate-50">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
-                        <p className="text-red-600 font-medium">Failed to load data</p>
-                        <p className="text-red-500 text-sm mt-2">{(nicheError as Error).message}</p>
+                    <div className="text-center">
+                        <p className="text-red-500 font-medium">Something went wrong</p>
+                        <p className="text-slate-500 mt-2">{(error as Error)?.message}</p>
                     </div>
                 </main>
             </div>
