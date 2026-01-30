@@ -16,8 +16,8 @@ export function StatsOverview({ scriptCount, avgViralScore, audience, bestTime }
 
     return (
         <div className="grid grid-cols-2 gap-4 h-full">
-            {stats.map((stat) => (
-                <div key={stat.label} className="bg-white/60 backdrop-blur-md border border-slate-200/50 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center group">
+            {stats.map((stat, index) => (
+                <div key={stat.label} className="neu-convex p-6 flex flex-col items-center justify-center text-center group cursor-pointer hover:scale-[1.02] transition-transform">
                     <p className="text-3xl md:text-4xl font-black text-slate-900 leading-none mb-1 group-hover:scale-110 transition-transform duration-200">
                         {stat.value}
                     </p>

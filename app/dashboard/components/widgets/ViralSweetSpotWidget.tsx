@@ -63,7 +63,7 @@ export default function ViralSweetSpotWidget({ data }: ViralSweetSpotProps) {
     );
 
     return (
-        <div className="bg-gradient-to-br from-white to-slate-50 p-6 rounded-3xl shadow-xl border border-slate-100/50 flex flex-col h-full animate-fadeInUp">
+        <div className="neu-convex p-6 flex flex-col h-full animate-fadeInUp">
             <div className="mb-4">
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Viral Sweet Spot</h3>
                 <p className="text-xs text-slate-500 mt-1 line-clamp-2">{data.insight}</p>

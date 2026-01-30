@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SidebarProvider } from "./context/SidebarContext";
 import { QueryProvider } from "./providers/QueryProvider";
+import { ThemeProvider } from "./context/ThemeContext";
 
 export const metadata: Metadata = {
   title: "Trendsta - Content Research Tool",
@@ -14,13 +15,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <QueryProvider>
-          <SidebarProvider>
-            {children}
-          </SidebarProvider>
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <SidebarProvider>
+              {children}
+            </SidebarProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

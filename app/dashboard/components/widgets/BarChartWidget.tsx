@@ -11,7 +11,7 @@ interface DataPoint {
 
 export default function BarChartWidget({ data }: { data: DataPoint[] }) {
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+        <div className="neu-convex p-6 flex flex-col h-full">
             <h3 className="text-lg font-bold text-slate-900 mb-6">Subscription & Plan Growth</h3>
             <div className="flex-1 w-full min-h-[200px]">
                 <ResponsiveContainer width="100%" height="100%">

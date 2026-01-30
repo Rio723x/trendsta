@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Home, Play, Hash, Sparkles, User, TrendingUp, Users, FileText, ChevronLeft, ChevronRight, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import { useSidebar } from "../context/SidebarContext";
+import ThemeToggle from "./ThemeToggle";
 import { useSession, authClient } from "@/lib/auth-client";
 
 const navItems = [
@@ -48,14 +49,14 @@ export default function Sidebar() {
     };
     return (
         <aside
-            className={`hidden md:flex flex-col bg-white border-r border-slate-200 h-screen fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"
+            className={`hidden md:flex flex-col neu-convex h-screen fixed left-0 top-0 z-50 transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"
                 }`}
         >
             {/* Logo */}
             <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "gap-3"}`}>
                 {isCollapsed ? (
-                    <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
-                        <TrendingUp className="text-white w-5 h-5" />
+                    <div className="w-10 h-10 rounded-xl neu-convex flex items-center justify-center shrink-0">
+                        <TrendingUp className="text-blue-600 w-6 h-6" />
                     </div>
                 ) : (
                     <div className="relative w-full h-12 flex items-center">
@@ -73,7 +74,7 @@ export default function Sidebar() {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 px-3 py-4 space-y-1">
+            <nav className="flex-1 px-3 py-4 space-y-3">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;
                     const Icon = item.icon;
@@ -83,21 +84,21 @@ export default function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative ${isActive
-                                ? "bg-blue-50 text-blue-600 border border-blue-100"
-                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                                ? "bg-white/10 border border-white/20 text-blue-400 font-bold shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                                : "text-slate-400 hover:text-white hover:bg-white/5"
                                 } ${isCollapsed ? "justify-center" : ""}`}
                             title={isCollapsed ? item.label : undefined}
                         >
                             <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
                             {!isCollapsed && (
-                                <span className={`text-sm whitespace-nowrap overflow-hidden ${isActive ? "font-semibold" : "font-medium"}`}>
+                                <span className="text-sm whitespace-nowrap overflow-hidden">
                                     {item.label}
                                 </span>
                             )}
 
                             {/* Tooltip for collapsed mode */}
                             {isCollapsed && (
-                                <div className="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                                <div className="absolute left-full ml-4 px-3 py-1 bg-slate-200 text-slate-600 text-xs rounded-lg neu-convex opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                                     {item.label}
                                 </div>
                             )}
@@ -109,51 +110,34 @@ export default function Sidebar() {
             {/* Collapse Toggle */}
             <button
                 onClick={toggleSidebar}
-                className="absolute -right-3 top-20 bg-white border border-slate-200 rounded-full p-1 shadow-md hover:bg-slate-50 text-slate-500 hover:text-slate-700 z-50"
+                className="absolute -right-4 top-20 neu-icon-btn z-50"
             >
-                {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+                {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
 
-            {/* Stats Summary (Hidden on Collapse) */}
-            {/* {!isCollapsed && (
-                <div className="px-4 py-4 border-t border-slate-200">
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                        <p className="text-xs text-slate-500 mb-2">Today&apos;s Focus</p>
-                        <p className="text-sm font-semibold text-slate-900 mb-1">Build in Public</p>
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <p className="text-xs text-slate-600">3 scripts ready</p>
-                        </div>
-                    </div>
+            {/* User Profile & Theme Toggle */}
+            <div className="p-4 space-y-3">
+                <div className={`flex justify-center ${isCollapsed ? "" : "w-full"}`}>
+                    <ThemeToggle />
                 </div>
-            )} */}
-
-            {/* User Profile */}
-            <div className="p-4 border-t border-slate-200">
                 <div className={`flex items-center gap-3 ${isCollapsed ? "flex-col" : ""}`}>
-                    <div className={`flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-all duration-200 ${isCollapsed ? "w-full justify-center" : "flex-1"}`}>
-                        <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                    <div className={`flex items-center gap-3 p-2 rounded-xl cursor-pointer transition-all duration-200 ${isCollapsed ? "w-full justify-center" : "flex-1 neu-convex"}`}>
+                        <div className="w-10 h-10 rounded-full neu-icon-btn shrink-0">
                             <User size={18} />
                         </div>
                         {!isCollapsed && (
                             <div className="flex-1 overflow-hidden">
-                                <p className="text-sm font-semibold text-slate-900 truncate">{name}</p>
+                                <p className="text-sm font-bold text-slate-700 truncate">{name}</p>
                                 <p className="text-xs text-slate-500 truncate">Free Plan</p>
                             </div>
                         )}
                     </div>
                     <button
                         onClick={handleLogout}
-                        className={`group relative p-2 rounded-xl text-slate-600 hover:text-red-600 hover:bg-red-50 transition-all duration-200 ${isCollapsed ? "w-full" : ""}`}
+                        className={`neu-icon-btn text-slate-500 hover:text-red-500 ${isCollapsed ? "w-10 h-10" : ""}`}
                         title={isCollapsed ? "Logout" : undefined}
                     >
                         <LogOut size={18} />
-                        {/* Tooltip for collapsed mode */}
-                        {isCollapsed && (
-                            <div className="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
-                                Logout
-                            </div>
-                        )}
                     </button>
                 </div>
             </div>

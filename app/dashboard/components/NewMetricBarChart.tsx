@@ -64,14 +64,14 @@ export function NewMetricBarChart({ timeRange = '7d', reels }: NewMetricBarChart
     const totalLabel = totalViews > 1000000 ? (totalViews / 1000000).toFixed(2) + "M" : (totalViews / 1000).toFixed(1) + "K";
 
     return (
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm h-full">
+        <div className="neu-convex p-6 h-full">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                    <div className="w-10 h-10 rounded-xl neu-pressed flex items-center justify-center text-blue-600">
                         <BarChart3 size={20} />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-slate-800">
+                        <h3 className="text-lg font-bold text-slate-700">
                             {timeRange === '30d' ? 'Monthly Engagement' : 'Weekly Engagement'}
                         </h3>
                         <p className="text-sm text-slate-500">
@@ -80,8 +80,8 @@ export function NewMetricBarChart({ timeRange = '7d', reels }: NewMetricBarChart
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-bold text-slate-900 animate-fadeIn">{totalLabel}</p>
-                    <div className="flex items-center gap-1 text-xs font-medium text-emerald-600 justify-end">
+                    <p className="text-2xl font-bold text-slate-100 animate-fadeIn">{totalLabel}</p>
+                    <div className="flex items-center gap-1 text-xs font-medium text-emerald-400 justify-end">
                         <TrendingUp size={12} />
                         <span>+12.5%</span>
                     </div>
@@ -93,11 +93,11 @@ export function NewMetricBarChart({ timeRange = '7d', reels }: NewMetricBarChart
                     <div key={index} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
                         <div className="relative w-full flex items-end justify-center h-full">
                             <div
-                                className="w-full max-w-[40px] bg-blue-100 rounded-t-xl group-hover:bg-blue-500 transition-all duration-500 ease-out relative"
+                                className="w-full max-w-[40px] bg-blue-500 rounded-t-xl hover:bg-blue-600 transition-all duration-500 ease-out relative"
                                 style={{ height: `${(item.value / maxValue) * 100}%` }}
                             >
                                 {/* Tooltip */}
-                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-lg">
+                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-700 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-lg">
                                     {item.value}k
                                 </div>
                             </div>

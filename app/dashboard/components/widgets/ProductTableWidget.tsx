@@ -13,7 +13,7 @@ interface ProductData {
 
 export default function ProductTableWidget({ data }: { data: ProductData[] }) {
     return (
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full w-full">
+        <div className="neu-convex p-8 flex flex-col h-full w-full">
             <div className="flex items-center justify-between mb-8">
                 <h3 className="text-lg font-bold text-slate-900">Top Revenue & AI-Powered Products</h3>
                 <div className="flex gap-4 text-sm font-medium text-slate-400">

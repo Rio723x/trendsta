@@ -31,7 +31,7 @@ export default function ContentDietWidget({ data }: ContentDietProps) {
     };
 
     return (
-        <div className="bg-gradient-to-br from-white to-slate-50 p-6 rounded-3xl shadow-xl border border-slate-100/50 flex flex-col h-full animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
+        <div className="neu-convex p-6 flex flex-col h-full animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
             <div className="mb-4">
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Content Diet</h3>
                 <p className="text-xs text-slate-500 mt-1">{data.insight}</p>

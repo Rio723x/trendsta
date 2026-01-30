@@ -13,7 +13,7 @@ export default function LineChartWidget({ data }: { data: DataPoint[] }) {
     if (!data || data.length === 0) return <div>No Data</div>;
 
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+        <div className="neu-convex p-6 flex flex-col h-full">
             <h3 className="text-lg font-bold text-slate-900 mb-6">Product Usage & Revenue Trends</h3>
             <div className="flex-1 w-full min-h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">

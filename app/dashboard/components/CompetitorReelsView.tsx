@@ -143,25 +143,25 @@ const ReelCard = ({ reel, index }: { reel: CompetitorReel; index: number }) => {
     };
 
     return (
-        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
+        <div className="neu-convex overflow-hidden group">
             {/* Thumbnail Section */}
             <div className="relative aspect-[9/16] max-h-[280px] overflow-hidden bg-slate-900">
                 <a href={reel.url} target="_blank" rel="noopener noreferrer">
-                <img
-                    src={reel.thumbnail}
-                    alt={`Reel by ${reel.creatorName}`}
-                    crossOrigin="anonymous"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://via.placeholder.com/270x480?text=Reel";
-                    }}
-                />
+                    <img
+                        src={reel.thumbnail}
+                        alt={`Reel by ${reel.creatorName}`}
+                        crossOrigin="anonymous"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://via.placeholder.com/270x480?text=Reel";
+                        }}
+                    />
                 </a>
                 {/* Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
-                
+
                 {/* Top badges */}
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
                     {/* Rank Badge */}
@@ -196,9 +196,9 @@ const ReelCard = ({ reel, index }: { reel: CompetitorReel; index: number }) => {
                     rel="noopener noreferrer"
                     className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 > */}
-                    <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
-                        <Play size={24} className="text-slate-800 ml-1" fill="currentColor" />
-                    </div>
+                <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
+                    <Play size={24} className="text-slate-800 ml-1" fill="currentColor" />
+                </div>
                 {/* </a> */}
 
                 {/* Bottom Stats Overlay */}

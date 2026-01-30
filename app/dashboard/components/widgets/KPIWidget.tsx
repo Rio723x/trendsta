@@ -10,7 +10,7 @@ interface KPIData {
 
 export default function KPIWidget({ data }: { data: KPIData }) {
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between h-full">
+        <div className="neu-convex p-6 flex items-center justify-between h-full">
             <div>
                 <div className="flex items-center gap-2 mb-1">
                     <div className="w-2 h-2 rounded-full bg-emerald-500" />

@@ -43,23 +43,23 @@ function MarkdownContent({ content }: { content: string }) {
             remarkPlugins={[remarkGfm]}
             components={{
                 // Headers
-                h1: ({ children }) => <h1 className="text-xl font-bold text-slate-800 mt-4 mb-2">{children}</h1>,
-                h2: ({ children }) => <h2 className="text-lg font-bold text-slate-800 mt-4 mb-2">{children}</h2>,
-                h3: ({ children }) => <h3 className="text-base font-bold text-slate-700 mt-3 mb-1.5">{children}</h3>,
-                h4: ({ children }) => <h4 className="text-sm font-bold text-slate-700 mt-2 mb-1">{children}</h4>,
+                h1: ({ children }) => <h1 className="text-xl font-bold text-theme-primary mt-4 mb-2">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-lg font-bold text-theme-primary mt-4 mb-2">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-base font-bold text-theme-secondary mt-3 mb-1.5">{children}</h3>,
+                h4: ({ children }) => <h4 className="text-sm font-bold text-theme-muted mt-2 mb-1">{children}</h4>,
                 // Paragraphs
-                p: ({ children }) => <p className="text-sm md:text-base leading-relaxed mb-3 last:mb-0">{children}</p>,
+                p: ({ children }) => <p className="text-sm md:text-base leading-relaxed mb-3 last:mb-0 text-theme-secondary">{children}</p>,
                 // Strong/Bold
-                strong: ({ children }) => <strong className="font-semibold text-slate-800">{children}</strong>,
+                strong: ({ children }) => <strong className="font-semibold text-theme-primary">{children}</strong>,
                 // Italic/Emphasis
-                em: ({ children }) => <em className="italic text-slate-600">{children}</em>,
+                em: ({ children }) => <em className="italic text-theme-muted">{children}</em>,
                 // Lists
-                ul: ({ children }) => <ul className="list-disc list-inside space-y-1.5 my-2 ml-2">{children}</ul>,
-                ol: ({ children }) => <ol className="list-decimal list-inside space-y-1.5 my-2 ml-2">{children}</ol>,
+                ul: ({ children }) => <ul className="list-disc list-inside space-y-1.5 my-2 ml-2 text-theme-secondary">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal list-inside space-y-1.5 my-2 ml-2 text-theme-secondary">{children} </ol>,
                 li: ({ children }) => <li className="text-sm md:text-base leading-relaxed">{children}</li>,
                 // Blockquotes
                 blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-blue-400 bg-blue-50 pl-4 py-2 my-3 italic text-slate-600 rounded-r-lg">
+                    <blockquote className="border-l-4 border-blue-500 glass-inset-bg pl-4 py-2 my-3 italic text-theme-muted rounded-r-lg">
                         {children}
                     </blockquote>
                 ),
@@ -67,10 +67,10 @@ function MarkdownContent({ content }: { content: string }) {
                 code: ({ className, children }) => {
                     const isInline = !className;
                     if (isInline) {
-                        return <code className="bg-slate-100 text-blue-600 px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>;
+                        return <code className="bg-white/10 text-blue-400 px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>;
                     }
                     return (
-                        <code className="block bg-slate-800 text-slate-100 p-4 rounded-lg text-sm font-mono overflow-x-auto my-3">
+                        <code className="block bg-black/40 text-slate-200 p-4 rounded-lg text-sm font-mono overflow-x-auto my-3 border border-white/5">
                             {children}
                         </code>
                     );
@@ -78,12 +78,12 @@ function MarkdownContent({ content }: { content: string }) {
                 pre: ({ children }) => <pre className="my-0">{children}</pre>,
                 // Links
                 a: ({ href, children }) => (
-                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 underline">
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
                         {children}
                     </a>
                 ),
                 // Horizontal Rule
-                hr: () => <hr className="my-4 border-slate-200" />,
+                hr: () => <hr className="my-4 border-white/10" />,
             }}
         >
             {content}
@@ -141,7 +141,7 @@ function ChatMessage({
                         </div>
                         <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1.5">
-                                <span className="text-xs font-bold text-slate-600">Trendsta AI</span>
+                                <span className="text-xs font-bold text-theme-muted">Trendsta AI</span>
                                 {message.isStreaming && (
                                     <span className="flex items-center gap-1">
                                         <span className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
@@ -150,7 +150,7 @@ function ChatMessage({
                                     </span>
                                 )}
                             </div>
-                            <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+                            <div className="glass-panel px-4 py-3 rounded-2xl rounded-tl-md shadow-sm">
                                 {/* Render content parts (text with markdown and graphs) */}
                                 {contentParts.map((part, index) => (
                                     <div key={index}>
@@ -515,22 +515,22 @@ export default function AIConsultantPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 font-sans selection:bg-blue-200">
+        <div className="min-h-screen bg-transparent text-slate-900 font-sans selection:bg-blue-200">
             <Sidebar />
             <MobileHeader />
 
             {/* History Sidebar */}
-            <div className={`fixed right-0 top-0 bottom-0 w-80 bg-white border-l border-slate-200 z-50 transform transition-transform duration-300 shadow-2xl ${showHistory ? 'translate-x-0' : 'translate-x-full'}`}>
-                <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-                    <h3 className="font-bold text-slate-800">Chat History</h3>
-                    <button onClick={() => setShowHistory(false)} className="text-slate-400 hover:text-slate-600">
+            <div className={`fixed right-0 top-0 bottom-0 w-80 bg-slate-900 border-l border-white/10 z-50 transform transition-transform duration-300 shadow-2xl ${showHistory ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                    <h3 className="font-bold text-theme-primary">Chat History</h3>
+                    <button onClick={() => setShowHistory(false)} className="text-theme-muted hover:text-theme-primary">
                         <ArrowRight size={20} />
                     </button>
                 </div>
                 <div className="p-4 space-y-3 overflow-y-auto h-full">
-                    <div className="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl cursor-pointer transition-colors border border-slate-200">
-                        <p className="text-sm font-medium text-slate-700 truncate">Current Session</p>
-                        <p className="text-xs text-slate-400">Just now</p>
+                    <div className="p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors border border-white/5">
+                        <p className="text-sm font-medium text-theme-primary truncate">Current Session</p>
+                        <p className="text-xs text-theme-muted">Just now</p>
                     </div>
                 </div>
             </div>
@@ -583,7 +583,7 @@ export default function AIConsultantPage() {
                                     />
                                 </div>
 
-                                <p className="text-slate-500 text-lg mb-10 max-w-md mx-auto">
+                                <p className="text-theme-secondary text-lg mb-10 max-w-md mx-auto">
                                     Your AI-powered content strategist. Ask me anything about reels, trends, and growth.
                                 </p>
 
@@ -596,12 +596,12 @@ export default function AIConsultantPage() {
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: 0.1 + i * 0.05 }}
                                             onClick={() => handleSend(item.prompt)}
-                                            className="group relative bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl p-4 text-left transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+                                            className="group relative glass-panel hover:bg-white/10 border-transparent hover:border-white/20 p-4 text-left transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
                                         >
                                             <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                                                 <item.icon size={16} className="text-white" />
                                             </div>
-                                            <p className="text-sm font-medium text-slate-700 leading-tight">{item.label}</p>
+                                            <p className="text-sm font-medium text-theme-secondary leading-tight group-hover:text-theme-primary">{item.label}</p>
                                         </motion.button>
                                     ))}
                                 </div>
@@ -636,19 +636,19 @@ export default function AIConsultantPage() {
                                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
                                             <Image src="/logo3.png" alt="Trendsta" width={20} height={20} className="rounded-full" />
                                         </div>
-                                        <div className="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-tl-md shadow-sm flex items-center gap-2">
+                                        <div className="glass-panel px-4 py-3 rounded-2xl rounded-tl-md shadow-sm flex items-center gap-2">
                                             {thinkingMode === 'flash' ? (
                                                 <Zap size={16} className="text-amber-500 animate-pulse" />
                                             ) : (
                                                 <BrainCircuit size={16} className="text-purple-500 animate-pulse" />
                                             )}
-                                            <span className="text-sm text-slate-500">
+                                            <span className="text-sm text-theme-muted">
                                                 {thinkingMode === 'flash' ? 'Thinking...' : 'Deep analyzing...'}
                                             </span>
                                             <span className="flex gap-1">
-                                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                                             </span>
                                         </div>
                                     </div>
@@ -660,24 +660,24 @@ export default function AIConsultantPage() {
                 </div>
 
                 {/* Input Area */}
-                <div className={`w-full max-w-4xl z-20 px-4 md:px-6 ${hasStartedChat ? 'fixed bottom-0 pb-6 pt-4 bg-gradient-to-t from-white via-white to-transparent' : 'relative'}`}>
+                <div className={`w-full max-w-4xl z-20 px-4 md:px-6 ${hasStartedChat ? 'fixed bottom-0 pb-6 pt-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent' : 'relative'}`}>
                     <div className="relative">
                         {/* Main Input */}
-                        <div className="bg-white p-2 rounded-2xl shadow-lg border border-slate-200 flex items-center gap-2 transition-all focus-within:border-blue-300 focus-within:shadow-blue-100">
+                        <div className="glass-panel p-2 rounded-2xl shadow-lg flex items-center gap-2 transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/30">
                             <textarea
                                 ref={inputRef}
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 placeholder="Ask Trendsta anything..."
-                                className="flex-1 bg-transparent border-none outline-none focus:ring-0 text-base p-3 min-h-[48px] max-h-[120px] resize-none text-slate-800 placeholder-slate-400"
+                                className="flex-1 bg-transparent border-none outline-none focus:ring-0 text-base p-3 min-h-[48px] max-h-[120px] resize-none text-theme-primary placeholder-theme-muted"
                                 rows={1}
                             />
 
                             {/* Mic Button */}
                             <button
                                 onClick={toggleListening}
-                                className={`p-2.5 rounded-xl transition-all ${isListening ? 'bg-red-500 text-white animate-pulse' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'}`}
+                                className={`p-2.5 rounded-xl transition-all ${isListening ? 'bg-red-500 text-white animate-pulse' : 'text-theme-muted hover:text-theme-primary hover:bg-white/10'}`}
                                 title={isListening ? "Stop listening" : "Voice input"}
                             >
                                 {isListening ? <MicOff size={20} /> : <Mic size={20} />}
@@ -687,7 +687,7 @@ export default function AIConsultantPage() {
                             <button
                                 onClick={() => handleSend()}
                                 disabled={!input.trim() || isLoading}
-                                className={`p-2.5 rounded-xl transition-all ${input.trim() && !isLoading ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105' : 'bg-slate-100 text-slate-300'}`}
+                                className={`p-2.5 rounded-xl transition-all ${input.trim() && !isLoading ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105' : 'bg-white/5 text-slate-600'}`}
                             >
                                 <ArrowRight size={20} strokeWidth={2.5} />
                             </button>

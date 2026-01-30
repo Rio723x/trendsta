@@ -65,24 +65,19 @@ export default function DashboardClient({ data }: DashboardClientProps) {
     }
 
     return (
-        <div className="min-h-screen bg-white relative selection:bg-blue-200">
-            {/* Background Effects */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] opacity-70" />
-                <div className="absolute top-[20%] right-0 w-[40%] h-[40%] bg-indigo-400/10 rounded-full blur-[100px] opacity-60" />
-                <div className="absolute bottom-0 left-[20%] w-[60%] h-[40%] bg-amber-200/20 rounded-full blur-[120px] opacity-50" />
-            </div>
+        <div className="min-h-screen neu-flat relative selection:bg-blue-200">
+
 
             <Sidebar />
             <MobileHeader />
 
-            <main className={`relative z-10 transition-all duration-300 ease-in-out p-4 md:p-8 pb-32 ${isCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
+            <main className={`relative z-10 transition-all duration-300 ease-in-out p-4 md:p-6 pb-32 ${isCollapsed ? 'md:ml-24' : 'md:ml-72'}`}>
                 <div className="max-w-6xl mx-auto space-y-8">
 
                     {/* Page Header with Date Toggle */}
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+                            <h1 className="text-3xl md:text-4xl font-bold text-slate-700 tracking-tight">
                                 Analytics Dashboard
                             </h1>
                             <p className="text-slate-500 mt-1">Analysis based on research from {formattedDate}</p>
@@ -90,11 +85,11 @@ export default function DashboardClient({ data }: DashboardClientProps) {
 
                         {/* Guest Banner */}
                         {data.isGuest && (
-                            <div className="flex items-center gap-4 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-lg">
-                                <div className="text-indigo-700 text-sm font-medium">
+                            <div className="flex items-center gap-4 neu-pressed px-4 py-2 rounded-xl">
+                                <div className="text-indigo-600 text-sm font-medium">
                                     Viewing as Guest Mode
                                 </div>
-                                <a href="/signin" className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-md hover:bg-indigo-700 transition-colors">
+                                <a href="/signin" className="neu-btn-primary text-xs">
                                     Log In to Save
                                 </a>
                             </div>

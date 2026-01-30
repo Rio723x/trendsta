@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSession, authClient } from "@/lib/auth-client";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: Home },
@@ -60,7 +61,7 @@ export default function MobileHeader(): React.JSX.Element {
     };
 
     return (
-        <div className="md:hidden flex items-center justify-between p-4 border-b border-slate-200 bg-white sticky top-0 z-40 shadow-sm">
+        <div className="md:hidden flex items-center justify-between p-4 neu-convex sticky top-0 z-40 mb-4 rounded-b-2xl border-b border-white/20">
             <div className="flex items-center gap-2">
                 <Image
                     src={"/logo3.png"}
@@ -70,18 +71,19 @@ export default function MobileHeader(): React.JSX.Element {
                     style={{ objectFit: 'contain' }}
                 />
             </div>
-            <div className="relative" ref={menuRef}>
+            <div className="relative flex items-center gap-2" ref={menuRef}>
+                <ThemeToggle />
                 <button
                     onClick={() => setShowMenu(!showMenu)}
-                    className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg"
+                    className="neu-icon-btn text-slate-600 ml-2"
                 >
                     <Menu size={24} />
                 </button>
 
                 {showMenu && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden z-50 animate-fadeInUp">
+                    <div className="absolute right-0 top-12 mt-2 w-64 neu-convex z-50 animate-fadeInUp p-4">
                         {/* Navigation Links */}
-                        <div className="p-2 border-b border-slate-100">
+                        <div className="space-y-2 mb-4">
                             {navItems.map((item) => {
                                 const isActive = pathname === item.href;
                                 const Icon = item.icon;
@@ -90,9 +92,9 @@ export default function MobileHeader(): React.JSX.Element {
                                         key={item.href}
                                         href={item.href}
                                         onClick={() => setShowMenu(false)}
-                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
-                                                ? "bg-blue-50 text-blue-600"
-                                                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                                        className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${isActive
+                                            ? "neu-pressed text-blue-600"
+                                            : "text-slate-600 hover:neu-convex"
                                             }`}
                                     >
                                         <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
@@ -102,24 +104,24 @@ export default function MobileHeader(): React.JSX.Element {
                             })}
                         </div>
 
-                        <div className="p-4 border-b border-slate-200 bg-slate-50">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
+                        <div className="p-4 border-t border-slate-200/50 mt-2">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-full neu-pressed flex items-center justify-center text-slate-600">
                                     <User size={20} />
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <p className="text-sm font-semibold text-slate-900 truncate">{name}</p>
+                                    <p className="text-sm font-semibold text-slate-700 truncate">{name}</p>
                                     <p className="text-xs text-slate-500 truncate">Free Plan</p>
                                 </div>
                             </div>
+                            <button
+                                onClick={handleLogout}
+                                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-slate-500 hover:text-red-500 neu-convex rounded-xl"
+                            >
+                                <LogOut size={18} />
+                                <span className="text-sm font-medium">Logout</span>
+                            </button>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors"
-                        >
-                            <LogOut size={18} />
-                            <span className="text-sm font-medium">Logout</span>
-                        </button>
                     </div>
                 )}
             </div>

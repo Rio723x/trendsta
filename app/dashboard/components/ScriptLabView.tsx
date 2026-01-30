@@ -16,7 +16,7 @@ export default function ScriptLabView({ scripts }: ScriptLabViewProps) {
     if (!activeScript) return null;
 
     return (
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm animate-fadeInUp">
+        <div className="neu-convex p-6 animate-fadeInUp">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">

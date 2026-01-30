@@ -99,13 +99,13 @@ export default function CompetitorsClient() {
     // Loading State
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-transparent">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
                     <div className="flex flex-col items-center gap-4">
-                        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-                        <p className="text-slate-500">Loading competitor data...</p>
+                        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+                        <p className="text-theme-secondary">Loading competitor data...</p>
                     </div>
                 </main>
             </div>
@@ -115,13 +115,13 @@ export default function CompetitorsClient() {
     // Error State
     if (competitorError) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-transparent">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
-                        <p className="text-red-600 font-medium">Failed to load competitor data</p>
-                        <p className="text-red-500 text-sm mt-2">{(competitorError as Error).message}</p>
+                    <div className="glass-panel border-red-500/30 p-6 max-w-md text-center">
+                        <p className="text-red-500 font-medium">Failed to load competitor data</p>
+                        <p className="text-red-400/80 text-sm mt-2">{(competitorError as Error).message}</p>
                     </div>
                 </main>
             </div>
@@ -129,7 +129,7 @@ export default function CompetitorsClient() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-transparent">
             <Sidebar />
             <MobileHeader />
 
@@ -139,10 +139,10 @@ export default function CompetitorsClient() {
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fadeInUp">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+                            <h1 className="text-3xl font-bold text-theme-primary flex items-center gap-3">
                                 {viewMode === 'reels' ? 'Competitor Intelligence' : 'Competitor Strategy Analysis'}
                             </h1>
-                            <p className="text-slate-500 mt-2">
+                            <p className="text-theme-secondary mt-2">
                                 {viewMode === 'reels'
                                     ? `Tracking ${competitorResearch?.summary?.competitorsTracked || 0} competitors and ${competitorResearch?.reels?.length || 0} viral uploads.`
                                     : 'AI breakdown of what your competitors are doing right.'}
@@ -150,12 +150,12 @@ export default function CompetitorsClient() {
                         </div>
 
                         {/* View Toggle */}
-                        <div className="bg-white p-1 rounded-xl border border-slate-200 shadow-sm inline-flex">
+                        <div className="glass-panel p-1 rounded-xl inline-flex">
                             <button
                                 onClick={() => setViewMode('reels')}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'reels'
-                                    ? 'bg-indigo-50 text-indigo-600'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-indigo-500/20 text-indigo-400 shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-900 hover:bg-white/5'
                                     }`}
                             >
                                 <LayoutGrid size={18} />
@@ -164,8 +164,8 @@ export default function CompetitorsClient() {
                             <button
                                 onClick={() => setViewMode('insights')}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'insights'
-                                    ? 'bg-indigo-50 text-indigo-600'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-indigo-500/20 text-indigo-400 shadow-sm'
+                                    : 'text-theme-secondary hover:text-theme-primary hover:bg-white/5'
                                     }`}
                             >
                                 <Sparkles size={18} />
@@ -187,15 +187,15 @@ export default function CompetitorsClient() {
                             <div className="flex-1 order-2 lg:order-1">
                                 {/* Sort Controls */}
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-lg font-semibold text-slate-900">
+                                    <h2 className="text-lg font-semibold text-theme-primary">
                                         {selectedCreator ? `@${selectedCreator}'s Reels` : 'All Competitor Reels'}
-                                        <span className="ml-2 text-sm font-normal text-slate-500">({filteredReels.length})</span>
+                                        <span className="ml-2 text-sm font-normal text-theme-muted">({filteredReels.length})</span>
                                     </h2>
                                     <div className="flex gap-3">
                                         {selectedCreator && (
                                             <button
                                                 onClick={() => setSelectedCreator(null)}
-                                                className="px-3 py-1.5 text-xs bg-slate-800 text-slate-400 rounded-lg hover:bg-slate-700 flex items-center gap-1"
+                                                className="px-3 py-1.5 text-xs glass-panel hover:bg-white/10 flex items-center gap-1"
                                             >
                                                 <X size={12} />Clear Filter
                                             </button>
@@ -203,12 +203,12 @@ export default function CompetitorsClient() {
                                         <select
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value as SortField)}
-                                            className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="px-3 py-2 glass-panel border border-white/10 rounded-xl text-sm text-theme-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         >
-                                            <option value="velocity">Sort by Velocity</option>
-                                            <option value="views">Sort by Views</option>
-                                            <option value="likes">Sort by Likes</option>
-                                            <option value="engagement">Sort by Engagement</option>
+                                            <option value="velocity" className="bg-slate-900 text-slate-200">Sort by Velocity</option>
+                                            <option value="views" className="bg-slate-900 text-slate-200">Sort by Views</option>
+                                            <option value="likes" className="bg-slate-900 text-slate-200">Sort by Likes</option>
+                                            <option value="engagement" className="bg-slate-900 text-slate-200">Sort by Engagement</option>
                                         </select>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@ export default function CompetitorsClient() {
                                         />
                                     ))}
                                     {filteredReels.length === 0 && (
-                                        <div className="col-span-full text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                        <div className="col-span-full text-center py-12 glass-panel border-dashed border-white/10">
                                             <p className="text-slate-500">No reels found matching your criteria.</p>
                                         </div>
                                     )}
@@ -235,8 +235,8 @@ export default function CompetitorsClient() {
                             <div className="w-full lg:w-80 space-y-6 order-1 lg:order-2 h-fit static lg:sticky lg:top-8">
                                 {/* Tracked Competitors List - Compact Filter Style */}
                                 <div>
-                                    <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2 px-1">
-                                        <Users size={16} className="text-slate-500" />
+                                    <h3 className="text-sm font-bold text-theme-primary mb-3 flex items-center gap-2 px-1">
+                                        <Users size={16} className="text-theme-muted" />
                                         Filter by Creator
                                     </h3>
                                     <div className="space-y-2">
@@ -248,7 +248,7 @@ export default function CompetitorsClient() {
                                                     group flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all duration-200
                                                     ${selectedCreator === competitor.username
                                                         ? 'bg-blue-600 border-blue-600 text-white shadow-md transform scale-[1.02]'
-                                                        : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                                                        : 'glass-panel border-transparent hover:border-white/10 hover:shadow-sm'
                                                     }
                                                 `}
                                             >
@@ -263,11 +263,11 @@ export default function CompetitorsClient() {
                                                 {/* Info */}
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center justify-between">
-                                                        <p className={`text-sm font-semibold truncate ${selectedCreator === competitor.username ? 'text-white' : 'text-slate-900'}`}>
+                                                        <p className={`text-sm font-semibold truncate ${selectedCreator === competitor.username ? 'text-white' : 'text-theme-primary'}`}>
                                                             @{competitor.username}
                                                         </p>
                                                         {/* Badge */}
-                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${selectedCreator === competitor.username ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${selectedCreator === competitor.username ? 'bg-white/20 text-white' : 'bg-slate-500/20 text-slate-400'}`}>
                                                             {competitor.reels.length}
                                                         </span>
                                                     </div>
@@ -275,7 +275,7 @@ export default function CompetitorsClient() {
                                             </div>
                                         ))}
                                         {competitorsList.length === 0 && (
-                                            <div className="text-center py-6 text-slate-400 text-xs italic">
+                                            <div className="text-center py-6 text-theme-muted text-xs italic">
                                                 No competitors added yet.
                                             </div>
                                         )}

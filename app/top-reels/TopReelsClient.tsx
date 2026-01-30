@@ -21,7 +21,7 @@ function FilterButton({ active, children, onClick }: { active: boolean; children
             onClick={onClick}
             className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${active
                 ? "bg-slate-900 text-white shadow-md"
-                : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-900"
+                : "bg-white text-theme-secondary border border-slate-200 hover:border-slate-300 hover:text-theme-primary"
                 }`}
         >
             {children}
@@ -68,13 +68,13 @@ export default function TopReelsClient() {
     // Loading State
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-transparent">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
                     <div className="flex flex-col items-center gap-4">
                         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-                        <p className="text-slate-500">Loading research data...</p>
+                        <p className="text-theme-secondary">Loading research data...</p>
                     </div>
                 </main>
             </div>
@@ -84,13 +84,13 @@ export default function TopReelsClient() {
     // Error State
     if (nicheError) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-transparent">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
-                        <p className="text-red-600 font-medium">Failed to load data</p>
-                        <p className="text-red-500 text-sm mt-2">{(nicheError as Error).message}</p>
+                    <div className="glass-panel border-red-500/20 p-6 max-w-md text-center">
+                        <p className="text-red-500 font-medium">Failed to load data</p>
+                        <p className="text-red-400/80 text-sm mt-2">{(nicheError as Error).message}</p>
                     </div>
                 </main>
             </div>
@@ -98,7 +98,7 @@ export default function TopReelsClient() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-transparent">
             <Sidebar />
             <MobileHeader />
 
@@ -107,10 +107,10 @@ export default function TopReelsClient() {
                     {/* Header & Toggle */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fadeInUp">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+                            <h1 className="text-3xl font-bold text-theme-primary flex items-center gap-3">
                                 {viewMode === 'reels' ? 'Top Performing Reels' : 'AI Strategic Insights'}
                             </h1>
-                            <p className="text-slate-500 mt-2">
+                            <p className="text-theme-secondary mt-2">
                                 {viewMode === 'reels'
                                     ? `Analyzing ${reels.length} viral reels in your niche.`
                                     : 'Deep dive analysis and actionable strategy.'}
@@ -118,12 +118,12 @@ export default function TopReelsClient() {
                         </div>
 
                         {/* View Toggle */}
-                        <div className="bg-white p-1 rounded-xl border border-slate-200 shadow-sm inline-flex">
+                        <div className="glass-panel p-1 rounded-xl inline-flex">
                             <button
                                 onClick={() => setViewMode('reels')}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'reels'
-                                    ? 'bg-blue-50 text-blue-600'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-blue-500/20 text-blue-500'
+                                    : 'text-slate-500 hover:text-slate-900 hover:bg-white/5'
                                     }`}
                             >
                                 <LayoutGrid size={18} />
@@ -132,8 +132,8 @@ export default function TopReelsClient() {
                             <button
                                 onClick={() => setViewMode('insights')}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'insights'
-                                    ? 'bg-purple-50 text-purple-600'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-purple-500/20 text-purple-500'
+                                    : 'text-theme-secondary hover:text-theme-primary hover:bg-white/5'
                                     }`}
                             >
                                 <Sparkles size={18} />
@@ -172,7 +172,7 @@ export default function TopReelsClient() {
 
                             {filteredReels.length === 0 && (
                                 <div className="text-center py-12">
-                                    <p className="text-slate-500">No reels found for this filter.</p>
+                                    <p className="text-theme-muted">No reels found for this filter.</p>
                                 </div>
                             )}
                         </div>

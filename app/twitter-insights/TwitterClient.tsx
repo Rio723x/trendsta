@@ -81,15 +81,15 @@ function ScoreBadge({ score }: { score: number }) {
 function TrendingItem({ topic, index }: { topic: { rank: number; topic: string; tweets: string; direction: string }; index: number }) {
     return (
         <div
-            className="flex items-center gap-4 p-4 hover:bg-slate-50 rounded-xl transition-all duration-200 cursor-pointer group"
+            className="flex items-center gap-4 p-4 hover:bg-slate-50/5 rounded-xl transition-all duration-200 cursor-pointer group"
             style={{ animationDelay: `${index * 0.05}s` }}
         >
-            <span className="text-2xl font-bold text-slate-400 w-8 group-hover:text-blue-500 transition-colors">
+            <span className="text-2xl font-bold text-theme-muted w-8 group-hover:text-blue-500 transition-colors">
                 #{topic.rank}
             </span>
             <div className="flex-1">
                 <div className="flex items-center gap-2">
-                    <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <span className="font-semibold text-theme-primary group-hover:text-blue-600 transition-colors">
                         {topic.topic}
                     </span>
                     {topic.direction === "Rising" ? (
@@ -98,7 +98,7 @@ function TrendingItem({ topic, index }: { topic: { rank: number; topic: string; 
                         <Minus size={14} className="text-slate-400" />
                     )}
                 </div>
-                <p className="text-sm text-slate-500">{topic.tweets}</p>
+                <p className="text-sm text-theme-secondary">{topic.tweets}</p>
             </div>
             <span className={`score-badge ${topic.direction === "Rising" ? "score-high" : "score-low"}`}>
                 {topic.direction}
@@ -131,14 +131,15 @@ function TweetCard({ tweet, index }: { tweet: TweetData; index: number }) {
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="font-semibold text-slate-900 truncate">{tweet.authorName}</span>
+                        <span className="font-semibold text-theme-primary truncate">{tweet.authorName}</span>
                         {tweet.isVerified && (
                             <svg className="w-4 h-4 text-blue-500 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.034-.033-.513 1.158-.687 1.943-1.99 1.943-3.484z" />
                             </svg>
                         )}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
+
+                    <div className="flex items-center gap-2 text-sm text-theme-muted">
                         <span>@{tweet.author}</span>
                         <span>•</span>
                         <span>{postedAgo(tweet.ageHours)}</span>
@@ -154,19 +155,19 @@ function TweetCard({ tweet, index }: { tweet: TweetData; index: number }) {
                     href={tweet.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-slate-400 hover:text-blue-500 transition-colors"
+                    className="p-2 text-theme-muted hover:text-blue-500 transition-colors"
                 >
                     <ExternalLink size={16} />
                 </a>
             </div>
 
             {/* Tweet Content */}
-            <p className="text-slate-700 leading-relaxed mb-4 whitespace-pre-wrap">
+            <p className="text-theme-primary leading-relaxed mb-4 whitespace-pre-wrap">
                 {tweet.text}
             </p>
 
             {/* Follower count */}
-            <div className="flex items-center gap-2 text-xs text-slate-500 mb-4">
+            <div className="flex items-center gap-2 text-xs text-theme-muted mb-4">
                 <Users size={12} />
                 <span>{((tweet.authorFollowers || 0) / 1000).toFixed(1)}k followers</span>
             </div>
@@ -190,7 +191,7 @@ function TweetCard({ tweet, index }: { tweet: TweetData; index: number }) {
                     <span>{tweet.views}</span>
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
@@ -205,7 +206,7 @@ function LatestTweetItem({ tweet, index }: { tweet: TweetData; index: number }) 
 
     return (
         <div
-            className="p-4 hover:bg-slate-50 rounded-xl transition-all duration-200 border-b border-slate-100 last:border-b-0"
+            className="p-4 hover:bg-slate-50/5 rounded-xl transition-all duration-200 border-b border-white/5 last:border-b-0"
             style={{ animationDelay: `${index * 0.03}s` }}
         >
             <div className="flex items-start gap-3">
@@ -216,12 +217,12 @@ function LatestTweetItem({ tweet, index }: { tweet: TweetData; index: number }) 
                 />
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-slate-900 text-sm">{tweet.authorName}</span>
-                        <span className="text-xs text-slate-500">@{tweet.author}</span>
-                        <span className="text-xs text-slate-500">• {postedAgo(tweet.ageHours)}</span>
+                        <span className="font-semibold text-theme-primary text-sm">{tweet.authorName}</span>
+                        <span className="text-xs text-theme-muted">@{tweet.author}</span>
+                        <span className="text-xs text-theme-muted">• {postedAgo(tweet.ageHours)}</span>
                     </div>
-                    <p className="text-sm text-slate-600 line-clamp-2">{tweet.text}</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
+                    <p className="text-sm text-theme-secondary line-clamp-2">{tweet.text}</p>
+                    <div className="flex items-center gap-4 mt-2 text-xs text-theme-muted">
                         <span className="flex items-center gap-1">
                             <Heart size={12} />
                             {tweet.likes}
@@ -295,7 +296,7 @@ export default function TwitterClient() {
     // Loading state
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-transparent">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
@@ -313,7 +314,7 @@ export default function TwitterClient() {
     // Error state
     if (error) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-transparent">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
@@ -329,7 +330,7 @@ export default function TwitterClient() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-transparent">
             <Sidebar />
             <MobileHeader />
 
@@ -339,10 +340,10 @@ export default function TwitterClient() {
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fadeInUp">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+                            <h1 className="text-3xl font-bold text-theme-primary flex items-center gap-3">
                                 {viewMode === 'tweets' ? 'X Intelligence' : 'X AI Strategy'}
                             </h1>
-                            <p className="text-slate-500 mt-2">
+                            <p className="text-theme-secondary mt-2">
                                 {viewMode === 'tweets'
                                     ? `Tracking ${latestTweets.length} tweets in your niche.`
                                     : 'Strategic analysis of the Twitter landscape.'}
@@ -350,12 +351,12 @@ export default function TwitterClient() {
                         </div>
 
                         {/* View Toggle */}
-                        <div className="bg-white p-1 rounded-xl border border-slate-200 shadow-sm inline-flex">
+                        <div className="glass-panel p-1 rounded-xl inline-flex">
                             <button
                                 onClick={() => setViewMode('tweets')}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'tweets'
-                                    ? 'bg-blue-50 text-blue-600'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-blue-500/20 text-blue-500'
+                                    : 'text-theme-secondary hover:text-theme-primary hover:bg-white/5'
                                     }`}
                             >
                                 <LayoutGrid size={18} />
@@ -364,8 +365,8 @@ export default function TwitterClient() {
                             <button
                                 onClick={() => setViewMode('insights')}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'insights'
-                                    ? 'bg-blue-50 text-blue-600'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-blue-500 text-blue-600'
+                                    : 'text-theme-secondary hover:text-theme-primary hover:bg-white/5'
                                     }`}
                             >
                                 <Sparkles size={18} />
@@ -387,18 +388,18 @@ export default function TwitterClient() {
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Left Panel - Trending Topics */}
                                 <div className="lg:col-span-1">
-                                    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden sticky top-8 shadow-sm">
-                                        <div className="p-5 border-b border-slate-100 flex items-center gap-2">
-                                            <TrendingUp size={20} className="text-blue-600" />
-                                            <h2 className="font-semibold text-slate-900">Trending Topics</h2>
+                                    <div className="glass-panel overflow-hidden sticky top-8">
+                                        <div className="p-5 border-b border-white/5 flex items-center gap-2">
+                                            <TrendingUp size={20} className="text-blue-500" />
+                                            <h2 className="font-semibold text-theme-primary">Trending Topics</h2>
                                             <div className="live-indicator ml-2" />
                                         </div>
-                                        <div className="divide-y divide-slate-100">
+                                        <div className="divide-y divide-white/5">
                                             {hashtags.map((topic, index) => (
                                                 <TrendingItem key={topic.rank} topic={topic} index={index} />
                                             ))}
                                             {hashtags.length === 0 && (
-                                                <div className="p-4 text-center text-slate-400 text-sm">No trending topics found</div>
+                                                <div className="p-4 text-center text-theme-muted text-sm">No trending topics found</div>
                                             )}
                                         </div>
                                     </div>
@@ -407,12 +408,12 @@ export default function TwitterClient() {
                                 {/* Right Panel - Tweet Feed */}
                                 <div className="lg:col-span-2 space-y-4">
                                     {/* Tab Switcher */}
-                                    <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-xl w-fit border border-slate-200">
+                                    <div className="flex items-center gap-2 p-1 glass-panel rounded-xl w-fit">
                                         <button
                                             onClick={() => setActiveTab("top")}
                                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === "top"
-                                                ? "bg-white text-blue-600 shadow-sm"
-                                                : "text-slate-500 hover:text-slate-700"
+                                                ? "bg-white/10 text-blue-500 shadow-sm"
+                                                : "text-theme-muted hover:text-theme-primary hover:bg-white/5"
                                                 }`}
                                         >
                                             <Zap size={14} className="inline mr-1.5" />
@@ -421,8 +422,8 @@ export default function TwitterClient() {
                                         <button
                                             onClick={() => setActiveTab("latest")}
                                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === "latest"
-                                                ? "bg-white text-blue-600 shadow-sm"
-                                                : "text-slate-500 hover:text-slate-700"
+                                                ? "bg-white/10 text-blue-500 shadow-sm"
+                                                : "text-theme-muted hover:text-theme-primary hover:bg-white/5"
                                                 }`}
                                         >
                                             <Clock size={14} className="inline mr-1.5" />
@@ -433,15 +434,18 @@ export default function TwitterClient() {
                                     {activeTab === "top" ? (
                                         <div className="space-y-4">
                                             {sortedTopTweets.map((tweet, index) => (
-                                                <TweetCard key={tweet.id} tweet={tweet} index={index} />
+                                                <div key={tweet.id} className="glass-card p-5">
+                                                    {/* Tweet Card Logic Copied Inline for simplicity in replace */}
+                                                    <TweetCard tweet={tweet} index={index} />
+                                                </div>
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="glass-card overflow-hidden border border-slate-200 bg-white">
-                                            <div className="p-4 border-b border-slate-100 flex items-center gap-2">
+                                        <div className="glass-panel overflow-hidden">
+                                            <div className="p-4 border-b border-white/5 flex items-center gap-2">
                                                 <div className="live-indicator" />
-                                                <span className="text-sm font-medium text-slate-900">Live Feed</span>
-                                                <span className="text-xs text-slate-500">• Updates in real-time</span>
+                                                <span className="text-sm font-medium text-theme-primary">Live Feed</span>
+                                                <span className="text-xs text-theme-muted">• Updates in real-time</span>
                                             </div>
                                             <div>
                                                 {latestTweets.map((tweet, index) => (

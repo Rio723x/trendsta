@@ -29,7 +29,7 @@ export default function PerformanceDoctorView({ performance }: PerformanceDoctor
     const viewGoal = Math.round((performance.aggregates.avgViews || 1000) * 1.5);
 
     return (
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm animate-fadeInUp">
+        <div className="neu-convex p-6 animate-fadeInUp">
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600">
