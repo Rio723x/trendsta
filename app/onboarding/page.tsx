@@ -7,7 +7,6 @@ import Image from 'next/image';
 import {
     NICHE_OPTIONS,
     SUB_NICHE_MAPPING,
-    CREATOR_PROFILE_OPTIONS,
     OnboardingFormData,
     INITIAL_FORM_DATA,
 } from './onboardingData';
@@ -81,10 +80,6 @@ export default function OnboardingPage() {
             }
             if (!formData.subNiche) {
                 newErrors.subNiche = 'Please select your sub-niche';
-            }
-        } else if (currentStep === 3) {
-            if (!formData.creatorProfile) {
-                newErrors.creatorProfile = 'Please select your creator profile';
             }
         }
 
@@ -205,13 +200,7 @@ export default function OnboardingPage() {
                                         errors={{ niche: errors.niche, subNiche: errors.subNiche }}
                                     />
                                 )}
-                                {currentStep === 3 && (
-                                    <CreatorProfileSlide
-                                        value={formData.creatorProfile}
-                                        onChange={(val) => updateField('creatorProfile', val)}
-                                        error={errors.creatorProfile}
-                                    />
-                                )}
+
 
                                 {/* Navigation Buttons */}
                                 <div className="mt-10 flex items-center justify-between">
@@ -407,81 +396,81 @@ function NicheSlide({
     );
 }
 
-interface CreatorProfileSlideProps {
-    value: string;
-    onChange: (value: string) => void;
-    error?: string;
-}
+// interface CreatorProfileSlideProps {
+//     value: string;
+//     onChange: (value: string) => void;
+//     error?: string;
+// }
 
-function CreatorProfileSlide({ value, onChange, error }: CreatorProfileSlideProps) {
-    return (
-        <motion.div {...fadeInUp} transition={{ duration: 0.4 }}>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a5f] mb-3">
-                Which best describes you?
-            </h2>
-            <p className="text-slate-500 mb-8">
-                This helps us benchmark and tailor insights accurately.
-            </p>
+// function CreatorProfileSlide({ value, onChange, error }: CreatorProfileSlideProps) {
+//     return (
+//         <motion.div {...fadeInUp} transition={{ duration: 0.4 }}>
+//             <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a5f] mb-3">
+//                 Which best describes you?
+//             </h2>
+//             <p className="text-slate-500 mb-8">
+//                 This helps us benchmark and tailor insights accurately.
+//             </p>
 
-            <div className="grid gap-3">
-                {CREATOR_PROFILE_OPTIONS.map((option) => (
-                    <motion.button
-                        key={option.value}
-                        onClick={() => onChange(option.value)}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
-                        className={`w-full p-5 text-left border-2 rounded-xl transition-all duration-200 ${value === option.value
-                            ? 'border-[#f97316] bg-orange-50/50 shadow-md shadow-orange-100'
-                            : 'border-slate-200 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-100/50'
-                            }`}
-                    >
-                        <div className="flex items-start justify-between">
-                            <div>
-                                <h3 className={`font-semibold ${value === option.value ? 'text-[#1e3a5f]' : 'text-slate-700'
-                                    }`}>
-                                    {option.label}
-                                </h3>
-                                <p className="mt-1 text-sm text-slate-500">
-                                    {option.description}
-                                </p>
-                            </div>
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${value === option.value
-                                ? 'border-[#f97316] bg-[#f97316]'
-                                : 'border-slate-300'
-                                }`}>
-                                {value === option.value && (
-                                    <motion.svg
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        className="w-3 h-3 text-white"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clipRule="evenodd"
-                                        />
-                                    </motion.svg>
-                                )}
-                            </div>
-                        </div>
-                    </motion.button>
-                ))}
-            </div>
+//             {/* <div className="grid gap-3">
+//                 {CREATOR_PROFILE_OPTIONS.map((option) => (
+//                     <motion.button
+//                         key={option.value}
+//                         onClick={() => onChange(option.value)}
+//                         whileHover={{ scale: 1.01 }}
+//                         whileTap={{ scale: 0.99 }}
+//                         className={`w-full p-5 text-left border-2 rounded-xl transition-all duration-200 ${value === option.value
+//                             ? 'border-[#f97316] bg-orange-50/50 shadow-md shadow-orange-100'
+//                             : 'border-slate-200 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-100/50'
+//                             }`}
+//                     >
+//                         <div className="flex items-start justify-between">
+//                             <div>
+//                                 <h3 className={`font-semibold ${value === option.value ? 'text-[#1e3a5f]' : 'text-slate-700'
+//                                     }`}>
+//                                     {option.label}
+//                                 </h3>
+//                                 <p className="mt-1 text-sm text-slate-500">
+//                                     {option.description}
+//                                 </p>
+//                             </div>
+//                             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${value === option.value
+//                                 ? 'border-[#f97316] bg-[#f97316]'
+//                                 : 'border-slate-300'
+//                                 }`}>
+//                                 {value === option.value && (
+//                                     <motion.svg
+//                                         initial={{ scale: 0 }}
+//                                         animate={{ scale: 1 }}
+//                                         className="w-3 h-3 text-white"
+//                                         fill="currentColor"
+//                                         viewBox="0 0 20 20"
+//                                     >
+//                                         <path
+//                                             fillRule="evenodd"
+//                                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+//                                             clipRule="evenodd"
+//                                         />
+//                                     </motion.svg>
+//                                 )}
+//                             </div>
+//                         </div>
+//                     </motion.button>
+//                 ))}
+//             </div> */}
 
-            {error && (
-                <motion.p
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 text-sm text-red-500"
-                >
-                    {error}
-                </motion.p>
-            )}
-        </motion.div>
-    );
-}
+//             {error && (
+//                 <motion.p
+//                     initial={{ opacity: 0, y: -5 }}
+//                     animate={{ opacity: 1, y: 0 }}
+//                     className="mt-4 text-sm text-red-500"
+//                 >
+//                     {error}
+//                 </motion.p>
+//             )}
+//         </motion.div>
+//     );
+// }
 
 // ============================================================
 // COMPLETION STATE

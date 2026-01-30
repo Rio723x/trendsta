@@ -6,7 +6,14 @@ import { TrendingUp, ArrowUp, Minus, Heart, Repeat2, MessageCircle, ExternalLink
 import MobileHeader from "../components/MobileHeader";
 import { TweetData, ResearchSummary } from "@/app/types/trendsta";
 import SmartInsightsView from "../components/SmartInsightsView";
+import NoResearchFound from "../components/NoResearchFound";
+import NoResearchState from "../components/NoResearchState";
+import NoSocialAccount from "../components/NoSocialAccount";
+import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { useTwitterResearch, useOverallStrategy } from "@/hooks/useResearch";
+import { useSocialAccount } from "@/hooks/useSocialAccount";
+import { useAnalysis } from "@/app/context/AnalysisContext";
+import { useSession } from "@/lib/auth-client";
 import { RawTweet, RawTwitterResearch } from "@/app/types/rawApiTypes";
 
 export const dynamic = 'force-dynamic';
@@ -242,10 +249,14 @@ function LatestTweetItem({ tweet, index }: { tweet: TweetData; index: number }) 
 export default function TwitterClient() {
     const [viewMode, setViewMode] = useState<'tweets' | 'insights'>('tweets');
     const [activeTab, setActiveTab] = useState<"top" | "latest">("top");
+    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     // Fetch Twitter research data from cache
-    const { data: twitterData, isLoading, error } = useTwitterResearch();
+    const { data: twitterData, isLoading, isNoResearch, isError, error } = useTwitterResearch();
     const { data: overallStrategy } = useOverallStrategy();
+    const { data: socialAccount, isLoading: socialLoading, hasNoAccount } = useSocialAccount();
+    const { isAnalysing } = useAnalysis();
+    const { data: session } = useSession();
 
     // Transform raw tweets to TweetData format
     const topTweets = useMemo(() => {
@@ -293,8 +304,11 @@ export default function TwitterClient() {
     // Sort tweets by viral score for "Top Tweets" view
     const sortedTopTweets = [...topTweets].sort((a, b) => b.viralScore - a.viralScore);
 
-    // Loading state
-    if (isLoading) {
+    // Don't show loading if query has errored (404 or other)
+    const isPageLoading = !isError && (isLoading || socialLoading);
+
+    // Loading state - show spinner while any query is loading
+    if (isPageLoading) {
         return (
             <div className="min-h-screen bg-transparent">
                 <Sidebar />
@@ -311,8 +325,43 @@ export default function TwitterClient() {
         );
     }
 
-    // Error state
-    if (error) {
+    // No Social Account State
+    if (hasNoAccount) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
+                    <NoSocialAccount />
+                </main>
+            </div>
+        );
+    }
+
+    // Error State - check for 404 (no research) vs other errors
+    if (isError) {
+        // Check if it's a 404 (no research found)
+        const errorStatus = (error as { status?: number })?.status;
+        const is404 = errorStatus === 404;
+
+        if (is404 && !isAnalysing && session?.user) {
+            return (
+                <div className="min-h-screen bg-slate-50">
+                    <Sidebar />
+                    <MobileHeader />
+                    <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
+                        <NoResearchState onAnalyse={() => setShowAnalyseModal(true)} />
+                        <AnalyseConfirmModal
+                            open={showAnalyseModal}
+                            onOpenChange={setShowAnalyseModal}
+                            socialAccountId={socialAccount?.id || ""}
+                        />
+                    </main>
+                </div>
+            );
+        }
+
+        // Other errors - show generic error
         return (
             <div className="min-h-screen bg-transparent">
                 <Sidebar />
@@ -320,8 +369,8 @@ export default function TwitterClient() {
                 <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
                     <div className="flex items-center justify-center h-[60vh]">
                         <div className="text-center">
-                            <p className="text-red-500 mb-2">Failed to load Twitter data</p>
-                            <p className="text-slate-500 text-sm">Please run an analysis first or try again later.</p>
+                            <p className="text-red-500 font-medium">Something went wrong</p>
+                            <p className="text-slate-500 mt-2">{(error as Error)?.message}</p>
                         </div>
                     </div>
                 </main>

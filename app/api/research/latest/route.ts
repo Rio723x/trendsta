@@ -82,22 +82,16 @@ export async function GET(request: Request) {
 
         const userId = session.user.id;
 
-        // TESTING: Get userId from query params
-        // const { searchParams } = new URL(request.url);
-        // const userId = searchParams.get("userId");
-
-        if (!userId) {
-            return NextResponse.json(
-                { error: "userId query param is required for testing" },
-                { status: 400 }
-            );
-        }
-
-        // ADD LOGIC TO FIND SOCIAL ACCOUNT USING SOCIAL @ , WHEN ADDING AGENCY MODE
-        // THE CURRENT LOGIC ASSUME ONLY 1 SOCIAL ACCOUNT PER USER SO THIS WORKS
+        // Find user's social account
         const socialAccount = await prisma.socialAccount.findFirst({
             where: { userId },
             orderBy: { createdAt: "desc" },
+        });
+
+        console.log("API Debug - Social account:", {
+            found: !!socialAccount,
+            socialAccountId: socialAccount?.id,
+            username: socialAccount?.username,
         });
 
         if (!socialAccount) {
@@ -106,6 +100,11 @@ export async function GET(request: Request) {
                 { status: 404 }
             );
         }
+
+        console.log("API Debug - Authenticated user:", {
+            userId: session.user.id,
+            email: session.user.email,
+        });
 
         // 3. Fetch the latest research for this social account
         const research = await prisma.research.findFirst({
@@ -123,6 +122,12 @@ export async function GET(request: Request) {
                 nicheResearch: true,
                 twitterResearch: true,
             },
+        });
+
+        console.log("API Debug - Research:", {
+            found: !!research,
+            researchId: research?.id,
+            createdAt: research?.createdAt,
         });
 
         if (!research) {

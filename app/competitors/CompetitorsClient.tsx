@@ -7,10 +7,14 @@ import MobileHeader from "../components/MobileHeader";
 import ReelCard from "../components/ReelCard";
 import ReelModal from "../components/ReelModal";
 import SmartInsightsView from "../components/SmartInsightsView";
+import NoResearchState from "../components/NoResearchState";
+import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { ReelData } from "@/app/types/trendsta";
 
 // Hooks & Transformers
 import { useCompetitorResearch, useOverallStrategy } from "@/hooks/useResearch";
+import { useSocialAccount } from "@/hooks/useSocialAccount";
+import { useSession } from "@/lib/auth-client";
 import { transformCompetitorResearch, formatCompetitorInsights } from "@/lib/transformers";
 
 type SortField = "velocity" | "views" | "likes" | "engagement";
@@ -22,8 +26,11 @@ export default function CompetitorsClient() {
     const [selectedReel, setSelectedReel] = useState<ReelData | null>(null);
 
     // Fetch data via hooks
-    const { data: rawCompetitorData, isLoading: competitorLoading, error: competitorError } = useCompetitorResearch();
+    const { data: rawCompetitorData, isLoading: competitorLoading, error: competitorError, isNoResearch } = useCompetitorResearch();
     const { data: rawStrategyData, isLoading: strategyLoading } = useOverallStrategy();
+    const { data: socialAccount } = useSocialAccount();
+    const { data: session } = useSession();
+    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     // Transform raw data to UI types
     const competitorResearch = transformCompetitorResearch(rawCompetitorData);
@@ -107,6 +114,24 @@ export default function CompetitorsClient() {
                         <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
                         <p className="text-theme-secondary">Loading competitor data...</p>
                     </div>
+                </main>
+            </div>
+        );
+    }
+
+    // No research state for logged-in users
+    if (isNoResearch && session?.user) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8">
+                    <NoResearchState onAnalyse={() => setShowAnalyseModal(true)} />
+                    <AnalyseConfirmModal
+                        open={showAnalyseModal}
+                        onOpenChange={setShowAnalyseModal}
+                        socialAccountId={socialAccount?.id || ""}
+                    />
                 </main>
             </div>
         );

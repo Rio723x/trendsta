@@ -5,14 +5,32 @@ import { FileText, Clock, Target, Hash, ChevronDown, ChevronUp, Copy, Check, Spa
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
+import NoSocialAccount from "../components/NoSocialAccount";
+import NoResearchState from "../components/NoResearchState";
+import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { useScriptSuggestions } from "@/hooks/useResearch";
 import { transformScriptSuggestion } from "@/lib/transformers";
+import { useSession } from "@/lib/auth-client";
+import { useSocialAccount } from "@/hooks/useSocialAccount";
 
 export default function ScriptIdeasClient() {
-    const { data: rawData, isLoading, error } = useScriptSuggestions();
+    const { data: rawData, isLoading, error, isNoResearch } = useScriptSuggestions();
+    const { data: session } = useSession();
+    const { data: socialAccount } = useSocialAccount();
+    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     const [expandedScript, setExpandedScript] = useState<number | null>(null);
     const [copiedSection, setCopiedSection] = useState<string | null>(null);
+
+    // Debug logging
+    console.log("ScriptIdeas Debug:", {
+        hasSession: !!session?.user,
+        sessionEmail: session?.user?.email,
+        isNoResearch,
+        hasData: !!rawData,
+        error: error?.message,
+    });
+    console.log("=== COMPONENT RENDER ===");
 
     const scripts = Array.isArray(rawData) ? rawData.map(transformScriptSuggestion) : [];
 
@@ -26,8 +44,8 @@ export default function ScriptIdeasClient() {
         setExpandedScript(expandedScript === id ? null : id);
     };
 
-    // Loading State
-    if (isLoading) {
+    // Loading State - only show loading if not in error state
+    if (isLoading && !error && !isNoResearch) {
         return (
             <div className="min-h-screen bg-transparent">
                 <Sidebar />
@@ -42,17 +60,43 @@ export default function ScriptIdeasClient() {
         );
     }
 
-    // Error State
+    // No research state for logged-in users
+    if (isNoResearch && session?.user) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Sidebar />
+                <MobileHeader />
+                <main className="md:ml-64 p-4 md:p-8">
+                    <NoResearchState onAnalyse={() => setShowAnalyseModal(true)} />
+                    <AnalyseConfirmModal
+                        open={showAnalyseModal}
+                        onOpenChange={setShowAnalyseModal}
+                        socialAccountId={socialAccount?.id || ""}
+                    />
+                </main>
+            </div>
+        );
+    }
+
+    // Error State - Check if it's a "no social account" error
     if (error) {
+        const errorMessage = (error as { message?: string })?.message || "";
+        const isNoAccountError = errorMessage.toLowerCase().includes("social account") ||
+            errorMessage.toLowerCase().includes("connect your instagram");
+
         return (
             <div className="min-h-screen bg-slate-50">
                 <Sidebar />
                 <MobileHeader />
                 <main className="md:ml-64 p-4 md:p-8 flex items-center justify-center min-h-screen">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
-                        <p className="text-red-600 font-medium">Failed to load scripts</p>
-                        <p className="text-red-500 text-sm mt-2">{(error as Error).message}</p>
-                    </div>
+                    {isNoAccountError ? (
+                        <NoSocialAccount message="Connect your Instagram account to generate personalized script ideas." />
+                    ) : (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md text-center">
+                            <p className="text-red-600 font-medium">Failed to load scripts</p>
+                            <p className="text-red-500 text-sm mt-2">{(error as Error).message}</p>
+                        </div>
+                    )}
                 </main>
             </div>
         );
@@ -379,6 +423,10 @@ export default function ScriptIdeasClient() {
                                 <FileText size={48} className="mx-auto text-slate-200 mb-4" />
                                 <h3 className="text-lg font-bold text-slate-900">No scripts generated yet</h3>
                                 <p className="text-slate-500">Run a new analysis to generate script ideas.</p>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9a527460fae2247ec9e1e2deacac7567f6923f6f
                             </div>
 
                         )}

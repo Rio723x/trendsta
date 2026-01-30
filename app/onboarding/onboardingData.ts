@@ -11,11 +11,7 @@ export interface SubNicheMapping {
     [niche: string]: NicheOption[];
 }
 
-export interface CreatorProfileOption {
-    value: string;
-    label: string;
-    description: string;
-}
+
 
 // Core niches - curated professional categories only
 export const NICHE_OPTIONS: NicheOption[] = [
@@ -106,41 +102,19 @@ export const SUB_NICHE_MAPPING: SubNicheMapping = {
     ],
 };
 
-// Creator profile options
-export const CREATOR_PROFILE_OPTIONS: CreatorProfileOption[] = [
-    {
-        value: 'solo-creator',
-        label: 'Solo Content Creator',
-        description: 'Individual creating and managing content independently',
-    },
-    {
-        value: 'personal-brand',
-        label: 'Personal Brand / Thought Leader',
-        description: 'Building authority and influence in your domain',
-    },
-    {
-        value: 'startup-brand',
-        label: 'Startup or Brand Account',
-        description: 'Company or product-focused content strategy',
-    },
-    {
-        value: 'agency',
-        label: 'Content / Growth Agency',
-        description: 'Managing multiple creators or brand accounts',
-    },
-];
+
 
 // Form data types
 export interface OnboardingFormData {
     instagramUsername: string;
     niche: string;
     subNiche: string;
-    creatorProfile: string;
+   
 }
 
 export const INITIAL_FORM_DATA: OnboardingFormData = {
     instagramUsername: '',
     niche: '',
     subNiche: '',
-    creatorProfile: '',
+   
 };

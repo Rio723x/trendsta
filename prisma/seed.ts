@@ -1,121 +1,156 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-
 import { PrismaClient } from "../generated/prisma";
-import path from "path";
-import fs from "fs";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    const guestEmail = process.env.GUEST_EMAIL;
-    console.log(guestEmail);
-        if (!guestEmail) {
-            throw new Error("GUEST_EMAIL env var not set");
+    console.log("Seeding subscription plans...");
+
+    // 1. Define Plans
+    const plans = [
+        {
+            name: "Silver",
+            tier: 1,
+            monthlyStellasGrant: 120,
+            competitorAnalysisAccess: false,
+            aiConsultantAccess: false,
+            dailyAutoAnalysisEnabled: false,
+            price: 2500, // $25.00
+            providerProductId: "pdt_0NWyeKym8LDKoNKB9E7do"
+        },
+        {
+            name: "Gold",
+            tier: 2,
+            monthlyStellasGrant: 220,
+            competitorAnalysisAccess: true,
+            aiConsultantAccess: false,
+            dailyAutoAnalysisEnabled: true,
+            price: 4500, // $45.00
+            providerProductId: "pdt_0NXHnRHE2WZEePYoiQlyI"
+        },
+        {
+            name: "Platinum",
+            tier: 3,
+            monthlyStellasGrant: 520,
+            competitorAnalysisAccess: true,
+            aiConsultantAccess: true, // "AI Consultant Access"
+            dailyAutoAnalysisEnabled: true,
+            price: 9900, // $99.00
+            providerProductId: "pdt_0NXHnX4Wd2XdAz47FRiof"
         }
-    
-        console.log(`Seeding guest user: ${guestEmail}`);
-    
-        // 1. Upsert User
-        const user = await prisma.user.upsert({
-            where: { email: guestEmail },
-            update: {},
-            create: {
-                email: guestEmail,
-                name: "Guest User",
-                emailVerified: true,
-                image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Guest",
+    ];
+
+    for (const p of plans) {
+        console.log(`Upserting plan: ${p.name}`);
+
+        const plan = await prisma.plan.upsert({
+            where: { name: p.name },
+            update: {
+                tier: p.tier,
+                monthlyStellasGrant: p.monthlyStellasGrant,
+                competitorAnalysisAccess: p.competitorAnalysisAccess,
+                aiConsultantAccess: p.aiConsultantAccess,
+                dailyAutoAnalysisEnabled: p.dailyAutoAnalysisEnabled,
             },
-        });
-    
-        console.log(`User ID: ${user.id}`);
-    
-        // 2. Upsert Social Account
-        const username = "chatgptricks";
-        const existingSocial = await prisma.socialAccount.findFirst({
-            where: { userId: user.id, username: username }
-        });
-    
-        let socialAccountId = existingSocial?.id;
-    
-        if (!existingSocial) {
-            const newSocial = await prisma.socialAccount.create({
-                data: {
-                    userId: user.id,
-                    username: username
-                }
-            });
-            socialAccountId = newSocial.id;
-            console.log(`Created SocialAccount: ${username}`);
-        } else {
-            console.log(`Found SocialAccount: ${username}`);
-        }
-    
-        if (!socialAccountId) throw new Error("Failed to get SocialAccountId");
-    
-        // 3. Read Data
-        const dataPath = path.join(process.cwd(), 'guest_data.json');
-        console.log(`Reading data from: ${dataPath}`);
-    
-        if (!fs.existsSync(dataPath)) {
-            throw new Error(`Data file not found at ${dataPath}`);
-        }
-    
-        const rawData = fs.readFileSync(dataPath, 'utf-8');
-        const jsonData = JSON.parse(rawData);
-    
-        // The JSON is an array, take the first item
-        const guestData = Array.isArray(jsonData) ? jsonData[0] : jsonData;
-    
-        // 4. Create Research
-        // Clear existing research for this account to avoid duplicates/confusion
-        console.log("Clearing old research...");
-        await prisma.research.deleteMany({
-            where: { socialAccountId: socialAccountId }
-        });
-    
-        console.log("Creating new research...");
-        const research = await prisma.research.create({
-            data: {
-                socialAccountId: socialAccountId,
-                // Create related data inline
-                scriptSuggestions: {
-                    create: {
-                        scripts: guestData.script_suggestion?.scripts || []
-                    }
-                },
-                overallStrategy: {
-                    create: {
-                        data: guestData.overall_strategy || {}
-                    }
-                },
-                userResearch: {
-                    create: {
-                        data: guestData.user_research_json || {}
-                    }
-                },
-                competitorResearch: {
-                    create: {
-                        data: guestData.competitor_research_json || {}
-                    }
-                },
-                nicheResearch: {
-                    create: {
-                        data: guestData.niche_research_json || {}
-                    }
-                },
-                twitterResearch: {
-                    create: {
-                        latestData: guestData.twitterLatest_research_json || {},
-                        topData: guestData.twitterTop_research_json || {}
-                    }
-                }
+            create: {
+                name: p.name,
+                tier: p.tier,
+                monthlyStellasGrant: p.monthlyStellasGrant,
+                competitorAnalysisAccess: p.competitorAnalysisAccess,
+                aiConsultantAccess: p.aiConsultantAccess,
+                dailyAutoAnalysisEnabled: p.dailyAutoAnalysisEnabled,
             }
         });
-    
-        console.log(`Successfully created Research Object! ID: ${research.id}`);
+
+        // Upsert Subscription Product
+        console.log(`Upserting product for: ${p.name}`);
+        const providerProductId = p.providerProductId;
+        if (!providerProductId) {
+            console.warn(`Skipping product for ${p.name} - no providerProductId`);
+            continue;
+        }
+
+        await prisma.paymentProduct.upsert({
+            where: { providerProductId: providerProductId },
+            update: {
+                planId: plan.id,
+                price: p.price,
+                currency: "USD",
+                type: "SUBSCRIPTION",
+                providerName: "dodo",
+                billingPeriod: "MONTHLY"
+            },
+            create: {
+                planId: plan.id,
+                price: p.price,
+                currency: "USD",
+                type: "SUBSCRIPTION",
+                providerName: "dodo",
+                providerProductId: providerProductId,
+                billingPeriod: "MONTHLY"
+            }
+        });
+    }
+
+    // 2. Define Stella Bundle (One-Time)
+    // Small Bundle: 100 Stellas, $29
+    const stellaBundle = {
+        name: "Small Bundle",
+        amount: 100,
+        price: 2900,
+        providerProductId: "pdt_0NWvdNgnGXCcADDk4MJDH"
+    };
+
+    console.log(`Upserting Stella Bundle: ${stellaBundle.name}`);
+
+    // Create or update StellaBundle using findFirst because name is not unique in schema check?
+    // Wait, let's look at schema again: `name` is just String, no @unique shown in snippet 287.
+    // So we can't use upsert by name unless name is unique.
+    // Let's use findFirst then create or update.
+
+    let bundle = await prisma.stellaBundle.findFirst({
+        where: { name: stellaBundle.name }
+    });
+
+    if (bundle) {
+        bundle = await prisma.stellaBundle.update({
+            where: { id: bundle.id },
+            data: {
+                stellaAmount: stellaBundle.amount
+            }
+        });
+    } else {
+        bundle = await prisma.stellaBundle.create({
+            data: {
+                name: stellaBundle.name,
+                stellaAmount: stellaBundle.amount
+            }
+        });
+    }
+
+    await prisma.paymentProduct.upsert({
+        where: { providerProductId: stellaBundle.providerProductId },
+        update: {
+            bundleId: bundle.id,
+            price: stellaBundle.price,
+            currency: "USD",
+            type: "ONE_TIME",
+            providerName: "dodo"
+        },
+        create: {
+            bundleId: bundle.id,
+            price: stellaBundle.price,
+            currency: "USD",
+            type: "ONE_TIME",
+            providerName: "dodo",
+            providerProductId: stellaBundle.providerProductId,
+        }
+    });
+
+    console.log("Seeding complete!");
 }
 
 main()
