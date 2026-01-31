@@ -6,10 +6,8 @@ import { TrendingUp, ArrowUp, Minus, Heart, Repeat2, MessageCircle, ExternalLink
 import MobileHeader from "../components/MobileHeader";
 import { TweetData, ResearchSummary } from "@/app/types/trendsta";
 import SmartInsightsView from "../components/SmartInsightsView";
-import NoResearchFound from "../components/NoResearchFound";
 import NoResearchState from "../components/NoResearchState";
 import NoSocialAccount from "../components/NoSocialAccount";
-import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { useTwitterResearch, useOverallStrategy } from "@/hooks/useResearch";
 import { useSocialAccount } from "@/hooks/useSocialAccount";
 import { useAnalysis } from "@/app/context/AnalysisContext";
@@ -254,7 +252,6 @@ function LatestTweetItem({ tweet, index }: { tweet: TweetData; index: number }) 
 export default function TwitterClient() {
     const [viewMode, setViewMode] = useState<'tweets' | 'insights'>('tweets');
     const [activeTab, setActiveTab] = useState<"top" | "latest">("top");
-    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     // Fetch Twitter research data from cache
     const { data: twitterData, isLoading, isNoResearch, isError, error } = useTwitterResearch();
@@ -356,11 +353,6 @@ export default function TwitterClient() {
                     <MobileHeader />
                     <main className="md:ml-64 p-4 md:p-8 transition-all duration-300">
                         <NoResearchState />
-                        <AnalyseConfirmModal
-                            open={showAnalyseModal}
-                            onOpenChange={setShowAnalyseModal}
-                            socialAccountId={socialAccount?.id || ""}
-                        />
                     </main>
                 </div>
             );

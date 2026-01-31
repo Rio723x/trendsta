@@ -50,34 +50,11 @@ export async function POST(request: NextRequest) {
 
         const userId = session.user.id;
 
-        // 1. Check if user has AI Consultant access
-        const { getActiveSubscription } = await import('@/lib/analysis/credits');
+        const body: ChatRequest = await request.json();
+        const { message: userMessage, conversationId, modelMode = 'thinking' } = body;
 
-        const subscription = await getActiveSubscription(userId);
-
-        if (!subscription) {
-            return NextResponse.json(
-                {
-                    error: 'AI Consultant requires an active subscription',
-                    code: 'NO_SUBSCRIPTION',
-                    requiresUpgrade: true,
-                },
-                { status: 403 }
-            );
-        }
-
-        const plan = subscription.plan;
-
-        if (!plan.aiConsultantAccess) {
-            return NextResponse.json(
-                {
-                    error: `AI Consultant is not available on the ${plan.name} plan. Please upgrade to access this feature.`,
-                    code: 'INSUFFICIENT_PLAN',
-                    requiresUpgrade: true,
-                    currentPlan: plan.name,
-                },
-                { status: 403 }
-            );
+        if (!userMessage || typeof userMessage !== 'string') {
+            return NextResponse.json({ error: 'Message is required' }, { status: 400 });
         }
 
         const apiKey = process.env.OPENROUTER_API_KEY;
@@ -88,16 +65,55 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const body: ChatRequest = await request.json();
-        const { message: userMessage, conversationId, modelMode = 'thinking' } = body;
-
         // Get model for the selected mode
         const selectedModel = MODEL_MODES[modelMode]?.model || AI_CONFIG.MODEL;
         console.log(`[Chat API] Using model mode: ${modelMode} (${selectedModel})`);
 
-        if (!userMessage || typeof userMessage !== 'string') {
-            return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+
+        // --- STELLA COST & ALLOWANCE LOGIC ---
+        // 1. Determine Cost
+        const { STELLA_COSTS } = await import('@/lib/aiConfig');
+        const cost = modelMode === 'thinking' ? STELLA_COSTS.THINKING : STELLA_COSTS.FAST;
+
+        // 2. CHECK Eligibility FIRST (Do not consume yet)
+        let isFreeEligible = false;
+        if (modelMode === 'fast') {
+            const { checkFreeAllowance } = await import('@/lib/analysis/featureAllowance');
+            isFreeEligible = await checkFreeAllowance(userId, 'AI_CONSULTANT');
         }
+
+        // 3. Fallback: Strict Subscription Check (if no free eligibility)
+        if (!isFreeEligible) {
+            // Check if user has AI Consultant access via Subscription
+            const { getActiveSubscription } = await import('@/lib/analysis/credits');
+            const subscription = await getActiveSubscription(userId);
+
+            if (!subscription) {
+                return NextResponse.json(
+                    { error: 'AI Consultant requires an active subscription or free allowance', code: 'NO_SUBSCRIPTION', requiresUpgrade: true },
+                    { status: 403 }
+                );
+            }
+
+            const plan = subscription.plan;
+            if (!plan.aiConsultantAccess) {
+                return NextResponse.json(
+                    { error: `AI Consultant is not available on the ${plan.name} plan.`, code: 'INSUFFICIENT_PLAN', requiresUpgrade: true, currentPlan: plan.name },
+                    { status: 403 }
+                );
+            }
+
+            // Verify Credits (Do not deduct yet)
+            const { getUserStellaBalance } = await import('@/lib/analysis/credits');
+            const balance = await getUserStellaBalance(userId);
+            if (balance < cost) {
+                return NextResponse.json(
+                    { error: `Insufficient Stellas. Requires ${cost}, you have ${balance}.`, code: 'INSUFFICIENT_STELLAS', required: cost, balance: balance },
+                    { status: 403 }
+                );
+            }
+        }
+        // -------------------------
 
         // 2. Get or create conversation session
         const chatSession = await getOrCreateSession(conversationId || null, userId);
@@ -106,6 +122,111 @@ export async function POST(request: NextRequest) {
         const debug = new DebugLogger(chatSession.chatId, userMessage);
 
         console.log(`\n🚀 [Chat API] Starting request for conversation: ${chatSession.chatId}`);
+
+        // 4. Fetch dynamic context from DB
+        const { getLatestResearch } = await import('@/lib/research/service');
+        const researchResult = await getLatestResearch(userId);
+        console.log("research data --------", researchResult);
+
+        const allContexts = getAllContexts(); // Get static defaults first
+
+        // Overwrite with dynamic data if available
+        if (researchResult.success) {
+            const r = researchResult.data;
+
+            // User Context
+            if (r.userResearch) {
+                if (r.userResearch.user_research_context) {
+                    allContexts.user = r.userResearch.user_research_context;
+                    console.log(`[Chat API] Loaded DYNAMIC User Context (Stored) (${allContexts.user.length} chars)`);
+                } else {
+                    const { generateUserContext } = await import('@/lib/consultant/contextGenerator');
+                    allContexts.user = generateUserContext(r.userResearch);
+                    console.log(`[Chat API] Generated DYNAMIC User Context (${allContexts.user.length} chars)`);
+                }
+            } else {
+                console.log('[Chat API] No dynamic user_context found, using static default');
+            }
+
+            // Competitor Context
+            if (r.competitorResearch) {
+                if (r.competitorResearch.competitor_research_context) {
+                    allContexts.competitor = r.competitorResearch.competitor_research_context;
+                    console.log(`[Chat API] Loaded DYNAMIC Competitor Context (Stored) (${allContexts.competitor.length} chars)`);
+                } else {
+                    const { generateCompetitorContext } = await import('@/lib/consultant/contextGenerator');
+                    allContexts.competitor = generateCompetitorContext(r.competitorResearch);
+                    console.log(`[Chat API] Generated DYNAMIC Competitor Context (${allContexts.competitor.length} chars)`);
+                }
+            }
+
+            // Niche Context
+            if (r.nicheResearch) {
+                if (r.nicheResearch.niche_research_context) {
+                    allContexts.niche = r.nicheResearch.niche_research_context;
+                    console.log(`[Chat API] Loaded DYNAMIC Niche Context (Stored) (${allContexts.niche.length} chars)`);
+                } else {
+                    const { generateNicheContext } = await import('@/lib/consultant/contextGenerator');
+                    allContexts.niche = generateNicheContext(r.nicheResearch);
+                    console.log(`[Chat API] Generated DYNAMIC Niche Context (${allContexts.niche.length} chars)`);
+                }
+            }
+
+            // Twitter Context
+            if (r.twitterResearch) {
+                const latestCtx = r.twitterResearch.twitterLatest_research_context;
+                const topCtx = r.twitterResearch.twitterTop_research_context;
+
+                if (latestCtx || topCtx) {
+                    allContexts.twitter = [latestCtx, topCtx].filter(Boolean).join('\n\n');
+                    console.log(`[Chat API] Loaded DYNAMIC Twitter Context (Stored) (${allContexts.twitter.length} chars)`);
+                } else {
+                    const { generateTwitterContext } = await import('@/lib/consultant/contextGenerator');
+                    allContexts.twitter = generateTwitterContext(r.twitterResearch);
+                    console.log(`[Chat API] Generated DYNAMIC Twitter Context (${allContexts.twitter.length} chars)`);
+                }
+            }
+        } else {
+            // Handle 404 specifically - Blocking LLM call if no research exists
+            if (researchResult.statusCode === 404) {
+                const noResearchMessage = "I notice you haven't generated any research yet. In order to function as your AI Consultant, I need to analyze your content and strategy first. Please go to the dashboard and run your first analysis!";
+
+                return NextResponse.json({
+                    message: noResearchMessage,
+                    contextsUsed: [],
+                    model: 'system-guard',
+                    usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 }
+                });
+            }
+
+            console.warn('[Chat API] Failed to fetch research for context:', researchResult.error);
+        }
+
+
+
+        // --- CONSUME CREDITS / ALLOWANCE NOW ---
+        // Only point of no return is here, after we verified we have data to proceed.
+        if (isFreeEligible) {
+            const { consumeFreeAllowance } = await import('@/lib/analysis/featureAllowance');
+            const consumed = await consumeFreeAllowance(userId, 'AI_CONSULTANT');
+            if (!consumed) {
+                // Race condition or exhausted in split-second
+                return NextResponse.json({ error: 'Free allowance exhausted.', code: 'ALLOWANCE_EXHAUSTED' }, { status: 403 });
+            }
+            console.log(`[Chat API] Used 1 Free Allowance`);
+        } else {
+            const { deductUserStellas } = await import('@/lib/analysis/credits');
+            const success = await deductUserStellas(userId, cost, {
+                feature: 'AI_CONSULTANT',
+                modelMode,
+                description: `AI Consultant Chat (${modelMode} mode)`
+            });
+            if (!success) {
+                return NextResponse.json({ error: 'Transaction failed (Insufficient Stellas).', code: 'TRANSACTION_FAILED' }, { status: 403 });
+            }
+            console.log(`[Chat API] Deducted ${cost} Stellas`);
+        }
+        // -------------------------
 
         // 3. Detect which contexts are needed for THIS question only
         let contextsForThisQuestion: ContextType[] = [];
@@ -139,8 +260,6 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 4. Log context token counts
-        const allContexts = getAllContexts();
         const contextStrings: Record<string, string> = {
             user: allContexts.user || '',
             competitor: allContexts.competitor || '',

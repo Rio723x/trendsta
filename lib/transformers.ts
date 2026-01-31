@@ -289,10 +289,10 @@ export function buildResearchSummary(
         instagram_insights: instagramInsights || base?.instagram_insights || "",
         twitter_insights: base?.twitter_insights || "",
         competitor_insights: competitorInsights || base?.competitor_insights || "",
-        viral_triggers: base?.viral_triggers || "",
-        content_gap: strategy?.content_gap?.gap || base?.content_gap || "",
+        viral_triggers: strategy?.viral_triggers || base?.viral_triggers,
+        content_gap: strategy?.content_gap || base?.content_gap,
         posting_times: postingTimes || base?.posting_times || "",
-        hook_formula: strategy?.viral_hook_formula?.pattern || base?.hook_formula || "",
+        hook_formula: strategy?.viral_hook_formula || base?.hook_formula,
         instagram_summary_research: base?.instagram_summary_research || "",
         generatedAt: base?.generatedAt || new Date().toISOString()
     };

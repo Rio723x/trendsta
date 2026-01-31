@@ -11,6 +11,8 @@ import InlineChart, { InlineChartError } from "../components/InlineChart";
 import { parseGraphBlocks, ContentPart } from "@/lib/consultant/graphParser";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useUsage } from "@/hooks/useUsage";
+import { useResearch } from "@/hooks/useResearch";
 
 // ============================================================
 // TYPES
@@ -225,6 +227,10 @@ export default function AIConsultantPage() {
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [speakingMessageId, setSpeakingMessageId] = useState<number | null>(null);
+
+    // Initial Data & Hooks
+    const { planTier } = useUsage();
+    const { data: researchData } = useResearch();
 
     // Refs
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -584,9 +590,19 @@ export default function AIConsultantPage() {
                                     />
                                 </div>
 
-                                <p className="text-theme-secondary text-lg mb-10 max-w-md mx-auto">
+                                <p className="text-theme-secondary text-lg mb-2 max-w-md mx-auto">
                                     Your AI-powered content strategist. Ask me anything about reels, trends, and growth.
                                 </p>
+
+                                {/* Research Date Note */}
+                                {researchData && researchData.createdAt && (
+                                    <div className="mb-8 max-w-md mx-auto">
+                                        <p className="text-xs text-theme-muted bg-white/5 inline-block px-3 py-1 rounded-full border border-white/10">
+                                            📊 Results based on data from {new Date(researchData.createdAt).toLocaleDateString()}.
+                                            <span className="opacity-70 ml-1">Analyse again for fresh results.</span>
+                                        </p>
+                                    </div>
+                                )}
 
                                 {/* Prompt Suggestions Grid */}
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-2xl mx-auto">
@@ -704,13 +720,31 @@ export default function AIConsultantPage() {
                             <Zap size={14} className={thinkingMode === 'flash' ? 'text-amber-500' : ''} />
                             Fast Mode
                         </button>
-                        <button
-                            onClick={() => setThinkingMode('deep')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all ${thinkingMode === 'deep' ? 'bg-purple-50 border border-purple-200 text-purple-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
-                        >
-                            <BrainCircuit size={14} className={thinkingMode === 'deep' ? 'text-purple-500' : ''} />
-                            Deep Research
-                        </button>
+
+                        {/* Pro/Thinking Modes - Locked for Tier 1 & 2 */}
+                        <div className="relative group/mode">
+                            <button
+                                onClick={() => {
+                                    if (planTier >= 3) setThinkingMode('deep');
+                                }}
+                                disabled={planTier < 3}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all ${planTier < 3
+                                    ? 'opacity-50 cursor-not-allowed bg-slate-100/5 text-slate-400'
+                                    : thinkingMode === 'deep'
+                                        ? 'bg-purple-50 border border-purple-200 text-purple-700 shadow-sm'
+                                        : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                                    }`}
+                            >
+                                <BrainCircuit size={14} className={thinkingMode === 'deep' ? 'text-purple-500' : ''} />
+                                Deep Research
+                                {planTier < 3 && <Target size={12} className="ml-1 text-slate-400" />}
+                            </button>
+                            {planTier < 3 && (
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/80 text-white text-[10px] rounded opacity-0 group-hover/mode:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                    Requires Platinum Plan
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </main>

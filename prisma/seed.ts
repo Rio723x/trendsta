@@ -159,50 +159,43 @@ async function main() {
     // ============================================
     console.log("\n👤 Seeding guest user data...");
 
-    const guestEmail = process.env.GUEST_EMAIL;
-    if (!guestEmail) {
+    //const guestEmail = process.env.GUEST_EMAIL;
+    const userId = "c38138e6-d4d3-4790-aafc-bc2428c6fbbf";
+    if (!userId) {
         console.warn("  ⚠️  GUEST_EMAIL not set in .env, skipping guest data seeding");
     } else {
-        console.log(`  ↳ Looking for guest user: ${guestEmail}`);
+        console.log(`  ↳ Looking for guest user: ${userId}`);
 
         // Upsert guest user (create if doesn't exist)
-        const guestUser = await prisma.user.upsert({
-            where: { email: guestEmail },
-            update: {},
-            create: {
-                email: guestEmail,
-                name: "Guest User",
-                emailVerified: true,
-            }
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
         });
 
-        console.log(`  ✓ Guest user ready: ${guestUser.name || guestUser.email}`);
+        //  console.log(`  ✓ Guest user ready: ${guestUser.name || guestUser.email}`);
 
         // Upsert social account for guest
-        const guestUsername = "100xengineers"; // Default guest username
-        console.log(`  ↳ Upserting social account: @${guestUsername}`);
+        //const guestUsername = "100xengineers"; // Default guest username
+        //console.log(`  ↳ Upserting social account: @${guestUsername}`);
 
         let socialAccount = await prisma.socialAccount.findFirst({
-            where: { userId: guestUser.id }
+            where: { userId: user!.id }
         });
 
-        if (socialAccount) {
-            // Update existing social account
-            socialAccount = await prisma.socialAccount.update({
-                where: { id: socialAccount.id },
-                data: { username: guestUsername }
-            });
-        } else {
-            // Create new social account
-            socialAccount = await prisma.socialAccount.create({
-                data: {
-                    userId: guestUser.id,
-                    username: guestUsername,
-                }
-            });
-        }
+        // if (socialAccount) {
+        //     // Update existing social account
+        //     socialAccount = await prisma.socialAccount.update({
+        //         where: { id: socialAccount.id },
+        //     });
 
-        console.log(`✓ Social account ready: ${socialAccount.id}`);
+        // Create new social account
+        // socialAccount = await prisma.socialAccount.create({
+        //     data: {
+        //         userId: guestUser.id,
+        //     }
+        // });
+
+
+        console.log(`✓ Social account ready: ${socialAccount!.id}`);
 
         // Read guest data from JSON file
         const dataPath = path.join(process.cwd(), 'guest_data.json');
@@ -218,14 +211,37 @@ async function main() {
             // Clear existing research for this account
             console.log("  ↳ Clearing old research...");
             await prisma.research.deleteMany({
-                where: { socialAccountId: socialAccount.id }
+                where: { socialAccountId: socialAccount!.id }
             });
+
+            // Inject Context 1-liners
+            const USER_CONTEXT = "Creator 100xengineers (Sanidhya Tulsinandan) focuses on AI & Tech tutorials, averaging 200k views/reel with a viral rate of 40%.";
+            const COMPETITOR_CONTEXT = "Competitors like trakin.ai and nivedan.ai leverage transcript-based hooks and storytelling to drive high engagement in the AI niche.";
+            const NICHE_CONTEXT = "The AI & Tech niche favors rapid tutorials and updates on new tools, with high demand for practical application advice.";
+            const TWITTER_CONTEXT = "Twitter trends highlight AI agent capabilities and security concerns, with active discussions on model performance.";
+
+            if (guestData.user_research_json) {
+                guestData.user_research_json.user_context = USER_CONTEXT;
+            }
+            if (guestData.competitor_research_json) {
+                guestData.competitor_research_json.competitor_context = COMPETITOR_CONTEXT;
+            }
+            // Ensure niche_research_json exists
+            if (!guestData.niche_research_json) guestData.niche_research_json = {};
+            guestData.niche_research_json.niche_context = NICHE_CONTEXT;
+
+            if (guestData.twitterLatest_research_json) {
+                guestData.twitterLatest_research_json.twitter_context = TWITTER_CONTEXT;
+            } else {
+                // If the key doesn't exist (e.g. data structure issue), ensure we create it or attach to what's available
+                guestData.twitterLatest_research_json = { twitter_context: TWITTER_CONTEXT };
+            }
 
             // Create new research with all data
             console.log("  ↳ Creating new research...");
             const research = await prisma.research.create({
                 data: {
-                    socialAccountId: socialAccount.id,
+                    socialAccountId: socialAccount!.id,
                     scriptSuggestions: {
                         create: {
                             scripts: guestData.script_suggestion?.scripts || []

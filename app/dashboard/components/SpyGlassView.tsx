@@ -19,8 +19,8 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
     // but display the real text summary below it.
     const { heatmap } = SPY_GLASS_DATA;
 
-    // For Viral Trigger, use real data text
-    const viralTriggerText = research.viral_triggers || "Analysis pending...";
+    // For Viral Trigger, extract the first trigger's text from the array
+    const viralTriggerText = research.viral_triggers?.[0]?.trigger || "Analysis pending...";
 
     // For Top Hooks, use real data but formatted as Leaderboard
     const topHooks = (competitors.top_hooks || []).slice(0, 7);
@@ -88,10 +88,10 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
                     </div>
 
                     {/* Viral Trigger Tip */}
-                    <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl text-blue-900 relative overflow-hidden border border-blue-200">
+                    <div className="p-5 glass-panel bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-xl relative overflow-hidden border border-blue-500/30">
                         <div className="flex items-center gap-2 mb-2 relative z-10">
                             <Flame size={16} className="text-orange-500" />
-                            <span className="text-xs font-bold text-blue-600 uppercase">Viral Trigger</span>
+                            <span className="text-xs font-bold text-blue-400 uppercase">Viral Trigger</span>
                         </div>
                         <h4 className="font-bold text-lg mb-1 relative z-10 text-blue-800">Core insight</h4>
                         <p className="text-blue-700 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">
@@ -109,14 +109,14 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
                             )}
                         </p>
                         {/* Decor */}
-                        <div className="absolute -right-4 -bottom-4 bg-blue-200/50 w-24 h-24 rounded-full blur-xl" />
+                        <div className="absolute -right-4 -bottom-4 bg-blue-500/20 w-24 h-24 rounded-full blur-xl" />
                     </div>
 
                     {/* Content Gap Card */}
-                    <div className="p-5 bg-gradient-to-br from-amber-50 to-yellow-100 rounded-xl text-amber-900 relative overflow-hidden mt-4 border border-amber-200">
+                    <div className="p-5 glass-panel bg-gradient-to-br from-amber-500/10 to-yellow-500/10 rounded-xl relative overflow-hidden mt-4 border border-amber-500/30">
                         <div className="flex items-center gap-2 mb-2 relative z-10">
-                            <TrendingUp size={16} className="text-amber-600" />
-                            <span className="text-xs font-bold text-amber-600 uppercase">Opportunity</span>
+                            <TrendingUp size={16} className="text-amber-500" />
+                            <span className="text-xs font-bold text-amber-400 uppercase">Opportunity</span>
                         </div>
                         <h4 className="font-bold text-lg mb-1 relative z-10 text-amber-800">Content Gap</h4>
                         <p className="text-amber-700 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">
@@ -130,7 +130,7 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
                             )}
                         </p>
                         {/* Decor */}
-                        <div className="absolute -right-4 -bottom-4 bg-amber-200/50 w-24 h-24 rounded-full blur-xl" />
+                        <div className="absolute -right-4 -bottom-4 bg-amber-500/20 w-24 h-24 rounded-full blur-xl" />
                     </div>
                 </div>
 

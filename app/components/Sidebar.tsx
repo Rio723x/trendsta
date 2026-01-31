@@ -8,6 +8,10 @@ import Image from "next/image";
 import { useSidebar } from "../context/SidebarContext";
 import ThemeToggle from "./ThemeToggle";
 import { useSession, authClient } from "@/lib/auth-client";
+import { useUsage } from "@/hooks/useUsage";
+import { useAnalysisStatus } from "@/hooks/useAnalysisStatus";
+import AnalysisConfirm from "./AnalysisConfirm";
+import { Loader2 } from "lucide-react";
 
 const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: Home },
@@ -27,7 +31,36 @@ export default function Sidebar() {
 
     const [name, setName] = useState("");
 
+    const { planTier, allowance, isLoading: usageLoading } = useUsage();
+
     const { data: session } = useSession();
+    const { isAnalyzing, mutate } = useAnalysisStatus();
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [isStarting, setIsStarting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleStartAnalysis = async (data: any) => {
+        setIsStarting(true);
+        setError(null);
+        try {
+            const res = await fetch("/api/analysis/start", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const resData = await res.json();
+
+            if (!res.ok) throw new Error(resData.error || "Failed to start analysis");
+
+            mutate(); // Refresh status immediately
+            setIsConfirmOpen(false);
+        } catch (error) {
+            console.error(error);
+            setError(error instanceof Error ? error.message : "Failed to start analysis");
+        } finally {
+            setIsStarting(false);
+        }
+    };
 
     useEffect(() => {
         if (session?.user?.name) {
@@ -103,10 +136,59 @@ export default function Sidebar() {
                                     {item.label}
                                 </div>
                             )}
+
+                            {/* Free Chat Counter (Only for AI Consultant) */}
+                            {item.label === "AI Consultant" && !isCollapsed && !usageLoading && (planTier === 1 || planTier === 2) && allowance > 0 && (
+                                <span className="ml-auto text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                    {allowance} left
+                                </span>
+                            )}
                         </Link>
                     );
                 })}
             </nav>
+
+            {/* New Analysis Button */}
+            <div className="px-3 pb-3">
+                <button
+                    onClick={() => {
+                        if (isAnalyzing) return;
+                        setIsConfirmOpen(true);
+                    }}
+                    disabled={isAnalyzing}
+                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative 
+                        ${isAnalyzing ? "bg-slate-50 text-slate-400 cursor-not-allowed border border-slate-100" : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:scale-[1.02]"}
+                        ${isCollapsed ? "justify-center" : ""}
+                    `}
+                    title={isCollapsed ? (isAnalyzing ? "Analysis in Progress" : "New Analysis") : undefined}
+                >
+                    {isAnalyzing ? (
+                        <Loader2 size={20} className="animate-spin shrink-0" />
+                    ) : (
+                        <Sparkles size={20} className="shrink-0" />
+                    )}
+
+                    {!isCollapsed && (
+                        <span className="font-bold text-sm whitespace-nowrap">
+                            {isAnalyzing ? "Analyzing..." : "New Analysis"}
+                        </span>
+                    )}
+
+                    {isCollapsed && (
+                        <div className="absolute left-full ml-4 px-3 py-1 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                            {isAnalyzing ? "Analysis in Progress" : "New Analysis"}
+                        </div>
+                    )}
+                </button>
+            </div>
+
+            <AnalysisConfirm
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={handleStartAnalysis}
+                isLoading={isStarting}
+                error={error}
+            />
 
             {/* Collapse Toggle */}
             <button

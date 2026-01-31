@@ -8,9 +8,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4ba6
-            direction: 'vertical', // vertical, horizontal
-            gestureDirection: 'vertical', // vertical, horizontal, both
-            smoothMultiplier: 1,
+
             touchMultiplier: 2,
         });
 

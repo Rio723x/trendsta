@@ -11,15 +11,27 @@ export const MODEL_MODES = {
         name: 'Fast',
         description: 'Quick responses, simple queries',
         // model: 'google/gemini-2.0-flash-001',
-        model:"tngtech/deepseek-r1t2-chimera:free",
+        model: "tngtech/deepseek-r1t2-chimera:free",
         icon: '⚡',
+    },
+    pro:{
+        name:'Pro',
+        description:'Deep analysis, complex strategy',
+        model:'tngtech/deepseek-r1t2-chimera:free',
+        icon:'🧠',
     },
     thinking: {
         name: 'Thinking',
         description: 'Deep analysis, complex strategy',
-        model: 'x-ai/grok-4.1-fast',
+        // model: 'x-ai/grok-4.1-fast',
+        model: "tngtech/deepseek-r1t2-chimera:free",
         icon: '🧠',
     },
+};
+
+export const STELLA_COSTS = {
+    FAST: 1,
+    THINKING: 2 // Deep mode
 };
 
 export const AI_CONFIG = {

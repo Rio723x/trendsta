@@ -10,7 +10,7 @@ import * as db from '@/lib/consultant/db';
  */
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth.api.getSession({
@@ -24,7 +24,8 @@ export async function GET(
             );
         }
 
-        const conversationId = params.id;
+        const { id } = await params;
+        const conversationId = id;
         const conversation = await db.getConversation(conversationId, session.user.id);
 
         if (!conversation) {
@@ -55,7 +56,7 @@ export async function GET(
  */
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth.api.getSession({
@@ -69,7 +70,8 @@ export async function DELETE(
             );
         }
 
-        const conversationId = params.id;
+        const { id } = await params;
+        const conversationId = id;
         const deleted = await deleteSession(conversationId, session.user.id);
 
         if (!deleted) {
@@ -95,7 +97,7 @@ export async function DELETE(
  */
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth.api.getSession({
@@ -118,7 +120,8 @@ export async function PATCH(
             );
         }
 
-        const conversationId = params.id;
+        const { id } = await params;
+        const conversationId = id;
         const updated = await db.updateConversationTitle(
             conversationId,
             session.user.id,

@@ -8,10 +8,8 @@ import MobileHeader from "../components/MobileHeader";
 import ReelCard from "../components/ReelCard";
 import ReelModal from "../components/ReelModal";
 import AIInsightsView from "../components/AIInsightsView";
-import NoResearchFound from "../components/NoResearchFound";
 import NoResearchState from "../components/NoResearchState";
 import NoSocialAccount from "../components/NoSocialAccount";
-import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { ReelData, ResearchSummary } from "../types/trendsta";
 
 // Hooks & Transformers
@@ -40,7 +38,6 @@ export default function TopReelsClient() {
     const [viewMode, setViewMode] = useState<'reels' | 'insights'>('insights');
     const [activeFilter, setActiveFilter] = useState("all");
     const [selectedReel, setSelectedReel] = useState<ReelData | null>(null);
-    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     // Fetch data via hooks
     const { data: rawNicheData, isLoading: nicheLoading, isNoResearch, isError, error } = useNicheResearch();
@@ -130,12 +127,9 @@ export default function TopReelsClient() {
                     <Sidebar />
                     <MobileHeader />
                     <main className="md:ml-64 p-4 md:p-8">
-                        <NoResearchFound onAnalyse={() => setShowAnalyseModal(true)} />
-                        <AnalyseConfirmModal
-                            open={showAnalyseModal}
-                            onOpenChange={setShowAnalyseModal}
-                            socialAccountId={socialAccount?.id || ""}
-                        />
+                        <main className="md:ml-64 p-4 md:p-8">
+                            <NoResearchState />
+                        </main>
                     </main>
                 </div>
             );

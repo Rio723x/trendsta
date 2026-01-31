@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
-import NoResearchFound from "../components/NoResearchFound"; // Import NoResearchFound
+import NoResearchState from "../components/NoResearchState";
 import { useRouter } from "next/navigation"; // Import useRouter
 import { StatsOverview } from "./components/StatsOverview";
 import ResearchSummaryView from "./components/ResearchSummaryView";
@@ -18,8 +18,6 @@ import { buildResearchSummary, transformScriptSuggestion } from "../../lib/trans
 // Hooks
 import { useSession } from "@/lib/auth-client";
 import { useResearch, useOverallStrategy, useScriptSuggestions } from "@/hooks/useResearch";
-import { getTrendstaData } from "../lib/dataLoader";
-import NoResearchState from "../components/NoResearchState";
 
 // New Widgets
 import ViralSweetSpotWidget from "./components/widgets/ViralSweetSpotWidget";
@@ -39,7 +37,7 @@ export const dynamic = 'force-dynamic';
 export default function DashboardClient() {
     const { isCollapsed } = useSidebar();
     const { data: session } = useSession();
-    const { data: researchData, isLoading, isNoResearch } = useResearch();
+    const { data: researchData, isLoading, isNoResearch, isError } = useResearch();
     const { data: strategyData } = useOverallStrategy();
     const { data: scriptSuggestions } = useScriptSuggestions();
 
@@ -57,26 +55,17 @@ export default function DashboardClient() {
 
     // Determine which data to use
     const isGuest = !session?.user;
-    const shouldShowGuestData = isGuest;
-    const shouldShowNoResearch = !isGuest && isNoResearch;
-    const shouldShowDynamicData = !isGuest && !isNoResearch && researchData;
+    const shouldShowNoResearch = isNoResearch;
+    const shouldShowDynamicData = !isNoResearch && researchData;
 
-    // Get data based on state
-    let data: any;
+    // Get data based on state - both guest and authenticated users use dynamic data
     let summaryData: any = {};
     let scriptIdeas: any[] = [];
     let graphs: any;
     let hooks: any[] = [];
 
-    if (shouldShowGuestData) {
-        // Guest mode: use static data
-        data = getTrendstaData();
-        summaryData = data.llm_research_summary?.[0] || {};
-        scriptIdeas = data.LLM_script_ideas || [];
-        graphs = data.dashboard_graphs;
-        hooks = data.hooks || [];
-    } else if (shouldShowDynamicData) {
-        // Authenticated mode: use dynamic data
+    if (shouldShowDynamicData) {
+        // Use dynamic data from hooks (works for both authenticated and guest users)
         // Map research data to dashboard format
         summaryData = {
             // Viral triggers
@@ -102,15 +91,6 @@ export default function DashboardClient() {
         // These would need to be added to the API response or fetched separately
         graphs = undefined;
         hooks = [];
-
-        // Create data object for compatibility
-        data = {
-            llm_research_summary: [summaryData],
-            LLM_script_ideas: scriptIdeas,
-            dashboard_graphs: graphs,
-            hooks: hooks,
-            isGuest: false
-        };
     }
 
     // Prepare Metrics Data
@@ -180,10 +160,10 @@ export default function DashboardClient() {
         }
 
         // Error State or No Data
-        if (isError || !rawData || isNoResearch || !summaryData || !metricsData) {
+        if (isError || !researchData || isNoResearch || !summaryData || !metricsData) {
             return (
                 <div className="h-[60vh] flex items-center justify-center">
-                    <NoResearchFound onAnalyse={() => router.push('/analysis')} />
+                    <NoResearchState />
                 </div>
             );
         }

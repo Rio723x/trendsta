@@ -6,8 +6,8 @@ import { calculateAnalysisCost } from "@/lib/analysis/config";
 import { getActiveSubscription, getWalletBalances, calculateDeductionSplit } from "@/lib/analysis/credits";
 
 interface StartAnalysisRequest {
-    socialAccountId: string;
-    competitorIds?: string[];
+    reelCountTier?: 'LOW' | 'MEDIUM' | 'HIGH';
+    competitorUsernames?: string[];
 }
 
 // POST /api/analysis/start
@@ -30,19 +30,11 @@ export async function POST(request: NextRequest) {
 
         // Parse request body
         const body: StartAnalysisRequest = await request.json();
-        const { socialAccountId, competitorIds = [] } = body;
-
-        if (!socialAccountId) {
-            return NextResponse.json(
-                { error: "socialAccountId is required" },
-                { status: 400 }
-            );
-        }
+        const { reelCountTier = 'MEDIUM', competitorUsernames = [] } = body;
 
         // 2. Verify social account belongs to user
         const socialAccount = await prisma.socialAccount.findFirst({
             where: {
-                id: socialAccountId,
                 userId: userId,
             },
         });
@@ -53,7 +45,7 @@ export async function POST(request: NextRequest) {
                 { status: 404 }
             );
         }
-
+        const socialAccountId = socialAccount.id;
         // 3. Check user has completed profile (niche + subNiche)
         const user = await prisma.user.findUnique({
             where: { id: userId },
@@ -83,7 +75,7 @@ export async function POST(request: NextRequest) {
         const plan = subscription.plan;
 
         // 5. Check competitor analysis access if competitors provided
-        if (competitorIds.length > 0 && !plan.competitorAnalysisAccess) {
+        if (competitorUsernames.length > 0 && !plan.competitorAnalysisAccess) {
             return NextResponse.json(
                 {
                     error: "Competitor analysis is not available on your current plan",
@@ -94,7 +86,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 6. Calculate cost and check credits with bucket breakdown
-        const stellaCost = calculateAnalysisCost(competitorIds.length);
+        const stellaCost = calculateAnalysisCost(reelCountTier, competitorUsernames.length);
         const balances = await getWalletBalances(userId);
         console.log("balances", balances);
         console.log("stellaCost", stellaCost);
@@ -113,6 +105,14 @@ export async function POST(request: NextRequest) {
         // Calculate how to split the deduction (monthly first, then topup)
         const deductionSplit = calculateDeductionSplit(stellaCost, balances);
 
+        // Map Tier to Reel Count
+        const reelCountMap = {
+            'LOW': 3,
+            'MEDIUM': 5,
+            'HIGH': 10
+        };
+        const noOfReelsToScrape = reelCountMap[reelCountTier] || 3;
+
         // 7. Call n8n research webhook
         const n8nUrl = process.env.N8N_WEBHOOK_URL!;
         const n8nApiKey = process.env.N8N_API_KEY;
@@ -120,22 +120,24 @@ export async function POST(request: NextRequest) {
 
         const n8nPayload = {
             creator_niche: "AI & Tech", // TODO: Get from user preferences
-            niche: "AI",
+            sub_niche: "AI",
             language_of_script: "English",
             language_of_text: "English",
             writing_style: "Let the Data/trend decide",
             location: "India",
-            noOfReelsToScrape: 3,
+            noOfReelsToScrape: noOfReelsToScrape,
             reelsTill_Filter: 14,
             minLikesReel_Filter: 0,
-            competitorListUsernames: "vaibhavsisinty", // TODO: Fetch from DB
+            competitorListUsernames: competitorUsernames.join(','),
             reels_per_competitor: 1,
             is_user_specific: true,
-            client_username: "100xengineers",
+            client_username: "aiwithbhushan",
             user_reels_to_scrape: 1,
             use_apify_transcript: true,
             socialAccountId: socialAccountId,
             apify_key: apifyKey,
+            callBackUrl: "https://trendsta.in",
+            analysis_model_openrouter: "google/gemini-2.0-flash-001",
         };
 
         let externalJobId: string;
@@ -197,7 +199,7 @@ export async function POST(request: NextRequest) {
             const transactionMetadata = {
                 type: "analysis",
                 socialAccountId,
-                competitorCount: competitorIds.length,
+                competitorCount: competitorUsernames.length,
             };
 
             // Create HELD transaction for monthly portion (if any)

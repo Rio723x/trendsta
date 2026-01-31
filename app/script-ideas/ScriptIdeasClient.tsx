@@ -7,7 +7,6 @@ import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
 import NoSocialAccount from "../components/NoSocialAccount";
 import NoResearchState from "../components/NoResearchState";
-import AnalyseConfirmModal from "../components/AnalyseConfirmModal";
 import { useScriptSuggestions } from "@/hooks/useResearch";
 import { transformScriptSuggestion } from "@/lib/transformers";
 import { useSession } from "@/lib/auth-client";
@@ -17,7 +16,6 @@ export default function ScriptIdeasClient() {
     const { data: rawData, isLoading, error, isNoResearch } = useScriptSuggestions();
     const { data: session } = useSession();
     const { data: socialAccount } = useSocialAccount();
-    const [showAnalyseModal, setShowAnalyseModal] = useState(false);
 
     const [expandedScript, setExpandedScript] = useState<number | null>(null);
     const [copiedSection, setCopiedSection] = useState<string | null>(null);

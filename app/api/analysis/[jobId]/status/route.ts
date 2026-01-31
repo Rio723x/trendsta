@@ -58,6 +58,64 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         switch (job.status) {
             case "PENDING":
             case "PROCESSING":
+                // [NEW] Verification Logic: Check if Research was created after job started
+                const latestResearch = await prisma.research.findFirst({
+                    where: {
+                        socialAccountId: job.socialAccountId,
+                        createdAt: {
+                            gte: job.createdAt
+                        }
+                    },
+                    orderBy: { createdAt: 'desc' }
+                });
+
+                if (latestResearch) {
+                    // Job is actually likely complete, but webhook might have failed/delayed. 
+                    // Auto-complete the job.
+                    console.log(`[Auto-Complete] Job ${job.id} detected new research ${latestResearch.id}. Marking as COMPLETED.`);
+
+                    await prisma.analysisJob.update({
+                        where: { id: job.id },
+                        data: {
+                            status: 'COMPLETED',
+                            completedAt: new Date(),
+                        }
+                    });
+
+                    // Update local job object so it falls through to COMPLETED logic below?
+                    // Actually, we need to BREAK out of this case or recursive call? 
+                    // Easiest is to recursively call self, or just jump to completion logic.
+                    // But we are in a switch.
+                    // Let's refactor: We can just fall through if we change the switch variable, but switch is evaluated once.
+                    // Better: Return the result of a fresh call to this logic, OR just copy the completion logic.
+                    // Copying completion logic is duplicative.
+                    // Safest: Update DB and return the response as if it was completed (recursive call or just proceed).
+
+                    // Since we can't "goto", let's restart the GET logic effectively by just changing 'job' status in memory and falling through? 
+                    // Switch doesn't support fallthrough after execution of block.
+
+                    // Alternative: Checking verification BEFORE switch.
+                    // But let's stick to this block. We'll just run the completion logic right here.
+
+                    // We need to re-fetch or just proceed with `latestResearch`.
+                    // Actually, the "COMPLETED" case below does billing finalization + fetching.
+                    // We should extract "COMPLETED" logic or just duplicate the billing finalization check here.
+                    // Let's duplicated the billing check call for simplicity and safety, ensuring dry code later if needed.
+
+                    // Wait, if I update DB here, the NEXT poll will catch it as COMPLETED.
+                    // That is acceptable and simpler. It adds 1 polling cycle delay (e.g. 3s), which is fine.
+                    // Implementation: Update DB and return "COMPLETED" status immediately so frontend knows to poll again or finish.
+
+                    return NextResponse.json({
+                        jobId: job.id,
+                        status: "COMPLETED",
+                        createdAt: job.createdAt,
+                        completedAt: new Date(),
+                        // Data will be fetched on next poll or we can send it now.
+                        // sending it now is better UX.
+                    });
+                }
+
                 return NextResponse.json({
                     jobId: job.id,
                     status: job.status,

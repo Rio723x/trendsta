@@ -197,6 +197,7 @@ export interface RawUserResearch {
     best_posting_days: RawDaySlot[];
     duration_performance: RawDurationPerformance[];
     insights: string[];
+    user_research_context?: string; // Stored user context string
 }
 
 // --- Competitor Research Reel ---
@@ -315,6 +316,7 @@ export interface RawCompetitorResearch {
     };
     content_strategy: RawContentStrategy;
     insights: string[];
+    competitor_research_context?: string; // Stored competitor context string
 }
 
 // --- Niche Research Reel ---
@@ -389,6 +391,7 @@ export interface RawNicheResearch {
     top_hashtags: RawHashtagStat[];
     top_keywords: RawKeywordStat[];
     top_audio: RawAudioStat[];
+    niche_research_context?: string; // Stored niche context string
 }
 
 // --- Twitter Research ---
@@ -450,6 +453,8 @@ export interface RawTwitterResearchSection {
 export interface RawTwitterResearch {
     latest: RawTwitterResearchSection;
     top: RawTwitterResearchSection;
+    twitterLatest_research_context?: string;
+    twitterTop_research_context?: string;
 }
 
 
