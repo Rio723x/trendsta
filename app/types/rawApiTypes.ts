@@ -103,6 +103,8 @@ export interface RawOverallStrategy {
     content_gap: RawContentGap;
     posting_strategy: RawPostingStrategy;
     viral_hook_formula: RawViralHookFormula;
+    dashboard_graphs?: any;
+    hooks?: any[];
 }
 
 // --- Common Reel Audio ---

@@ -339,7 +339,7 @@ export default function AccountPage() {
     const selectedPhoneCode = countryCodes.find((c) => c.code === phoneCode);
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div style={{ backgroundColor: 'var(--bg-primary)' }} className="min-h-screen transition-colors duration-300">
             <Sidebar />
 
             <main
@@ -349,33 +349,35 @@ export default function AccountPage() {
                 <div className="max-w-4xl mx-auto px-6 py-8">
                     {/* Header */}
                     <div className="mb-8">
-                        <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
+                        <div className="flex items-center gap-2 text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
                             <ChevronDown className="w-4 h-4 rotate-90" />
                             <span>Settings</span>
                         </div>
-                        <h1 className="text-3xl font-bold text-slate-900">Account Settings</h1>
-                        <p className="text-slate-500 mt-1">
+                        <h1 className="text-3xl font-bold text-theme-primary">Account Settings</h1>
+                        <p className="text-sm text-theme-secondary mt-1">
                             Manage your preferences, security, and connected tools all in one place.
                         </p>
                     </div>
 
                     {/* Tabs */}
-                    <div className="flex items-center gap-1 mb-6 border-b border-slate-200">
+                    <div className="flex items-center gap-1 mb-6" style={{ borderBottomColor: 'var(--glass-border)' }}>
                         <button
                             onClick={() => setActiveTab('profile')}
                             className={`px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors border-b-2 ${activeTab === 'profile'
-                                ? 'border-blue-600 text-blue-600 bg-blue-50/50'
-                                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                                ? 'border-blue-600 text-blue-600'
+                                : 'border-transparent text-theme-secondary hover:text-theme-primary'
                                 }`}
+                            style={activeTab === 'profile' ? { backgroundColor: 'rgba(59, 130, 246, 0.1)' } : {}}
                         >
                             My Profile
                         </button>
                         <button
                             onClick={() => setActiveTab('plan')}
                             className={`px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors border-b-2 ${activeTab === 'plan'
-                                ? 'border-blue-600 text-blue-600 bg-blue-50/50'
-                                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                                ? 'border-blue-600 text-blue-600'
+                                : 'border-transparent text-theme-secondary hover:text-theme-primary'
                                 }`}
+                            style={activeTab === 'plan' ? { backgroundColor: 'rgba(59, 130, 246, 0.1)' } : {}}
                         >
                             Subscription Plan
                         </button>
@@ -385,10 +387,10 @@ export default function AccountPage() {
                     {activeTab === 'profile' ? (
                         <div className="space-y-6 animate-fadeIn">
                             {/* Personal Information Card */}
-                            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                                <div className="p-6 border-b border-slate-100">
-                                    <h2 className="text-lg font-semibold text-slate-900">Personal Information</h2>
-                                    <p className="text-sm text-slate-500">Edit your personal information</p>
+                            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: 'var(--glass-surface)', border: '1px solid var(--glass-border)' }}>
+                                <div className="p-6" style={{ borderBottomColor: 'var(--glass-border)', borderBottomWidth: '1px' }}>
+                                    <h2 className="text-lg font-semibold text-theme-primary">Personal Information</h2>
+                                    <p className="text-sm text-theme-secondary">Edit your personal information</p>
                                 </div>
 
                                 <div className="p-6">
@@ -396,7 +398,7 @@ export default function AccountPage() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* First Name */}
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            <label className="block text-sm font-medium text-theme-primary mb-2">
                                                 First name <span className="text-red-500">*</span>
                                             </label>
                                             <input
@@ -404,13 +406,19 @@ export default function AccountPage() {
                                                 value={firstName}
                                                 onChange={(e) => setFirstName(e.target.value)}
                                                 placeholder="Enter first name"
-                                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
+                                                className="w-full px-4 py-3 rounded-xl border transition-all font-medium focus:outline-none focus:ring-2"
+                                                style={{
+                                                    backgroundColor: 'var(--glass-inset-bg)',
+                                                    color: 'var(--text-primary)',
+                                                    borderColor: 'var(--glass-border)',
+                                                    '--tw-ring-color': 'rgba(59, 130, 246, 0.2)'
+                                                } as any}
                                             />
                                         </div>
 
                                         {/* Last Name */}
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            <label className="block text-sm font-medium text-theme-primary mb-2">
                                                 Last name <span className="text-red-500">*</span>
                                             </label>
                                             <input
@@ -418,13 +426,19 @@ export default function AccountPage() {
                                                 value={lastName}
                                                 onChange={(e) => setLastName(e.target.value)}
                                                 placeholder="Enter last name"
-                                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
+                                                className="w-full px-4 py-3 rounded-xl border transition-all font-medium focus:outline-none focus:ring-2"
+                                                style={{
+                                                    backgroundColor: 'var(--glass-inset-bg)',
+                                                    color: 'var(--text-primary)',
+                                                    borderColor: 'var(--glass-border)',
+                                                    '--tw-ring-color': 'rgba(59, 130, 246, 0.2)'
+                                                } as any}
                                             />
                                         </div>
 
                                         {/* Email */}
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            <label className="block text-sm font-medium text-theme-primary mb-2">
                                                 Email <span className="text-red-500">*</span>
                                             </label>
                                             <input
@@ -433,14 +447,19 @@ export default function AccountPage() {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 placeholder="example@email.com"
                                                 disabled
-                                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 placeholder-slate-400 focus:outline-none transition-all font-medium cursor-not-allowed"
+                                                className="w-full px-4 py-3 rounded-xl border transition-all font-medium focus:outline-none cursor-not-allowed"
+                                                style={{
+                                                    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                                                    color: 'var(--text-secondary)',
+                                                    borderColor: 'var(--glass-border)',
+                                                }}
                                             />
-                                            <p className="text-xs text-slate-400 mt-1">Email cannot be changed</p>
+                                            <p className="text-xs text-theme-muted mt-1">Email cannot be changed</p>
                                         </div>
 
                                         {/* Phone Number */}
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            <label className="block text-sm font-medium text-theme-primary mb-2">
                                                 Phone number
                                             </label>
                                             <div className="flex gap-2">
@@ -449,14 +468,24 @@ export default function AccountPage() {
                                                     <button
                                                         type="button"
                                                         onClick={() => setShowPhoneCodeDropdown(!showPhoneCodeDropdown)}
-                                                        className="flex items-center gap-2 px-3 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors min-w-[90px]"
+                                                        className="flex items-center gap-2 px-3 py-3 rounded-xl border transition-colors"
+                                                        style={{
+                                                            backgroundColor: 'var(--glass-inset-bg)',
+                                                            borderColor: 'var(--glass-border)',
+                                                            minWidth: '90px'
+                                                        }}
                                                     >
                                                         <span className="text-lg">{selectedPhoneCode?.flag}</span>
-                                                        <span className="text-sm text-slate-600 font-medium">{phoneCode}</span>
-                                                        <ChevronDown size={14} className="text-slate-400" />
+                                                        <span className="text-sm text-theme-secondary font-medium">{phoneCode}</span>
+                                                        <ChevronDown size={14} style={{ color: 'var(--text-secondary)' }} />
                                                     </button>
                                                     {showPhoneCodeDropdown && (
-                                                        <div className="absolute top-full left-0 mt-1 w-40 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-48 overflow-y-auto">
+                                                        <div className="absolute top-full left-0 mt-1 w-40 border rounded-xl shadow-lg z-50 max-h-48 overflow-y-auto"
+                                                            style={{
+                                                                backgroundColor: 'var(--glass-surface)',
+                                                                borderColor: 'var(--glass-border)'
+                                                            }}
+                                                        >
                                                             {countryCodes.map((country) => (
                                                                 <button
                                                                     key={country.country}
@@ -464,10 +493,11 @@ export default function AccountPage() {
                                                                         setPhoneCode(country.code);
                                                                         setShowPhoneCodeDropdown(false);
                                                                     }}
-                                                                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-50 text-left"
+                                                                    className="w-full flex items-center gap-2 px-3 py-2 text-left transition-colors hover:opacity-80"
+                                                                    style={{ backgroundColor: 'var(--glass-surface)' }}
                                                                 >
                                                                     <span className="text-lg">{country.flag}</span>
-                                                                    <span className="text-sm text-slate-700 font-medium">{country.code}</span>
+                                                                    <span className="text-sm text-theme-primary font-medium">{country.code}</span>
                                                                 </button>
                                                             ))}
                                                         </div>
@@ -478,7 +508,13 @@ export default function AccountPage() {
                                                     value={phoneNumber}
                                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                                     placeholder="000 000-000 00"
-                                                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
+                                                    className="flex-1 px-4 py-3 rounded-xl border transition-all font-medium focus:outline-none focus:ring-2"
+                                                    style={{
+                                                        backgroundColor: 'var(--glass-inset-bg)',
+                                                        color: 'var(--text-primary)',
+                                                        borderColor: 'var(--glass-border)',
+                                                        '--tw-ring-color': 'rgba(59, 130, 246, 0.2)'
+                                                    } as any}
                                                 />
                                             </div>
                                         </div>
@@ -486,16 +522,15 @@ export default function AccountPage() {
                                 </div>
                             </div>
 
-                            {/* Instagram & Content Settings Card */}
-                            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                                <div className="p-6 border-b border-slate-100">
+                            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: 'var(--glass-surface)', border: '1px solid var(--glass-border)' }}>
+                                <div className="p-6" style={{ borderBottomColor: 'var(--glass-border)', borderBottomWidth: '1px' }}>
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+                                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundImage: 'linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)' }}>
                                             <Instagram className="w-5 h-5 text-pink-500" />
                                         </div>
                                         <div>
-                                            <h2 className="text-lg font-semibold text-slate-900">Instagram & Content</h2>
-                                            <p className="text-sm text-slate-500">Configure your content analysis settings</p>
+                                            <h2 className="text-lg font-semibold text-theme-primary">Instagram & Content</h2>
+                                            <p className="text-sm text-theme-primary">Configure your content analysis settings</p>
                                         </div>
                                     </div>
                                 </div>
@@ -503,7 +538,7 @@ export default function AccountPage() {
                                 <div className="p-6 space-y-6">
                                     {/* Instagram Username */}
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        <label className="block text-sm font-medium text-theme-primary mb-2">
                                             Instagram Username <span className="text-red-500">*</span>
                                         </label>
                                         <input
@@ -512,27 +547,36 @@ export default function AccountPage() {
                                             readOnly
                                             disabled
                                             placeholder="@yourusername"
-                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 placeholder-slate-400 focus:outline-none transition-all font-medium cursor-not-allowed"
+                                            className="w-full px-4 py-3 rounded-xl border transition-all font-medium focus:outline-none cursor-not-allowed"
+                                            style={{
+                                                backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                                                color: 'var(--text-secondary)',
+                                                borderColor: 'var(--glass-border)',
+                                            }}
                                         />
-                                        <p className="text-xs text-slate-400 mt-1">Username cannot be changed</p>
+                                        <p className="text-xs text-theme-muted mt-1">Username cannot be changed</p>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* Niche */}
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            <label className="block text-sm font-medium text-theme-primary mb-2">
                                                 Content Niche <span className="text-red-500">*</span>
                                             </label>
                                             <select
                                                 value={niche}
                                                 onChange={(e) => handleNicheChange(e.target.value)}
-                                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all font-medium appearance-none cursor-pointer"
+                                                className="w-full px-4 py-3 rounded-xl border transition-all font-medium appearance-none cursor-pointer focus:outline-none focus:ring-2"
                                                 style={{
+                                                    backgroundColor: 'var(--glass-inset-bg)',
+                                                    color: 'var(--text-primary)',
+                                                    borderColor: 'var(--glass-border)',
+                                                    '--tw-ring-color': 'rgba(59, 130, 246, 0.2)',
                                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                                                     backgroundRepeat: 'no-repeat',
                                                     backgroundPosition: 'right 1rem center',
                                                     backgroundSize: '1.25rem',
-                                                }}
+                                                } as any}
                                             >
                                                 <option value="">Select your niche</option>
                                                 {NICHE_OPTIONS.map((opt) => (
@@ -545,20 +589,24 @@ export default function AccountPage() {
 
                                         {/* Sub-Niche */}
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            <label className="block text-sm font-medium text-theme-primary mb-2">
                                                 Sub-Niche <span className="text-red-500">*</span>
                                             </label>
                                             <select
                                                 value={subNiche}
                                                 onChange={(e) => setSubNiche(e.target.value)}
                                                 disabled={!niche}
-                                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all font-medium appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-50"
+                                                className="w-full px-4 py-3 rounded-xl border transition-all font-medium appearance-none cursor-pointer focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 style={{
+                                                    backgroundColor: 'var(--glass-inset-bg)',
+                                                    color: 'var(--text-primary)',
+                                                    borderColor: 'var(--glass-border)',
+                                                    '--tw-ring-color': 'rgba(59, 130, 246, 0.2)',
                                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                                                     backgroundRepeat: 'no-repeat',
                                                     backgroundPosition: 'right 1rem center',
                                                     backgroundSize: '1.25rem',
-                                                }}
+                                                } as any}
                                             >
                                                 <option value="">
                                                     {niche ? "Select your specialization" : "First select a niche"}
@@ -611,10 +659,10 @@ export default function AccountPage() {
                     ) : (
                         <div className="space-y-6 animate-fadeIn">
                             {/* Stats Overview */}
-                            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+                            <div className="rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6" style={{ backgroundColor: 'var(--glass-surface)', border: '1px solid var(--glass-border)' }}>
                                 <div>
                                     <div className="flex items-center gap-3 mb-1">
-                                        <h2 className="text-lg font-bold text-slate-900">
+                                        <h2 className="text-lg font-bold text-theme-primary">
                                             {currentSubscription ? currentSubscription.plan.name : "Free Plan"}
                                         </h2>
                                         {currentSubscription && (
@@ -623,7 +671,7 @@ export default function AccountPage() {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-slate-500">
+                                    <p className="text-sm text-theme-secondary">
                                         {currentSubscription
                                             ? "Manage your active subscription"
                                             : "Upgrade to unlock full power"}
@@ -632,15 +680,15 @@ export default function AccountPage() {
 
                                 <div className="flex items-center gap-8 w-full md:w-auto">
                                     <div className="flex-1 md:flex-none">
-                                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Stella Balance</p>
+                                        <p className="text-xs text-slate-400 dark:text-slate-300 font-bold uppercase tracking-wider mb-1">Stella Balance</p>
                                         <div className="flex items-end gap-2">
                                             <span className="text-2xl font-black text-purple-600">{walletBalance.totalBalance}</span>
                                             <span className="text-sm text-slate-400 font-medium mb-1">({walletBalance.monthlyBalance} monthly + {walletBalance.topupBalance} topup)</span>
                                         </div>
                                     </div>
                                     <div className="flex-1 md:flex-none text-right">
-                                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Renewal</p>
-                                        <p className="text-slate-900 font-semibold">
+                                        <p className="text-xs text-theme-muted font-bold uppercase tracking-wider mb-1">Renewal</p>
+                                        <p className="text-theme-primary font-semibold">
                                             {currentSubscription
                                                 ? new Date(currentSubscription.currentPeriodEnd).toLocaleDateString()
                                                 : "-"
@@ -660,29 +708,29 @@ export default function AccountPage() {
                             {/* Preview Modal */}
                             {previewData && (
                                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                                    <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl animate-fadeIn">
-                                        <h3 className="text-xl font-bold text-slate-900 mb-2">
+                                    <div className="rounded-2xl p-8 max-w-md w-full shadow-2xl animate-fadeIn border" style={{ backgroundColor: 'var(--glass-surface)', borderColor: 'var(--glass-border)' }}>
+                                        <h3 className="text-xl font-bold text-theme-primary mb-2">
                                             Confirm {previewData.changeType === 'upgrade' ? 'Upgrade' : 'Downgrade'}
                                         </h3>
-                                        <p className="text-slate-500 mb-6">
-                                            You are about to switch to <span className="font-semibold text-slate-900">{previewData.targetPlanName}</span>.
+                                        <p className="text-theme-secondary mb-6">
+                                            You are about to switch to <span className="font-semibold text-theme-primary">{previewData.targetPlanName}</span>.
                                         </p>
 
-                                        <div className="bg-slate-50 rounded-xl p-4 mb-6 space-y-3">
+                                        <div className="rounded-xl p-4 mb-6 space-y-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.03)' }}>
                                             <div className="flex justify-between items-center text-sm">
-                                                <span className="text-slate-600">New Price</span>
-                                                <span className="font-semibold text-slate-900">{previewData.currency} {(previewData.newPlanDetails.amount / 100).toFixed(2)}/{previewData.newPlanDetails.interval}</span>
+                                                <span className="text-theme-secondary">New Price</span>
+                                                <span className="font-semibold text-theme-primary">{previewData.currency} {(previewData.newPlanDetails.amount / 100).toFixed(2)}/{previewData.newPlanDetails.interval}</span>
                                             </div>
                                             {previewData.changeType === 'upgrade' && (
                                                 <div className="flex justify-between items-center text-sm">
-                                                    <span className="text-slate-600">Immediate Charge (Prorated)</span>
+                                                    <span className="text-theme-secondary">Immediate Charge (Prorated)</span>
                                                     <span className="font-bold text-emerald-600">
                                                         {previewData.currency} {(previewData.chargeAmount / 100).toFixed(2)}
                                                     </span>
                                                 </div>
                                             )}
                                             {previewData.changeType === 'upgrade' && previewData.stellasToGrant > 0 && (
-                                                <div className="pt-3 border-t border-slate-200">
+                                                <div className="pt-3" style={{ borderTopColor: 'var(--glass-border)', borderTopWidth: '1px' }}>
                                                     <div className="flex justify-between items-center text-sm">
                                                         <span className="text-purple-600 font-medium">+ Bonus Stellas</span>
                                                         <span className="font-bold text-purple-600">{previewData.stellasToGrant}</span>
@@ -697,7 +745,11 @@ export default function AccountPage() {
                                                     setPreviewData(null);
                                                     setActionError(null);
                                                 }}
-                                                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+                                                className="flex-1 px-4 py-2.5 rounded-xl border font-semibold transition-colors"
+                                                style={{
+                                                    borderColor: 'var(--glass-border)',
+                                                    color: 'var(--text-secondary)',
+                                                }}
                                             >
                                                 Cancel
                                             </button>
@@ -728,17 +780,44 @@ export default function AccountPage() {
                                     const isPlatinum = plan.name.toLowerCase().includes('platinum');
 
                                     // Determine styles based on plan name
-                                    let containerClass = "bg-white rounded-3xl border border-slate-200 p-6 flex flex-col";
-                                    if (isGold) containerClass = "bg-white rounded-3xl border border-amber-100 p-6 flex flex-col relative shadow-sm ring-1 ring-amber-100/50";
-                                    if (isPlatinum) containerClass = "bg-slate-900 rounded-3xl border border-slate-800 p-6 flex flex-col relative shadow-xl overflow-hidden group";
+                                    let containerClass = "rounded-3xl p-6 flex flex-col border";
+                                    let containerStyle: any = {
+                                        backgroundColor: 'var(--glass-surface)',
+                                        borderColor: 'var(--glass-border)'
+                                    };
+                                    if (isGold) {
+                                        containerStyle = {
+                                            backgroundColor: 'var(--glass-surface)',
+                                            borderColor: 'rgba(217, 119, 6, 0.3)'
+                                        };
+                                    }
+                                    if (isPlatinum) {
+                                        containerStyle = {
+                                            backgroundColor: 'var(--glass-surface)',
+                                            borderColor: 'rgba(147, 51, 234, 0.3)',
+                                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                                        };
+                                    }
 
                                     const isCurrentPlan = currentSubscription?.plan.id === plan.id;
                                     const isUpgrade = currentSubscription && plan.tier > currentSubscription.plan.tier;
 
 
 
+                                    // Base hover auras
+                                    let auraColor = "rgba(148, 163, 184, 0.4)"; // Silver
+                                    if (isGold) auraColor = "rgba(245, 158, 11, 0.3)";
+                                    if (isPlatinum) auraColor = "rgba(168, 85, 247, 0.4)";
+
                                     return (
-                                        <div key={plan.id} className={containerClass}>
+                                        <div key={plan.id} className={`${containerClass} group relative transition-all duration-500 hover:-translate-y-2`} style={containerStyle}>
+                                            {/* Responsive Glass UI Aura */}
+                                            <div
+                                                className="absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-[inherit] pointer-events-none z-0 blur-xl"
+                                                style={{
+                                                    background: `radial-gradient(circle at 50% 0%, ${auraColor}, transparent 70%)`,
+                                                }}
+                                            />
                                             {/* Platinum Glow & Badge */}
                                             {isPlatinum && (
                                                 <>
@@ -747,21 +826,20 @@ export default function AccountPage() {
                                                             Best Seller
                                                         </span>
                                                     </div>
-                                                    <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-500/20 blur-3xl rounded-full pointer-events-none"></div>
-                                                    <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent pointer-events-none"></div>
+                                                    <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-500/20 blur-3xl rounded-full pointer-events-none opacity-40"></div>
                                                 </>
                                             )}
 
                                             <div className="mb-4 relative z-10">
                                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${isPlatinum ? 'bg-purple-500/20 text-purple-400' :
-                                                    isGold ? 'bg-amber-50 text-amber-500' :
-                                                        'bg-slate-50 text-slate-600'
+                                                    isGold ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-500' :
+                                                        'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                                                     }`}>
                                                     {isPlatinum ? <Zap size={20} fill="currentColor" /> :
                                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>}
                                                 </div>
-                                                <h3 className={`text-xl font-bold ${isPlatinum ? 'text-white' : 'text-slate-900'}`}>{plan.name}</h3>
-                                                <p className={`text-xs mt-1 ${isPlatinum ? 'text-slate-400' : 'text-slate-500'}`}>
+                                                <h3 className={`text-xl font-bold ${isPlatinum ? 'text-theme-primary' : 'text-theme-primary'}`}>{plan.name}</h3>
+                                                <p className={`text-xs mt-1 ${isPlatinum ? 'text-theme-secondary' : 'text-theme-secondary'}`}>
                                                     {isPlatinum ? 'Full AI power for agencies & pros.' :
                                                         isGold ? 'For serious competitors who need data.' :
                                                             'Essential tools for creators starting out.'}
@@ -770,17 +848,17 @@ export default function AccountPage() {
 
                                             <div className="mb-6 relative z-10">
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className={`text-3xl font-bold ${isPlatinum ? 'text-white' : 'text-slate-900'}`}>
+                                                    <span className={`text-3xl font-bold ${isPlatinum ? 'text-theme-primary' : 'text-theme-primary'}`}>
                                                         ${plan.price / 100}
                                                     </span>
-                                                    <span className={`text-sm ${isPlatinum ? 'text-slate-400' : 'text-slate-500'}`}>/mo</span>
+                                                    <span className={`text-sm ${isPlatinum ? 'text-theme-secondary' : 'text-theme-secondary'}`}>/mo</span>
                                                 </div>
                                             </div>
 
-                                            <div className={`${isPlatinum ? 'bg-purple-500/10 border-purple-500/20' : isGold ? 'bg-amber-50/50 border-amber-100/50' : 'bg-slate-50 border-slate-100'} rounded-xl p-3 mb-6 border relative z-10`}>
+                                            <div className={`${isPlatinum ? 'bg-purple-500/10 border-purple-500/20' : isGold ? 'bg-amber-500/5 dark:bg-amber-900/10 border-amber-500/20 dark:border-amber-900/30' : 'bg-slate-500/5 dark:bg-white/5 border-slate-200 dark:border-white/5'} rounded-xl p-3 mb-6 border relative z-10`}>
                                                 <div className="flex justify-between items-center mb-2">
-                                                    <span className={`text-xs font-bold ${isPlatinum ? 'text-purple-200' : 'text-slate-700'}`}>Stella Balance</span>
-                                                    <span className={`text-xs font-bold ${isPlatinum ? 'text-purple-300' : isGold ? 'text-amber-600' : 'text-orange-500'}`}>
+                                                    <span className={`text-xs font-bold ${isPlatinum ? 'text-purple-600 dark:text-purple-200' : 'text-slate-700 dark:text-slate-300'}`}>Stella Balance</span>
+                                                    <span className={`text-xs font-bold ${isPlatinum ? 'text-purple-700 dark:text-purple-300' : isGold ? 'text-amber-600 dark:text-amber-500' : 'text-orange-500'}`}>
                                                         {plan.monthlyStellasGrant}
                                                     </span>
                                                 </div>
@@ -798,7 +876,7 @@ export default function AccountPage() {
                                                             "Viral Script Generator",
                                                             "Twitter Trends"
                                                         ].map(feature => (
-                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-600">
+                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300">
                                                                 <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
                                                                 {feature}
                                                             </li>
@@ -807,8 +885,8 @@ export default function AccountPage() {
                                                             "Competitor Analysis",
                                                             "AI Consultant"
                                                         ].map(feature => (
-                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-300 line-through decoration-slate-300">
-                                                                <Check size={14} className="text-slate-200 shrink-0 mt-0.5" />
+                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-300 dark:text-slate-600 line-through decoration-slate-300 dark:decoration-slate-600">
+                                                                <Check size={14} className="text-slate-200 dark:text-slate-700 shrink-0 mt-0.5" />
                                                                 {feature}
                                                             </li>
                                                         ))}
@@ -817,21 +895,21 @@ export default function AccountPage() {
 
                                                 {isGold && (
                                                     <>
-                                                        <div className="mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Everything in Silver, plus</div>
+                                                        <div className="mb-4 text-[10px] font-bold text-slate-400 dark:text-slate-300 uppercase tracking-wider">Everything in Silver, plus</div>
                                                         {[
                                                             "Competitor Deep-Dive Analysis",
                                                             "Priority Support"
-                                                        ].map(feature => (
-                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-700 font-medium">
-                                                                <Check size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                                                                {feature}
+                                                        ].map((feature, i) => (
+                                                            <li key={i} className={`flex items-start gap-2 text-sm ${isPlatinum ? 'text-slate-300' : 'text-slate-600 dark:text-slate-300'}`}>
+                                                                <Check size={16} className={`mt-0.5 shrink-0 ${isPlatinum ? 'text-purple-400' : isGold ? 'text-amber-500' : 'text-blue-500'}`} />
+                                                                <span>{feature}</span>
                                                             </li>
                                                         ))}
                                                         {[
                                                             "AI Consultant"
                                                         ].map(feature => (
-                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-300 line-through decoration-slate-300">
-                                                                <Check size={14} className="text-slate-200 shrink-0 mt-0.5" />
+                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-300 dark:text-slate-600 line-through decoration-slate-300 dark:decoration-slate-600">
+                                                                <Check size={14} className="text-slate-200 dark:text-slate-700 shrink-0 mt-0.5" />
                                                                 {feature}
                                                             </li>
                                                         ))}
@@ -840,14 +918,14 @@ export default function AccountPage() {
 
                                                 {isPlatinum && (
                                                     <>
-                                                        <div className="mb-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider relative z-10">Everything in Gold, plus</div>
+                                                        <div className="mb-4 text-[10px] font-bold text-theme-muted uppercase tracking-wider relative z-10">Everything in Gold, plus</div>
                                                         {[
                                                             "AI Consultant Access (2 Stellas/prompt)",
                                                             "Deep Research Mode",
                                                             "Scheduled Daily WhatsApp/Mail Updates",
                                                             "Early Access to Beta Features"
                                                         ].map(feature => (
-                                                            <li key={feature} className="flex items-start gap-2 text-xs text-slate-200 font-medium">
+                                                            <li key={feature} className="flex items-start gap-2 text-xs text-theme-secondary font-medium">
                                                                 <div className="mt-0.5 rounded-full bg-purple-500/20 p-0.5">
                                                                     <Check size={10} className="text-purple-400 shrink-0" strokeWidth={3} />
                                                                 </div>
@@ -861,12 +939,26 @@ export default function AccountPage() {
                                             <button
                                                 onClick={() => !isCurrentPlan && handlePlanAction(plan)}
                                                 disabled={isCurrentPlan || isProcessingAction}
-                                                className={`w-full py-2.5 rounded-xl font-semibold transition-colors text-sm relative z-10 ${isCurrentPlan
-                                                    ? (isPlatinum ? 'bg-purple-900/50 text-purple-300 border border-purple-500/30' : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-default')
-                                                    : (isPlatinum
-                                                        ? 'bg-purple-600 text-white hover:bg-purple-500 shadow-lg shadow-purple-900/20'
-                                                        : 'border border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900')
-                                                    }`}
+                                                className="w-full py-2.5 rounded-xl font-semibold transition-colors text-sm relative z-10"
+                                                style={{
+                                                    background: isCurrentPlan
+                                                        ? (isPlatinum ? 'rgba(168, 85, 247, 0.2)' : 'rgba(0, 0, 0, 0.06)')
+                                                        : (isPlatinum
+                                                            ? '#9333ea'
+                                                            : (isGold
+                                                                ? 'linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%)'
+                                                                : 'linear-gradient(135deg, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)')),
+                                                    color: isCurrentPlan
+                                                        ? (isPlatinum ? '#c084fc' : 'var(--text-muted)')
+                                                        : (isPlatinum ? 'white' : (isGold ? '#78350f' : '#374151')),
+                                                    border: isCurrentPlan
+                                                        ? (isPlatinum ? '1px solid rgba(168, 85, 247, 0.3)' : '1px solid var(--glass-border)')
+                                                        : 'none',
+                                                    cursor: isCurrentPlan ? 'default' : 'pointer',
+                                                    boxShadow: isCurrentPlan
+                                                        ? 'none'
+                                                        : (isPlatinum ? '0 10px 15px -3px rgba(147, 51, 234, 0.3)' : (isGold ? '0 8px 16px rgba(217, 119, 6, 0.2)' : '0 8px 16px rgba(156, 163, 175, 0.2)')),
+                                                }}
                                             >
                                                 {isProcessingAction && !isCurrentPlan ? 'Processing...' : (
                                                     isCurrentPlan ? 'Current Plan' : (currentSubscription ? (isUpgrade ? 'Upgrade' : 'Downgrade') : 'Subscribe')

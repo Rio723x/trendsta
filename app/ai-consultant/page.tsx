@@ -138,8 +138,8 @@ function ChatMessage({
                 {/* Avatar for AI */}
                 {!isUser && (
                     <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                            <Image src="/logo3.png" alt="Trendsta" width={20} height={20} className="rounded-full" />
+                        <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                            <Image src="/T_logo.png" alt="Trendsta" width={24} height={24} className="object-contain" />
                         </div>
                         <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1.5">
@@ -526,17 +526,17 @@ export default function AIConsultantPage() {
             <MobileHeader />
 
             {/* History Sidebar */}
-            <div className={`fixed right-0 top-0 bottom-0 w-80 bg-slate-900 border-l border-white/10 z-50 transform transition-transform duration-300 shadow-2xl ${showHistory ? 'translate-x-0' : 'translate-x-full'}`}>
-                <div className="p-4 border-b border-white/10 flex items-center justify-between">
-                    <h3 className="font-bold text-theme-primary">Chat History</h3>
-                    <button onClick={() => setShowHistory(false)} className="text-theme-muted hover:text-theme-primary">
+            <div className={`fixed right-0 top-0 bottom-0 w-80 bg-[var(--bg-primary)] border-l border-[var(--glass-border)] z-50 transform transition-transform duration-300 shadow-2xl ${showHistory ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="p-4 border-b border-[var(--glass-border)] flex items-center justify-between">
+                    <h3 className="font-bold text-theme-primary tracking-tight">Chat History</h3>
+                    <button onClick={() => setShowHistory(false)} className="p-1.5 text-theme-muted hover:text-theme-primary hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-all">
                         <ArrowRight size={20} />
                     </button>
                 </div>
-                <div className="p-4 space-y-3 overflow-y-auto h-full">
-                    <div className="p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors border border-white/5">
-                        <p className="text-sm font-medium text-theme-primary truncate">Current Session</p>
-                        <p className="text-xs text-theme-muted">Just now</p>
+                <div className="p-4 space-y-3 overflow-y-auto h-[calc(100vh-65px)]">
+                    <div className="p-3 bg-[var(--glass-surface)] hover:bg-[var(--glass-surface-hover)] rounded-xl cursor-pointer transition-all border border-[var(--glass-border)] group">
+                        <p className="text-sm font-semibold text-theme-primary truncate group-hover:text-blue-600 dark:group-hover:text-blue-400">Current Session</p>
+                        <p className="text-[10px] uppercase font-bold text-theme-muted tracking-wider mt-1">Just now</p>
                     </div>
                 </div>
             </div>
@@ -580,12 +580,13 @@ export default function AIConsultantPage() {
                                 className="text-center px-4"
                             >
                                 {/* Logo */}
-                                <div className="relative w-56 h-14 mx-auto mb-6">
+                                <div className="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
                                     <Image
-                                        src="/logo3.png"
-                                        fill
-                                        style={{ objectFit: 'contain' }}
+                                        src="/T_logo.png"
+                                        width={80}
+                                        height={80}
                                         alt="Trendsta Logo"
+                                        className="object-contain"
                                     />
                                 </div>
 
@@ -649,8 +650,8 @@ export default function AIConsultantPage() {
                                     className="flex justify-start"
                                 >
                                     <div className="flex items-start gap-3">
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                            <Image src="/logo3.png" alt="Trendsta" width={20} height={20} className="rounded-full" />
+                                        <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                                            <Image src="/T_logo.png" alt="Trendsta" width={24} height={24} className="object-contain" />
                                         </div>
                                         <div className="glass-panel px-4 py-3 rounded-2xl rounded-tl-md shadow-sm flex items-center gap-2">
                                             {thinkingMode === 'flash' ? (
@@ -676,10 +677,10 @@ export default function AIConsultantPage() {
                 </div>
 
                 {/* Input Area */}
-                <div className={`w-full max-w-4xl z-20 px-4 md:px-6 ${hasStartedChat ? 'fixed bottom-0 pb-6 pt-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent' : 'relative'}`}>
+                <div className={`w-full max-w-4xl z-20 px-4 md:px-6 ${hasStartedChat ? 'fixed bottom-0 pb-6 pt-4' : 'relative'}`}>
                     <div className="relative">
                         {/* Main Input */}
-                        <div className="glass-panel p-2 rounded-2xl shadow-lg flex items-center gap-2 transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/30">
+                        <div className="bg-white/40 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-2 rounded-2xl shadow-xl flex items-center gap-2 transition-all duration-300 focus-within:bg-white/60 dark:focus-within:bg-white/10 focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:border-blue-500/40">
                             <textarea
                                 ref={inputRef}
                                 value={input}

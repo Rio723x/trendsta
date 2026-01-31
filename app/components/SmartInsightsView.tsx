@@ -47,7 +47,7 @@ export default function SmartInsightsView({ insightText, title, description, the
         return { number, title: titleText, evidence, action };
     }).filter(Boolean);
 
-    // Theme Config
+    // Theme Config (Updated for Dark Mode)
     const themes = {
         instagram: {
             bg: "bg-gradient-to-br from-fuchsia-50 to-pink-50 dark:from-fuchsia-950/20 dark:to-pink-950/20",
@@ -68,19 +68,19 @@ export default function SmartInsightsView({ insightText, title, description, the
             ),
             accentData: "text-pink-600 dark:text-pink-400",
             accentAction: "bg-pink-600 dark:bg-pink-500",
-            lightAction: "bg-pink-50 dark:bg-pink-950/30 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800/50"
+            lightAction: "bg-pink-100/50 dark:bg-pink-900/20 text-pink-900 dark:text-pink-100 border-pink-200/50 dark:border-pink-800/30"
         },
         twitter: {
             bg: "bg-gradient-to-br from-blue-50 to-sky-50 dark:from-blue-950/20 dark:to-sky-950/20",
             border: "border-blue-100 dark:border-blue-900/30",
             icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-black dark:text-white">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-slate-900 dark:text-white">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
             ),
             accentData: "text-blue-600 dark:text-blue-400",
             accentAction: "bg-blue-600 dark:bg-blue-500",
-            lightAction: "bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/50"
+            lightAction: "bg-blue-100/50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 border-blue-200/50 dark:border-blue-800/30"
         },
         competitor: {
             bg: "bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20",
@@ -88,7 +88,7 @@ export default function SmartInsightsView({ insightText, title, description, the
             icon: <TrendingUp className="text-indigo-600 dark:text-indigo-400" size={24} />,
             accentData: "text-indigo-600 dark:text-indigo-400",
             accentAction: "bg-indigo-600 dark:bg-indigo-500",
-            lightAction: "bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/50"
+            lightAction: "bg-indigo-100/50 dark:bg-indigo-900/20 text-indigo-900 dark:text-indigo-100 border-indigo-200/50 dark:border-indigo-800/30"
         }
     };
 
@@ -123,8 +123,9 @@ export default function SmartInsightsView({ insightText, title, description, the
                     <div
                         key={idx}
                         className={`
-                            relative overflow-hidden p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg
-                            bg-white dark:bg-white/5 border-white/10 dark:border-white/10 hover:border-white/20 dark:hover:border-white/20
+                            relative overflow-hidden p-6 rounded-2xl border transition-all duration-300
+                            bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20
+                            shadow-sm hover:shadow-md
                             ${!insight?.action ? 'flex items-center' : ''} 
                         `}
                     >
@@ -159,9 +160,9 @@ export default function SmartInsightsView({ insightText, title, description, the
                                         <div className={`mt-1 p-1 rounded-full ${currentTheme.accentAction} text-white`}>
                                             <CheckCircle2 size={12} strokeWidth={4} />
                                         </div>
-                                        <div>
-                                            <p className="text-[10px] uppercase font-bold opacity-70 mb-1">Recommended Action</p>
-                                            <p className="font-semibold text-sm leading-relaxed">
+                                        <div className="flex-1">
+                                            <p className="text-[10px] uppercase font-bold opacity-60 mb-1 tracking-wider text-theme-secondary">Recommended Action</p>
+                                            <p className="font-semibold text-sm leading-relaxed text-theme-primary">
                                                 {insight.action}
                                             </p>
                                         </div>

@@ -93,9 +93,20 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
                             <Flame size={16} className="text-orange-500" />
                             <span className="text-xs font-bold text-blue-400 uppercase">Viral Trigger</span>
                         </div>
-                        <h4 className="font-bold text-lg mb-1 relative z-10 text-blue-300">Core insight</h4>
-                        <p className="text-blue-200/90 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">
-                            {viralTriggerText}
+                        <h4 className="font-bold text-lg mb-1 relative z-10 text-blue-800">Core insight</h4>
+                        <p className="text-blue-700 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">
+                            {Array.isArray(viralTriggerText) ? (
+                                <ul className="list-disc pl-4 space-y-1">
+                                    {viralTriggerText.map((t, i) => (
+                                        <li key={i}>
+                                            <span className="font-semibold block">{t.trigger}</span>
+                                            <span className="text-xs opacity-90">{t.why_works}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                viralTriggerText
+                            )}
                         </p>
                         {/* Decor */}
                         <div className="absolute -right-4 -bottom-4 bg-blue-500/20 w-24 h-24 rounded-full blur-xl" />
@@ -107,9 +118,16 @@ export default function SpyGlassView({ research, competitors }: SpyGlassViewProp
                             <TrendingUp size={16} className="text-amber-500" />
                             <span className="text-xs font-bold text-amber-400 uppercase">Opportunity</span>
                         </div>
-                        <h4 className="font-bold text-lg mb-1 relative z-10 text-amber-300">Content Gap</h4>
-                        <p className="text-amber-200/90 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">
-                            {research.content_gap?.gap || "Analysis pending..."}
+                        <h4 className="font-bold text-lg mb-1 relative z-10 text-amber-800">Content Gap</h4>
+                        <p className="text-amber-700 text-sm leading-relaxed relative z-10 whitespace-pre-wrap">
+                            {typeof research.content_gap === 'string' ? (
+                                research.content_gap || "Analysis pending..."
+                            ) : (
+                                <span>
+                                    <span className="font-semibold block mb-1">{research.content_gap?.gap}</span>
+                                    <span className="opacity-90">{research.content_gap?.opportunity}</span>
+                                </span>
+                            )}
                         </p>
                         {/* Decor */}
                         <div className="absolute -right-4 -bottom-4 bg-amber-500/20 w-24 h-24 rounded-full blur-xl" />
