@@ -1,15 +1,21 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma";
+import path from "path";
+import fs from "fs";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    console.log("Seeding subscription plans...");
+    console.log("🌱 Starting database seeding...\n");
 
-    // 1. Define Plans
+    // ============================================
+    // 1. SEED SUBSCRIPTION PLANS
+    // ============================================
+    console.log("📋 Seeding subscription plans...");
+
     const plans = [
         {
             name: "Silver",
@@ -44,7 +50,7 @@ async function main() {
     ];
 
     for (const p of plans) {
-        console.log(`Upserting plan: ${p.name}`);
+        console.log(`  ↳ Upserting plan: ${p.name}`);
 
         const plan = await prisma.plan.upsert({
             where: { name: p.name },
@@ -66,10 +72,10 @@ async function main() {
         });
 
         // Upsert Subscription Product
-        console.log(`Upserting product for: ${p.name}`);
+        console.log(`  ↳ Upserting product for: ${p.name}`);
         const providerProductId = p.providerProductId;
         if (!providerProductId) {
-            console.warn(`Skipping product for ${p.name} - no providerProductId`);
+            console.warn(`  ⚠️  Skipping product for ${p.name} - no providerProductId`);
             continue;
         }
 
@@ -95,8 +101,11 @@ async function main() {
         });
     }
 
-    // 2. Define Stella Bundle (One-Time)
-    // Small Bundle: 100 Stellas, $29
+    // ============================================
+    // 2. SEED STELLA BUNDLE (ONE-TIME)
+    // ============================================
+    console.log("\n💎 Seeding Stella Bundle...");
+
     const stellaBundle = {
         name: "Small Bundle",
         amount: 100,
@@ -104,12 +113,7 @@ async function main() {
         providerProductId: "pdt_0NWvdNgnGXCcADDk4MJDH"
     };
 
-    console.log(`Upserting Stella Bundle: ${stellaBundle.name}`);
-
-    // Create or update StellaBundle using findFirst because name is not unique in schema check?
-    // Wait, let's look at schema again: `name` is just String, no @unique shown in snippet 287.
-    // So we can't use upsert by name unless name is unique.
-    // Let's use findFirst then create or update.
+    console.log(`  ↳ Upserting Stella Bundle: ${stellaBundle.name}`);
 
     let bundle = await prisma.stellaBundle.findFirst({
         where: { name: stellaBundle.name }
@@ -150,7 +154,116 @@ async function main() {
         }
     });
 
-    console.log("Seeding complete!");
+    // ============================================
+    // 3. SEED GUEST USER DATA
+    // ============================================
+    console.log("\n👤 Seeding guest user data...");
+
+    const guestEmail = process.env.GUEST_EMAIL;
+    if (!guestEmail) {
+        console.warn("  ⚠️  GUEST_EMAIL not set in .env, skipping guest data seeding");
+    } else {
+        console.log(`  ↳ Looking for guest user: ${guestEmail}`);
+
+        // Find or create guest user
+        let guestUser = await prisma.user.findUnique({
+            where: { email: guestEmail }
+        });
+
+        if (!guestUser) {
+            console.log("  ⚠️  Guest user not found, skipping guest data seeding");
+            console.log("     (Guest user should be created by better-auth on first visit)");
+        } else {
+            console.log(`  ✓ Found guest user: ${guestUser.name || guestUser.email}`);
+
+            // Upsert social account for guest
+            const guestUsername = "100xengineers"; // Default guest username
+            console.log(`  ↳ Upserting social account: @${guestUsername}`);
+
+            let socialAccount = await prisma.socialAccount.findFirst({
+                where: { userId: guestUser.id }
+            });
+
+            if (socialAccount) {
+                // Update existing social account
+                socialAccount = await prisma.socialAccount.update({
+                    where: { id: socialAccount.id },
+                    data: { username: guestUsername }
+                });
+            } else {
+                // Create new social account
+                socialAccount = await prisma.socialAccount.create({
+                    data: {
+                        userId: guestUser.id,
+                        username: guestUsername,
+                    }
+                });
+            }
+
+            console.log(`  ✓ Social account ready: ${socialAccount.id}`);
+
+            // Read guest data from JSON file
+            const dataPath = path.join(process.cwd(), 'guest_data.json');
+            console.log(`  ↳ Reading data from: ${dataPath}`);
+
+            if (!fs.existsSync(dataPath)) {
+                console.warn(`  ⚠️  Data file not found at ${dataPath}, skipping research data`);
+            } else {
+                const rawData = fs.readFileSync(dataPath, 'utf-8');
+                const jsonData = JSON.parse(rawData);
+                const guestData = Array.isArray(jsonData) ? jsonData[0] : jsonData;
+
+                // Clear existing research for this account
+                console.log("  ↳ Clearing old research...");
+                await prisma.research.deleteMany({
+                    where: { socialAccountId: socialAccount.id }
+                });
+
+                // Create new research with all data
+                console.log("  ↳ Creating new research...");
+                const research = await prisma.research.create({
+                    data: {
+                        socialAccountId: socialAccount.id,
+                        scriptSuggestions: {
+                            create: {
+                                scripts: guestData.script_suggestion?.scripts || []
+                            }
+                        },
+                        overallStrategy: {
+                            create: {
+                                data: guestData.overall_strategy || {}
+                            }
+                        },
+                        userResearch: {
+                            create: {
+                                data: guestData.user_research_json || {}
+                            }
+                        },
+                        competitorResearch: {
+                            create: {
+                                data: guestData.competitor_research_json || {}
+                            }
+                        },
+                        nicheResearch: {
+                            create: {
+                                data: guestData.niche_research_json || {}
+                            }
+                        },
+                        twitterResearch: {
+                            create: {
+                                latestData: guestData.twitterLatest_research_json || {},
+                                topData: guestData.twitterTop_research_json || {}
+                            }
+                        }
+                    }
+                });
+
+                console.log(`  ✓ Successfully created research! ID: ${research.id}`);
+            }
+        }
+    }
+
+    console.log("\n✅ Seeding complete!");
 }
 
 main()

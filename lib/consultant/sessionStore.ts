@@ -1,72 +1,133 @@
 // ============================================================
-// AI CONSULTANT - SESSION STORE (In-Memory)
+// AI CONSULTANT - SESSION STORE (Hybrid: Cache + DB)
+// ============================================================
+// Request-scoped cache + database persistence
+// Edge-runtime compatible
 // ============================================================
 
 import { ChatSession, ChatMessage, ContextType } from './types';
+import * as db from './db';
 
-// In-memory store for chat sessions
-const sessions = new Map<string, ChatSession>();
-
-/**
- * Generate a unique chat ID
- */
-export function generateChatId(): string {
-    return `chat_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-}
+// Request-scoped cache (cleared between requests in serverless)
+const requestCache = new Map<string, ChatSession>();
 
 /**
- * Create a new chat session
+ * Load conversation from database and convert to ChatSession format
  */
-export function createSession(chatId?: string): ChatSession {
-    const id = chatId || generateChatId();
+async function loadSessionFromDB(
+    conversationId: string,
+    userId: string
+): Promise<ChatSession | null> {
+    const conversation = await db.getConversation(conversationId, userId);
+    if (!conversation) return null;
+
+    const messages = await db.getMessages(conversationId);
 
     const session: ChatSession = {
-        chatId: id,
+        chatId: conversation.id,
         loadedContexts: new Set<ContextType>(),
-        messages: [],
-        conversationSummary: null,
-        estimatedTokens: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        messages: messages.map(m => ({
+            role: m.role.toLowerCase() as 'user' | 'assistant',
+            content: m.content,
+            timestamp: m.createdAt,
+        })),
+        conversationSummary: conversation.summary,
+        estimatedTokens: 0, // Will be recalculated
+        createdAt: conversation.createdAt,
+        updatedAt: conversation.updatedAt,
     };
 
-    sessions.set(id, session);
     return session;
 }
 
 /**
- * Get an existing session or create a new one
+ * Get or create a conversation session
+ * Hybrid approach: check cache first, then DB, then create new
  */
-export function getOrCreateSession(chatId?: string): ChatSession {
-    if (chatId && sessions.has(chatId)) {
-        return sessions.get(chatId)!;
+export async function getOrCreateSession(
+    conversationId: string | null,
+    userId: string
+): Promise<ChatSession> {
+    // If conversationId provided, try to load it
+    if (conversationId) {
+        // Check cache first
+        if (requestCache.has(conversationId)) {
+            return requestCache.get(conversationId)!;
+        }
+
+        // Load from DB
+        const session = await loadSessionFromDB(conversationId, userId);
+        if (session) {
+            requestCache.set(conversationId, session);
+            return session;
+        }
+
+        // If not found, fall through to create new
+        console.log(`[Session Store] Conversation ${conversationId} not found, creating new`);
     }
-    return createSession(chatId);
+
+    // Create new conversation in DB
+    const newConversation = await db.createConversation(userId);
+
+    const newSession: ChatSession = {
+        chatId: newConversation.id,
+        loadedContexts: new Set<ContextType>(),
+        messages: [],
+        conversationSummary: null,
+        estimatedTokens: 0,
+        createdAt: newConversation.createdAt,
+        updatedAt: newConversation.createdAt,
+    };
+
+    requestCache.set(newSession.chatId, newSession);
+    return newSession;
 }
 
 /**
- * Get a session by ID
+ * Get a session by ID (no creation)
  */
-export function getSession(chatId: string): ChatSession | null {
-    return sessions.get(chatId) || null;
+export async function getSession(
+    conversationId: string,
+    userId: string
+): Promise<ChatSession | null> {
+    // Check cache
+    if (requestCache.has(conversationId)) {
+        return requestCache.get(conversationId)!;
+    }
+
+    // Load from DB
+    const session = await loadSessionFromDB(conversationId, userId);
+    if (session) {
+        requestCache.set(conversationId, session);
+    }
+
+    return session;
 }
 
 /**
- * Save/update a session
+ * Save session to database
+ * NOTE: Individual messages are saved via addMessage, this updates metadata
  */
-export function saveSession(session: ChatSession): void {
-    session.updatedAt = new Date();
-    sessions.set(session.chatId, session);
+export async function saveSession(session: ChatSession): Promise<void> {
+    // Update cache
+    requestCache.set(session.chatId, session);
+
+    // Update summary in DB if it exists
+    if (session.conversationSummary) {
+        await db.updateConversationSummary(session.chatId, session.conversationSummary);
+    }
 }
 
 /**
- * Add a message to the session
+ * Add a message to the session AND save to database
  */
-export function addMessage(
+export async function addMessage(
     session: ChatSession,
     role: 'user' | 'assistant',
-    content: string
-): void {
+    content: string,
+    contextsUsed?: string[]
+): Promise<void> {
+    // Add to session (in-memory)
     session.messages.push({
         role,
         content,
@@ -76,6 +137,17 @@ export function addMessage(
     // Update token estimate (rough: chars / 4)
     session.estimatedTokens += Math.ceil(content.length / 4);
     session.updatedAt = new Date();
+
+    // Save to database
+    await db.addMessage(
+        session.chatId,
+        role.toUpperCase() as 'USER' | 'ASSISTANT',
+        content,
+        contextsUsed
+    );
+
+    // Update cache
+    requestCache.set(session.chatId, session);
 }
 
 /**
@@ -94,24 +166,31 @@ export function isContextLoaded(session: ChatSession, context: ContextType): boo
 }
 
 /**
- * Delete a session
+ * Delete a conversation
  */
-export function deleteSession(chatId: string): boolean {
-    return sessions.delete(chatId);
+export async function deleteSession(
+    conversationId: string,
+    userId: string
+): Promise<boolean> {
+    // Remove from cache
+    requestCache.delete(conversationId);
+
+    // Delete from DB
+    return await db.deleteConversation(conversationId, userId);
 }
 
 /**
- * Get all active session IDs (for debugging)
+ * List user's conversations
  */
-export function getAllSessionIds(): string[] {
-    return Array.from(sessions.keys());
+export async function listUserConversations(userId: string) {
+    return await db.listUserConversations(userId);
 }
 
 /**
- * Clear all sessions (useful for testing)
+ * Clear request cache (for testing or between requests in non-serverless)
  */
-export function clearAllSessions(): void {
-    sessions.clear();
+export function clearRequestCache(): void {
+    requestCache.clear();
 }
 
 /**
@@ -122,4 +201,14 @@ export function serializeSession(session: ChatSession): object {
         ...session,
         loadedContexts: Array.from(session.loadedContexts),
     };
+}
+
+/**
+ * Auto-generate title for conversation if needed
+ */
+export async function autoGenerateTitle(
+    conversationId: string,
+    userId: string
+): Promise<void> {
+    await db.autoGenerateTitle(conversationId, userId);
 }

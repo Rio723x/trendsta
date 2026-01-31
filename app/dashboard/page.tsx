@@ -2,8 +2,7 @@
 import React from 'react';
 import DashboardClient from './DashboardClient';
 import { getTrendstaData } from '../lib/dataLoader';
-
-
+import { OnboardingGuard } from '../components/OnboardingGuard';
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -24,5 +23,11 @@ export default async function DashboardPage() {
         isGuest
     };
 
-    return <DashboardClient data={dashboardData} />;
+    return (
+        <>
+            <OnboardingGuard>
+                <DashboardClient data={dashboardData} />;
+            </OnboardingGuard>
+        </>
+    )
 }

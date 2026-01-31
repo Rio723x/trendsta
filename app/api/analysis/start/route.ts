@@ -54,7 +54,23 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 3. Check user has active subscription
+        // 3. Check user has completed profile (niche + subNiche)
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { niche: true, subNiche: true },
+        });
+
+        if (!user?.niche || !user?.subNiche) {
+            return NextResponse.json(
+                {
+                    error: "Profile incomplete. Please complete your profile first.",
+                    needsOnboarding: true,
+                },
+                { status: 400 }
+            );
+        }
+
+        // 4. Check user has active subscription
         const subscription = await getActiveSubscription(userId);
 
         if (!subscription) {
@@ -66,7 +82,7 @@ export async function POST(request: NextRequest) {
 
         const plan = subscription.plan;
 
-        // 4. Check competitor analysis access if competitors provided
+        // 5. Check competitor analysis access if competitors provided
         if (competitorIds.length > 0 && !plan.competitorAnalysisAccess) {
             return NextResponse.json(
                 {
@@ -77,7 +93,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 5. Calculate cost and check credits with bucket breakdown
+        // 6. Calculate cost and check credits with bucket breakdown
         const stellaCost = calculateAnalysisCost(competitorIds.length);
         const balances = await getWalletBalances(userId);
         console.log("balances", balances);
@@ -97,7 +113,7 @@ export async function POST(request: NextRequest) {
         // Calculate how to split the deduction (monthly first, then topup)
         const deductionSplit = calculateDeductionSplit(stellaCost, balances);
 
-        // 6. Call n8n research webhook
+        // 7. Call n8n research webhook
         const n8nUrl = process.env.N8N_WEBHOOK_URL!;
         const n8nApiKey = process.env.N8N_API_KEY;
         const apifyKey = process.env.APIFY_API_KEY;
@@ -166,7 +182,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 7. Create AnalysisJob and HELD transactions in a single transaction
+        // 8. Create AnalysisJob and HELD transactions in a single transaction
         const job = await prisma.$transaction(async (tx) => {
             // Create the analysis job
             const newJob = await tx.analysisJob.create({
@@ -228,7 +244,7 @@ export async function POST(request: NextRequest) {
             return newJob;
         });
 
-        // 8. Return job info
+        // 9. Return job info
         return NextResponse.json({
             success: true,
             jobId: job.id,

@@ -74,68 +74,66 @@ export async function POST(req: Request) {
         }
 
         if (action === "upgrade") {
-            // UPGRADE: Execute immediately with proration
-            await dodoPayments.subscriptions.changePlan(
-                currentSubscription.providerSubscriptionId,
-                {
-                    product_id: targetProductId,
-                    proration_billing_mode: "prorated_immediately",
-                    quantity: 1,
-                }
-            );
+            // UPGRADE: Initiate plan change with Dodo
+            let changePlanResult;
+            try {
+                changePlanResult = await dodoPayments.subscriptions.changePlan(
+                    currentSubscription.providerSubscriptionId,
+                    {
+                        product_id: targetProductId,
+                        proration_billing_mode: "prorated_immediately",
+                        quantity: 1,
+                    }
+                );
+            } catch (error: any) {
+                console.error('[Subscription Change] Dodo changePlan error:', error);
 
-            // Calculate and grant prorated stellas
-            const daysRemaining = Math.ceil(
-                (new Date(currentSubscription.currentPeriodEnd).getTime() - Date.now()) /
-                (1000 * 60 * 60 * 24)
-            );
-            const stellaDifference =
-                targetPaymentProduct.plan.monthlyStellasGrant -
-                currentSubscription.plan.monthlyStellasGrant;
-            const stellasToGrant = Math.round((stellaDifference * daysRemaining) / 30);
-
-            if (stellasToGrant > 0) {
-                await prisma.$transaction(async (tx) => {
-                    // Create stella transaction
-                    await tx.stellaTransaction.create({
-                        data: {
-                            userId: session.user.id,
-                            amount: stellasToGrant,
-                            bucket: StellaBucket.MONTHLY,
-                            reason: StellaReason.MONTHLY_GRANT,
-                            status: "SETTLED",
-                            referenceId: currentSubscription.providerSubscriptionId,
-                            metadata: {
-                                event: "plan_upgrade",
-                                fromPlan: currentSubscription.plan.name,
-                                toPlan: targetPaymentProduct.plan!.name,
-                                daysRemaining,
-                                proratedAmount: stellasToGrant,
-                            },
+                // Check for specific error codes
+                if (error.message?.includes('previous payment is not successful yet')) {
+                    return NextResponse.json(
+                        {
+                            error: 'Cannot change plan while a payment is pending. Please wait for the current payment to complete or contact support.',
+                            code: 'PAYMENT_PENDING'
                         },
-                    });
+                        { status: 409 }
+                    );
+                }
 
-                    // Update wallet
-                    await tx.wallet.update({
-                        where: { userId: session.user.id },
-                        data: { monthlyBalance: { increment: stellasToGrant } },
-                    });
+                throw error;
+            }
+
+            console.log('[Subscription Change] Dodo response:', changePlanResult);
+
+            // Check if payment URL exists (requires user action)
+            const requiresPayment = (changePlanResult as any).payment_url ||
+                (changePlanResult as any).hosted_invoice_url ||
+                (changePlanResult as any).latest_invoice?.hosted_invoice_url;
+
+            if (requiresPayment) {
+                // Payment required - return payment URL
+                const paymentUrl = (changePlanResult as any).payment_url ||
+                    (changePlanResult as any).hosted_invoice_url ||
+                    (changePlanResult as any).latest_invoice?.hosted_invoice_url;
+
+                console.log('[Subscription Change] Payment required, URL:', paymentUrl);
+
+                return NextResponse.json({
+                    success: true,
+                    requiresPayment: true,
+                    paymentUrl,
+                    message: 'Please complete payment to upgrade your plan',
+                    newPlan: targetPaymentProduct.plan.name,
                 });
             }
 
-            // Update local subscription record
-            await prisma.subscription.update({
-                where: { id: currentSubscription.id },
-                data: {
-                    planId: targetPaymentProduct.plan.id,
-                },
-            });
-
+            // Plan change initiated successfully
+            // Database will be updated by subscription.plan_changed webhook
+            // For Indian payments, this may take 48-51 hours
             return NextResponse.json({
                 success: true,
-                message: `Upgraded to ${targetPaymentProduct.plan.name}`,
-                stellasGranted: stellasToGrant,
+                message: `Plan upgrade to ${targetPaymentProduct.plan.name} initiated. Your plan will be updated once payment is confirmed.`,
                 newPlan: targetPaymentProduct.plan.name,
+                note: 'For Indian payment methods (UPI/RuPay), payment confirmation may take up to 48-51 hours.',
             });
 
         } else {

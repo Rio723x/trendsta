@@ -64,28 +64,93 @@ export async function POST(req: Request) {
             );
         }
 
+        // Get current product ID from subscription
+        const currentProductId = await prisma.paymentProduct.findFirst({
+            where: { planId: currentSubscription.planId },
+            select: { providerProductId: true },
+        });
+
+        // Check if trying to change to the exact same product
+        if (currentProductId?.providerProductId === targetProductId) {
+            return NextResponse.json({
+                error: "You are already subscribed to this exact plan",
+                currentPlan: currentSubscription.plan.name,
+                code: 'SAME_PRODUCT',
+            }, { status: 400 });
+        }
+
         const currentTier = currentSubscription.plan.tier;
         const targetTier = targetPaymentProduct.plan.tier;
         const isUpgrade = targetTier > currentTier;
         const isDowngrade = targetTier < currentTier;
-        const isSamePlan = targetTier === currentTier;
+        const isSameTier = targetTier === currentTier;
 
-        if (isSamePlan) {
-            return NextResponse.json({
-                error: "You are already on this plan",
-                currentPlan: currentSubscription.plan.name,
-            }, { status: 400 });
+        // Allow same tier changes (e.g., monthly to yearly)
+        // but warn the user
+        if (isSameTier) {
+            console.log('[Subscription Preview] Same tier change:', {
+                from: currentSubscription.plan.name,
+                to: targetPaymentProduct.plan.name,
+            });
         }
 
         // Call Dodo preview API
-        const preview = await dodoPayments.subscriptions.previewChangePlan(
-            currentSubscription.providerSubscriptionId,
-            {
-                product_id: targetProductId,
-                proration_billing_mode: "prorated_immediately",
-                quantity: 1,
+        let preview;
+        try {
+            console.log('[Subscription Preview] Calling Dodo API:', {
+                subscriptionId: currentSubscription.providerSubscriptionId,
+                targetProductId,
+                currentPlan: currentSubscription.plan.name,
+                targetPlan: targetPaymentProduct.plan.name,
+            });
+
+            preview = await dodoPayments.subscriptions.previewChangePlan(
+                currentSubscription.providerSubscriptionId,
+                {
+                    product_id: targetProductId,
+                    proration_billing_mode: "prorated_immediately",
+                    quantity: 1,
+                }
+            );
+        } catch (dodoError: any) {
+            console.error('[Subscription Preview] Dodo API Error:', {
+                status: dodoError.status,
+                error: dodoError.error,
+                message: dodoError.message,
+                headers: dodoError.headers,
+            });
+
+            // Handle specific Dodo errors
+            if (dodoError.status === 409) {
+                const errorCode = dodoError.error?.code;
+                const errorMessage = dodoError.error?.message;
+
+                // Handle payment pending error
+                if (errorCode === 'PREVIOUS_PAYMENT_PENDING') {
+                    return NextResponse.json(
+                        {
+                            error: 'Cannot change plan while a payment is pending. Please wait for the current payment to complete or contact support.',
+                            code: 'PAYMENT_PENDING',
+                            details: errorMessage,
+                        },
+                        { status: 409 }
+                    );
+                }
+
+                // Generic 409 error
+                return NextResponse.json(
+                    {
+                        error: errorMessage || 'Cannot change plan at this time. The subscription may have a pending change or be in a non-changeable state.',
+                        code: 'PLAN_CHANGE_CONFLICT',
+                        details: dodoError.error,
+                    },
+                    { status: 409 }
+                );
             }
-        );
+
+            // Re-throw other errors to be caught by outer catch
+            throw dodoError;
+        }
 
         // Calculate prorated stellas for upgrade
         let stellasToGrant = 0;
@@ -120,10 +185,19 @@ export async function POST(req: Request) {
             newPlanDetails: preview.new_plan,
         });
     } catch (error: any) {
-        console.error("[Subscription Preview] Error:", error);
+        console.error("[Subscription Preview] Error:", {
+            message: error.message,
+            status: error.status,
+            error: error.error,
+            stack: error.stack,
+        });
+
         return NextResponse.json(
-            { error: error.message || "Failed to preview plan change" },
-            { status: 500 }
+            {
+                error: error.message || "Failed to preview plan change",
+                details: error.error || undefined,
+            },
+            { status: error.status || 500 }
         );
     }
 }

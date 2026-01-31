@@ -57,10 +57,12 @@ export const MEMORY_CONFIG = {
     KEEP_RECENT_MESSAGES: 2,
 
     // Model for intent detection (cheap + fast)
-    INTENT_MODEL: 'google/gemini-2.0-flash-001',
+    // INTENT_MODEL: 'google/gemini-2.0-flash-001',
+    INTENT_MODEL: 'tngtech/deepseek-r1t2-chimera:free',
 
     // Model for summarization (cheap + fast)
-    SUMMARIZATION_MODEL: 'google/gemini-2.0-flash-001',
+    //SUMMARIZATION_MODEL: 'google/gemini-2.0-flash-001',
+    SUMMARIZATION_MODEL: 'tngtech/deepseek-r1t2-chimera:free',
 
     // Rough token estimation (chars / 4)
     CHARS_PER_TOKEN: 4,

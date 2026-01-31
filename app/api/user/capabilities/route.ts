@@ -19,6 +19,7 @@ export async function GET() {
             hasSubscription: !!subscription,
             planName: subscription?.plan.name ?? null,
             competitorAnalysisAccess: subscription?.plan.competitorAnalysisAccess ?? false,
+            aiConsultantAccess: subscription?.plan.aiConsultantAccess ?? false,
         });
     } catch (error) {
         console.error("Error fetching user capabilities:", error);

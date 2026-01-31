@@ -6,12 +6,13 @@ interface UserCapabilities {
     hasSubscription: boolean;
     planName: string | null;
     competitorAnalysisAccess: boolean;
+    aiConsultantAccess: boolean;
 }
 
 async function fetchCapabilities(): Promise<UserCapabilities> {
     const res = await fetch("/api/user/capabilities");
     if (!res.ok) {
-        
+
         throw new Error("Failed to fetch capabilities");
     }
     return res.json();

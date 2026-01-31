@@ -37,6 +37,10 @@ model User {
   wallet             Wallet?
   analysisJobs       AnalysisJob[]
   payments           Payment[]
+  
+  // AI Consultant
+  conversations      Conversation[]
+  
   @@map("user")
 }
 
@@ -271,6 +275,68 @@ model AnalysisJob {
 }
 
 // ============================================
+// WEBHOOK IDEMPOTENCY
+// ============================================
+
+model WebhookEvent {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  webhookId       String   @unique // WEBHOOK-ID from DodoPayments header
+  eventType       String   // e.g., "payment.succeeded", "subscription.active"
+  payload         Json     // Store full payload for debugging
+  processedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([webhookId])
+  @@index([eventType])
+  @@map("webhook_event")
+}
+
+// ============================================
+// AI CONSULTANT - CHAT STORAGE
+// ============================================
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+model Conversation {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title     String?  // Auto-generated from first message or user-set
+  summary   String?  @db.Text // Conversation summary for token efficiency
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  messages  Message[]
+  
+  @@index([userId])
+  @@index([userId, updatedAt(sort: Desc)]) // For listing user's conversations
+  @@map("conversation")
+}
+
+model Message {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversationId String       @db.Uuid
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  role           MessageRole
+  content        String       @db.Text
+  
+  // Context tracking (for analytics)
+  contextsUsed   String[]     @default([])
+  
+  createdAt      DateTime     @default(now())
+  
+  @@index([conversationId])
+  @@index([conversationId, createdAt]) // For ordered retrieval
+  @@map("message")
+}
+
+// ============================================
 // PLANS & SUBSCRIPTIONS
 // ============================================
 
@@ -381,22 +447,21 @@ enum PaymentStatus {
 model Payment {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String @db.Uuid
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  providerPaymentId String @unique // pay_...
-  amount            Int // in cents/smallest unit (settlement_amount usually)
-  currency          String // USD, etc
+  providerPaymentId String  @unique // Prevent duplicate payment records
+  amount            Decimal @db.Decimal(10, 2)
+  currency          String  @default("USD")
   status            PaymentStatus
-
-  // Optional links
-  subscriptionId String? // If linked to subscription
-  invoiceUrl     String?
-  
-  metadata Json? 
+  subscriptionId    String? // If this payment is for a subscription
+  invoiceUrl        String?
+  metadata          Json?
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  @@index([userId])
   @@map("payment")
 }
 

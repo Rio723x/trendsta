@@ -44,12 +44,16 @@ export async function GET() {
         // Extract Instagram username from social account
         const instagramUsername = user.socialAccounts[0]?.username || "";
 
-        return NextResponse.json({
+        const profileData = {
             niche: user.niche,
             subNiche: user.subNiche,
             phoneNumber: user.phoneNumber,
             instagramUsername,
-        });
+        };
+
+        console.log('[Profile API] Returning profile for user:', session.user.id, profileData);
+
+        return NextResponse.json(profileData);
     } catch (error: any) {
         console.error("[Profile API] Error:", error);
         return NextResponse.json(

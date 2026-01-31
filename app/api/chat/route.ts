@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
 import { AI_CONFIG, ModelMode, MODEL_MODES } from '@/lib/aiConfig';
 import {
     getOrCreateSession,
     saveSession,
     addMessage,
+    autoGenerateTitle,
     ContextType,
     getAllContexts,
     detectIntent,
@@ -23,12 +26,60 @@ import { DebugLogger, estimateTokenCount } from '@/lib/consultant/debugLogger';
 
 interface ChatRequest {
     message: string;
-    chatId?: string;
+    conversationId?: string; // Changed from chatId
     modelMode?: ModelMode;  // 'fast' | 'thinking'
 }
 
 export async function POST(request: NextRequest) {
     try {
+        // 0. Authenticate user
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+
+        if (!session?.user) {
+            return NextResponse.json(
+                {
+                    error: 'Please sign in to use AI Consultant',
+                    code: 'UNAUTHENTICATED',
+                    requiresAuth: true,
+                },
+                { status: 401 }
+            );
+        }
+
+        const userId = session.user.id;
+
+        // 1. Check if user has AI Consultant access
+        const { getActiveSubscription } = await import('@/lib/analysis/credits');
+
+        const subscription = await getActiveSubscription(userId);
+
+        if (!subscription) {
+            return NextResponse.json(
+                {
+                    error: 'AI Consultant requires an active subscription',
+                    code: 'NO_SUBSCRIPTION',
+                    requiresUpgrade: true,
+                },
+                { status: 403 }
+            );
+        }
+
+        const plan = subscription.plan;
+
+        if (!plan.aiConsultantAccess) {
+            return NextResponse.json(
+                {
+                    error: `AI Consultant is not available on the ${plan.name} plan. Please upgrade to access this feature.`,
+                    code: 'INSUFFICIENT_PLAN',
+                    requiresUpgrade: true,
+                    currentPlan: plan.name,
+                },
+                { status: 403 }
+            );
+        }
+
         const apiKey = process.env.OPENROUTER_API_KEY;
         if (!apiKey) {
             return NextResponse.json(
@@ -38,7 +89,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body: ChatRequest = await request.json();
-        const { message: userMessage, chatId, modelMode = 'thinking' } = body;
+        const { message: userMessage, conversationId, modelMode = 'thinking' } = body;
 
         // Get model for the selected mode
         const selectedModel = MODEL_MODES[modelMode]?.model || AI_CONFIG.MODEL;
@@ -48,15 +99,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Message is required' }, { status: 400 });
         }
 
-        // 1. Get or create session
-        const session = getOrCreateSession(chatId);
+        // 2. Get or create conversation session
+        const chatSession = await getOrCreateSession(conversationId || null, userId);
 
         // Initialize debug logger
-        const debug = new DebugLogger(session.chatId, userMessage);
+        const debug = new DebugLogger(chatSession.chatId, userMessage);
 
-        console.log(`\n🚀 [Chat API] Starting request for session: ${session.chatId}`);
+        console.log(`\n🚀 [Chat API] Starting request for conversation: ${chatSession.chatId}`);
 
-        // 2. Detect which contexts are needed for THIS question only
+        // 3. Detect which contexts are needed for THIS question only
         let contextsForThisQuestion: ContextType[] = [];
         let intentPrompt = '';
         let intentResponse = '';
@@ -88,7 +139,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 3. Log context token counts
+        // 4. Log context token counts
         const allContexts = getAllContexts();
         const contextStrings: Record<string, string> = {
             user: allContexts.user || '',
@@ -98,33 +149,33 @@ export async function POST(request: NextRequest) {
         };
         debug.logContextTokens(contextStrings, contextsForThisQuestion);
 
-        // 4. Add user message to session
-        addMessage(session, 'user', userMessage);
+        // 5. Add user message to session AND database
+        await addMessage(chatSession, 'user', userMessage, contextsForThisQuestion);
 
-        // 5. Memory state before summarization
-        const messageCountBefore = session.messages.length;
-        const tokensBeforeSummarization = session.messages.reduce(
+        // 6. Memory state before summarization
+        const messageCountBefore = chatSession.messages.length;
+        const tokensBeforeSummarization = chatSession.messages.reduce(
             (sum, m) => sum + estimateTokenCount(m.content),
             0
         );
 
-        // 6. Summarize if needed (memory captures prior context)
-        const hadSummaryBefore = !!session.conversationSummary;
-        await updateSessionSummary(session, apiKey);
-        const hadSummarization = !hadSummaryBefore && !!session.conversationSummary;
+        // 7. Summarize if needed (memory captures prior context)
+        const hadSummaryBefore = !!chatSession.conversationSummary;
+        await updateSessionSummary(chatSession, apiKey);
+        const hadSummarization = !hadSummaryBefore && !!chatSession.conversationSummary;
 
         // Log summarization if it happened
-        if (hadSummarization && session.conversationSummary) {
-            const summarizationInput = session.messages.map(m => `${m.role}: ${m.content}`).join('\n');
+        if (hadSummarization && chatSession.conversationSummary) {
+            const summarizationInput = chatSession.messages.map(m => `${m.role}: ${m.content}`).join('\n');
             debug.logSummarization(
                 'google/gemini-2.0-flash-001',
                 summarizationInput,
-                session.conversationSummary
+                chatSession.conversationSummary
             );
         }
 
-        // 7. Prepare messages for API
-        const { messages: historyMessages, summary } = prepareMessagesForAPI(session);
+        // 8. Prepare messages for API
+        const { messages: historyMessages, summary } = prepareMessagesForAPI(chatSession);
         const tokensAfterSummarization = historyMessages.reduce(
             (sum, m) => sum + estimateTokenCount(m.content),
             0
@@ -138,7 +189,7 @@ export async function POST(request: NextRequest) {
             summary ? estimateTokenCount(summary) : undefined
         );
 
-        // 8. Build system prompt with ONLY this question's contexts
+        // 9. Build system prompt with ONLY this question's contexts
         const systemPrompt = buildPerQuestionSystemPrompt(
             contextsForThisQuestion,
             allContexts,
@@ -154,7 +205,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // 9. Call LLM
+        // 10. Call LLM
         const apiMessages = [
             { role: 'system', content: systemPrompt },
             ...historyMessages,
@@ -194,7 +245,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'No response from AI' }, { status: 500 });
         }
 
-        // 10. Log main response
+        // 11. Log main response
         debug.logMainResponse(
             selectedModel,
             systemPrompt,
@@ -203,16 +254,21 @@ export async function POST(request: NextRequest) {
             contextBreakdown
         );
 
-        // 11. Finalize debug report (prints to console)
+        // 12. Finalize debug report (prints to console)
         const debugInfo = debug.finalize();
 
-        // 12. Save response to session
-        addMessage(session, 'assistant', assistantMessage);
-        saveSession(session);
+        // 13. Save response to session AND database
+        await addMessage(chatSession, 'assistant', assistantMessage, contextsForThisQuestion);
+        await saveSession(chatSession);
+
+        // 14. Auto-generate title if this is the first exchange
+        if (messageCountBefore === 1) { // First user message
+            await autoGenerateTitle(chatSession.chatId, userId);
+        }
 
         return NextResponse.json({
             message: assistantMessage,
-            chatId: session.chatId,
+            conversationId: chatSession.chatId, // Changed from chatId
             contextsUsed: contextsForThisQuestion,
             model: selectedModel,
             usage: data.usage,

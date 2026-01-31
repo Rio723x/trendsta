@@ -111,10 +111,10 @@ export default function DashboardClient({ data }: DashboardClientProps) {
                             </div>
 
                             {/* Row 2: Topic Gaps (Wide) & Content Diet */}
-                            <div className="lg:col-span-2 h-[350px]">
+                            <div className="lg:col-span-2 h-[400px]">
                                 <TopicGapsWidget data={graphs.bubble_chart_topic_gaps} />
                             </div>
-                            <div className="h-[350px]">
+                            <div className="h-[400px]">
                                 <ContentDietWidget data={graphs.pie_chart_content_diet} />
                             </div>
 

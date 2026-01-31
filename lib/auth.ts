@@ -10,6 +10,8 @@ import {
     handleSubscriptionExpired,
     handleSubscriptionCancelled,
     handleSubscriptionFailed,
+    handleSubscriptionPlanChanged,
+    handleSubscriptionOnHold,
 } from "@/lib/webhooks/handlers";
 
 import {
@@ -102,6 +104,9 @@ export const auth = betterAuth({
                     onSubscriptionExpired: handleSubscriptionExpired,
                     onSubscriptionCancelled: handleSubscriptionCancelled,
                     onSubscriptionFailed: handleSubscriptionFailed,
+                    // Plan change events
+                    onSubscriptionPlanChanged: handleSubscriptionPlanChanged,
+                    onSubscriptionOnHold: handleSubscriptionOnHold,
                 }),
                 usage(),
             ],

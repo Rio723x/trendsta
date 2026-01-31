@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useQueryClient } from '@tanstack/react-query';
+import { useProfileCompletion } from '@/hooks/useProfileCompletion';
 import {
     NICHE_OPTIONS,
     SUB_NICHE_MAPPING,
@@ -16,7 +18,7 @@ import {
 // Premium SaaS / AI-consultancy experience
 // ============================================================
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 
 // Animation variants for slide transitions
 const slideVariants = {
@@ -42,11 +44,23 @@ const fadeInUp = {
 
 export default function OnboardingPage() {
     const router = useRouter();
+    const queryClient = useQueryClient();
+    const { isProfileComplete, isLoading: profileLoading } = useProfileCompletion();
+
     const [currentStep, setCurrentStep] = useState(1);
     const [direction, setDirection] = useState(0);
     const [formData, setFormData] = useState<OnboardingFormData>(INITIAL_FORM_DATA);
     const [isCompleting, setIsCompleting] = useState(false);
     const [errors, setErrors] = useState<Partial<OnboardingFormData>>({});
+    const [apiError, setApiError] = useState<string>('');
+
+    // Redirect if profile is already complete
+    useEffect(() => {
+        if (!profileLoading && isProfileComplete) {
+            console.log('[Onboarding] Profile already complete, redirecting to dashboard');
+            router.push('/dashboard');
+        }
+    }, [isProfileComplete, profileLoading, router]);
 
     // Update form field
     const updateField = useCallback((field: keyof OnboardingFormData, value: string) => {
@@ -111,16 +125,38 @@ export default function OnboardingPage() {
     // Complete onboarding and redirect
     const handleComplete = useCallback(async () => {
         setIsCompleting(true);
+        setApiError('');
 
-        // Simulate API call to save onboarding data
-        await new Promise(resolve => setTimeout(resolve, 2500));
+        try {
+            const response = await fetch('/api/user/onboarding', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    instagramUsername: formData.instagramUsername,
+                    niche: formData.niche,
+                    subNiche: formData.subNiche,
+                }),
+            });
 
-        // Store in localStorage for now (in production, save to backend)
-        localStorage.setItem('trendsta_onboarding', JSON.stringify(formData));
-        localStorage.setItem('trendsta_onboarded', 'true');
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.error || 'Failed to save onboarding data');
+            }
 
-        // Redirect to dashboard
-        router.push('/dashboard');
+            // Invalidate all relevant caches to refresh data
+            await queryClient.invalidateQueries({ queryKey: ['user-profile'] });
+            await queryClient.invalidateQueries({ queryKey: ['social-account'] });
+
+            // Small delay for cache invalidation to propagate
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Redirect to dashboard
+            router.push('/dashboard');
+        } catch (error: any) {
+            console.error('Onboarding error:', error);
+            setApiError(error.message || 'Something went wrong. Please try again.');
+            setIsCompleting(false);
+        }
     }, [formData, router]);
 
     // Get sub-niches for selected niche
@@ -199,6 +235,17 @@ export default function OnboardingPage() {
                                         onSubNicheChange={(val) => updateField('subNiche', val)}
                                         errors={{ niche: errors.niche, subNiche: errors.subNiche }}
                                     />
+                                )}
+
+                                {/* API Error Display */}
+                                {apiError && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl"
+                                    >
+                                        <p className="text-sm text-red-600">{apiError}</p>
+                                    </motion.div>
                                 )}
 
 
