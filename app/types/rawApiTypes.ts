@@ -35,7 +35,8 @@ export interface RawScriptMetadata {
 }
 
 export interface RawScriptSuggestion {
-    scripts:{
+    scripts:[
+        {
         rank: number;
         topic_title: string;
         script_title: string;
@@ -48,7 +49,8 @@ export interface RawScriptSuggestion {
         hashtags: RawScriptHashtags;
         audio_vibe: string;
         metadata: RawScriptMetadata;
-    }
+        }
+    ]
 }
 
 // --- Overall Strategy ---
@@ -560,7 +562,7 @@ export interface RawResearchData {
     id: string;
     socialAccountId: string;
     createdAt: string;
-    scriptSuggestions: { scripts: RawScriptSuggestion[] } | null;
+    scriptSuggestions: RawScriptSuggestion | null;
     overallStrategy: RawOverallStrategy | null;
     userResearch: RawUserResearch | null;
     competitorResearch: RawCompetitorResearch | null;

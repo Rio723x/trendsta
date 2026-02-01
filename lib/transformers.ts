@@ -14,7 +14,12 @@ import {
     RawOverallStrategy,
     RawInstagramNicheInsight,
     RawCompetitorReverseEngineering,
-    RawScriptSuggestion
+    RawScriptSuggestion,
+    RawScriptBreakdown,
+    RawScriptCaption,
+    RawVisualStoryboard,
+    RawScriptHashtags,
+    RawScriptMetadata
 } from "@/app/types/rawApiTypes";
 
 // =============================================================================
@@ -305,7 +310,24 @@ export function buildResearchSummary(
 /**
  * Transforms a raw script suggestion to UI-ready ScriptIdea.
  */
-export function transformScriptSuggestion(raw: RawScriptSuggestion): ScriptIdea {
+interface TransformationProps{
+    
+            rank: number;
+            topic_title: string;
+            script_title: string;
+            viral_potential_score: number;
+            estimated_duration: string;
+            full_script: string;
+            script_breakdown: RawScriptBreakdown;
+            caption: RawScriptCaption;
+            visual_storyboard: RawVisualStoryboard;
+            hashtags: RawScriptHashtags;
+            audio_vibe: string;
+            metadata: RawScriptMetadata;
+            
+}
+
+export function transformScriptSuggestion(raw: TransformationProps): ScriptIdea {
     const primaryTags = raw.hashtags?.primary || [];
     const trendingTags = raw.hashtags?.trending || [];
     const allTags = [...primaryTags, ...trendingTags];
