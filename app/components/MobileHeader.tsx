@@ -111,7 +111,7 @@ export default function MobileHeader(): React.JSX.Element {
                                 </div>
                                 <div className="flex-1 overflow-hidden">
                                     <p className="text-sm font-semibold text-slate-700 truncate">{name}</p>
-                                    <p className="text-xs text-slate-500 truncate">Free Plan</p>
+
                                 </div>
                             </div>
                             <button

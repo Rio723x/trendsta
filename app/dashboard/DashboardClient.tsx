@@ -77,12 +77,14 @@ export default function DashboardClient() {
                 frequency: '',
                 evidence: ''
             }
+
+            
         };
 
         scriptIdeas = scriptSuggestions || [];
         // Note: dashboard_graphs and hooks are not available in RawOverallStrategy
         // These would need to be added to the API response or fetched separately
-        graphs = undefined;
+        ;
         hooks = [];
     }
 
