@@ -47,8 +47,9 @@ export default function ReelCard({ reel, index, onViewDetails }: ReelCardProps) 
     const displayCreator = reel.creator || "Unknown Creator";
 
     return (
+
         <div
-            className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
+            className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group hover:border-blue-500/20"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{ animationDelay: `${index * 0.05}s` }}
@@ -73,14 +74,14 @@ export default function ReelCard({ reel, index, onViewDetails }: ReelCardProps) 
 
                 {/* Top badges */}
                 <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-                    <div className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1.5 shadow-sm border border-slate-100">
-                        <Eye size={14} className="text-slate-500" />
-                        <span className="text-sm font-semibold text-slate-900">{reel.views}</span>
+                    <div className="px-2.5 py-1 bg-black/60 backdrop-blur-sm rounded-full flex items-center gap-1.5 shadow-sm border border-white/10">
+                        <Eye size={14} className="text-slate-300" />
+                        <span className="text-sm font-semibold text-white">{reel.views}</span>
                     </div>
                     {/* Posted time ago - top right */}
-                    <div className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1.5 shadow-sm border border-slate-100">
-                        <Clock size={12} className="text-slate-500" />
-                        <span className="text-xs font-medium text-slate-600">{formatTimeAgo(reel.age_hours)}</span>
+                    <div className="px-2.5 py-1 bg-black/60 backdrop-blur-sm rounded-full flex items-center gap-1.5 shadow-sm border border-white/10">
+                        <Clock size={12} className="text-slate-300" />
+                        <span className="text-xs font-medium text-slate-200">{formatTimeAgo(reel.age_hours)}</span>
                     </div>
                 </div>
 
@@ -107,12 +108,12 @@ export default function ReelCard({ reel, index, onViewDetails }: ReelCardProps) 
                 </div>
             </a>
 
-            {/* Card Footer - Dark area */}
+            {/* Card Footer */}
             <div className="p-4">
                 {/* Title and Creator */}
-                <p className="text-sm font-semibold text-slate-900 line-clamp-2 mb-2">{displayTitle}</p>
+                <p className="text-sm font-semibold text-theme-primary line-clamp-2 mb-2">{displayTitle}</p>
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-slate-500">{displayCreator}</span>
+                    <span className="text-xs text-theme-secondary">{displayCreator}</span>
                     {/* Velocity Score */}
                     <VelocityBadge score={reel.velocity_score} />
                 </div>
@@ -120,7 +121,7 @@ export default function ReelCard({ reel, index, onViewDetails }: ReelCardProps) 
                 {/* View Details Button */}
                 <button
                     onClick={onViewDetails}
-                    className="w-full py-2.5 text-sm font-medium text-blue-600 hover:text-white hover:bg-blue-600 border border-blue-200 hover:border-blue-600 rounded-xl transition-all duration-200"
+                    className="w-full py-2.5 text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-white hover:bg-blue-600 border border-blue-500/30 hover:border-blue-600 rounded-xl transition-all duration-200"
                 >
                     View Details
                 </button>

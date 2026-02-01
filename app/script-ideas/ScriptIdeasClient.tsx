@@ -152,9 +152,9 @@ export default function ScriptIdeasClient() {
 
                                                 <div className="relative w-28 h-28 mb-4">
                                                     <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                                                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#e2e8f0" strokeWidth="8" />
+                                                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#1e293b" strokeWidth="8" />
                                                         <circle
-                                                            cx="50" cy="50" r="40" fill="transparent" stroke="#9333ea" strokeWidth="8"
+                                                            cx="50" cy="50" r="40" fill="transparent" stroke="#a855f7" strokeWidth="8"
                                                             strokeDasharray={`${2 * Math.PI * 40}`}
                                                             strokeDashoffset={`${2 * Math.PI * 40 * (1 - viralScore / 100)}`}
                                                             strokeLinecap="round"

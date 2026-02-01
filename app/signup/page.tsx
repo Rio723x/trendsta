@@ -80,14 +80,15 @@ export default function SignUp() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-100 via-slate-50 to-white p-5">
             {/* Centered Logo */}
-            <div className="mb-8">
+            <div className="mb-10 flex items-center gap-4">
                 <Image
-                    src="/logo3.png"
-                    alt="TrendSta"
-                    width={180}
-                    height={50}
-                    priority
+                    src="/T_logo.png"
+                    width={42}
+                    height={42}
+                    alt="Trendsta"
+                    className="drop-shadow-[0_0_10px_rgba(30,58,95,0.2)]"
                 />
+                <span className="text-4xl font-black text-[#1e3a5f] tracking-tighter">Trendsta</span>
             </div>
 
             {/* Card */}

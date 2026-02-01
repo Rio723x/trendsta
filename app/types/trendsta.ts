@@ -69,11 +69,17 @@ export interface ResearchSummary {
             target_wpm: string;
             target_duration: string;
             audio_mood: string;
+            visual_style_guide?: string;
         };
-        experiment_this: {
+        experiment_of_the_week: {
             hypothesis: string;
             how_to_test: string;
         };
+        upcoming_schedule_7_days?: {
+            day: string;
+            time: string;
+            content_focus: string;
+        }[];
     };
 
     instagram_summary_research?: string;

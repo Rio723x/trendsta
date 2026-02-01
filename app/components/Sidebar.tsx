@@ -89,18 +89,19 @@ export default function Sidebar() {
             <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "gap-3"}`}>
                 {isCollapsed ? (
                     <div className="w-10 h-10 rounded-xl neu-convex flex items-center justify-center shrink-0">
-                        <TrendingUp className="text-blue-600 w-6 h-6" />
+                        <Image src="/T_logo.png" width={24} height={24} alt="T" />
                     </div>
                 ) : (
-                    <div className="relative w-full h-12 flex items-center">
-                        <Link href="/">
+                    <div className="relative w-full h-12 flex items-center gap-3">
+                        <Link href="/" className="flex items-center gap-3">
                             <Image
-                                src="/logo3.png"
-                                width={150}
-                                height={50}
-                                alt="Trendsta Logo"
-                                className="object-contain"
+                                src="/T_logo.png"
+                                width={32}
+                                height={32}
+                                alt="Trendsta"
+                                className="drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
                             />
+                            <span className="text-2xl font-black text-theme-primary tracking-tighter">Trendsta</span>
                         </Link>
                     </div>
                 )}
@@ -118,7 +119,7 @@ export default function Sidebar() {
                             href={item.href}
                             className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative ${isActive
                                 ? "bg-white/10 border border-white/20 text-blue-400 font-bold shadow-[0_0_15px_rgba(59,130,246,0.3)]"
-                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                                : "text-theme-secondary hover:text-white hover:bg-white/5"
                                 } ${isCollapsed ? "justify-center" : ""}`}
                             title={isCollapsed ? item.label : undefined}
                         >
@@ -215,7 +216,7 @@ export default function Sidebar() {
                     </div>
                     <button
                         onClick={handleLogout}
-                        className={`neu-icon-btn text-slate-500 hover:text-red-500 ${isCollapsed ? "w-10 h-10" : ""}`}
+                        className={`text-theme-muted hover:text-red-500 ${isCollapsed ? "w-10 h-10" : ""}`}
                         title={isCollapsed ? "Logout" : undefined}
                     >
                         <LogOut size={18} />

@@ -163,42 +163,50 @@ export default function OnboardingPage() {
     const availableSubNiches = formData.niche ? SUB_NICHE_MAPPING[formData.niche] || [] : [];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-white flex flex-col">
+        <div data-theme="dark" className="min-h-screen bg-[#020617] text-white flex flex-col relative overflow-hidden">
+            {/* Frosted Background Effects */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '8s' }} />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '10s' }} />
+                <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDuration: '7s' }} />
+            </div>
+
             {/* Header - Centered Logo */}
-            <header className="w-full py-8 flex justify-center">
+            <header className="w-full py-10 flex justify-center items-center gap-4 relative z-10">
                 <Image
-                    src="/logo3.png"
-                    alt="TrendSta"
-                    width={180}
-                    height={50}
-                    priority
+                    src="/T_logo.png"
+                    width={42}
+                    height={42}
+                    alt="Trendsta"
+                    className="drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]"
                 />
+                <span className="text-4xl font-extrabold text-white tracking-tighter">Trendsta</span>
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 flex flex-col items-center justify-center px-4 pb-12">
+            <main className="flex-1 flex flex-col items-center justify-center px-4 pb-12 relative z-10 backdrop-blur-[2px]">
                 {/* Progress Indicator */}
                 {!isCompleting && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-8 flex flex-col items-center gap-4"
+                        className="mb-10 flex flex-col items-center gap-4"
                     >
                         <div className="flex items-center gap-2">
                             {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
                                 <div
                                     key={i}
-                                    className={`h-2 rounded-full transition-all duration-300 ${i + 1 === currentStep
-                                        ? 'w-8 bg-[#f97316]'
+                                    className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === currentStep
+                                        ? 'w-12 bg-gradient-to-r from-orange-400 to-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.5)]'
                                         : i + 1 < currentStep
-                                            ? 'w-2 bg-[#1e3a5f]'
-                                            : 'w-2 bg-slate-200'
+                                            ? 'w-4 bg-blue-500/50'
+                                            : 'w-4 bg-white/5'
                                         }`}
                                 />
                             ))}
                         </div>
-                        <span className="text-sm text-slate-500 font-medium">
-                            Step {currentStep} of {TOTAL_STEPS}
+                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">
+                            Progress: {currentStep} / {TOTAL_STEPS}
                         </span>
                     </motion.div>
                 )}
@@ -217,7 +225,7 @@ export default function OnboardingPage() {
                                 animate="center"
                                 exit="exit"
                                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 md:p-10"
+                                className="glass-panel p-8 md:p-12"
                             >
                                 {currentStep === 1 && (
                                     <InstagramSlide
@@ -242,19 +250,19 @@ export default function OnboardingPage() {
                                     <motion.div
                                         initial={{ opacity: 0, y: -10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl"
+                                        className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl"
                                     >
-                                        <p className="text-sm text-red-600">{apiError}</p>
+                                        <p className="text-sm text-red-400 font-medium">{apiError}</p>
                                     </motion.div>
                                 )}
 
 
                                 {/* Navigation Buttons */}
-                                <div className="mt-10 flex items-center justify-between">
+                                <div className="mt-12 flex items-center justify-between gap-6">
                                     {currentStep > 1 ? (
                                         <button
                                             onClick={handleBack}
-                                            className="px-6 py-3 text-slate-600 hover:text-[#1e3a5f] font-medium rounded-xl transition-colors"
+                                            className="px-6 py-3.5 text-slate-400 hover:text-white font-semibold rounded-xl transition-all border border-white/5 hover:bg-white/5"
                                         >
                                             Back
                                         </button>
@@ -263,7 +271,7 @@ export default function OnboardingPage() {
                                     )}
                                     <button
                                         onClick={handleNext}
-                                        className="px-8 py-3.5 bg-gradient-to-r from-[#f97316] to-[#ea580c] text-white font-semibold rounded-xl shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-300 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                                        className="flex-1 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl shadow-[0_4px_20px_rgba(234,88,12,0.3)] hover:shadow-[0_4px_25px_rgba(234,88,12,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-white/10"
                                     >
                                         {currentStep === TOTAL_STEPS ? 'Build My Trendsta Dashboard' : 'Continue'}
                                     </button>
@@ -299,10 +307,10 @@ function InstagramSlide({ value, onChange, error }: InstagramSlideProps) {
 
     return (
         <motion.div {...fadeInUp} transition={{ duration: 0.4 }}>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a5f] mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
                 What's your Instagram username?
             </h2>
-            <p className="text-slate-500 mb-8">
+            <p className="text-slate-400 mb-10 text-lg leading-relaxed">
                 We'll use this to analyze your content performance and identify growth opportunities.
             </p>
 
@@ -312,23 +320,24 @@ function InstagramSlide({ value, onChange, error }: InstagramSlideProps) {
                     value={value}
                     onChange={handleChange}
                     placeholder="@yourusername"
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-xl bg-slate-50/50 focus:bg-white outline-none transition-all duration-200 ${error
-                        ? 'border-red-300 focus:border-red-400'
-                        : 'border-slate-200 focus:border-[#1e3a5f]'
+                    className={`w-full px-6 py-5 text-xl rounded-2xl bg-white/5 border-2 outline-none transition-all duration-300 font-medium ${error
+                        ? 'border-red-500/50 focus:border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+                        : 'border-white/10 focus:border-blue-500/50 focus:bg-white/10 shadow-inner'
                         }`}
                 />
                 {error && (
                     <motion.p
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-2 text-sm text-red-500"
+                        className="mt-3 text-sm text-red-400 font-semibold flex items-center gap-2"
                     >
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
                         {error}
                     </motion.p>
                 )}
             </div>
 
-            <p className="mt-4 text-xs text-slate-400">
+            <p className="mt-6 text-sm text-slate-500 italic">
                 Used only for performance and competitor analysis. We never post on your behalf.
             </p>
         </motion.div>
@@ -354,36 +363,36 @@ function NicheSlide({
 }: NicheSlideProps) {
     return (
         <motion.div {...fadeInUp} transition={{ duration: 0.4 }}>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a5f] mb-3">
-                What type of content do you create?
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+                What do you create?
             </h2>
-            <p className="text-slate-500 mb-8">
+            <p className="text-slate-400 mb-10 text-lg leading-relaxed">
                 This helps us curate relevant insights and competitor benchmarks for your space.
             </p>
 
-            <div className="space-y-5">
+            <div className="space-y-6">
                 {/* Niche Dropdown */}
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3 px-1">
                         Core Niche
                     </label>
                     <select
                         value={niche}
                         onChange={(e) => onNicheChange(e.target.value)}
-                        className={`w-full px-5 py-4 text-base border-2 rounded-xl bg-slate-50/50 focus:bg-white outline-none transition-all duration-200 appearance-none cursor-pointer ${errors.niche
-                            ? 'border-red-300 focus:border-red-400'
-                            : 'border-slate-200 focus:border-[#1e3a5f]'
+                        className={`w-full px-6 py-4 text-lg rounded-2xl bg-white/5 border-2 outline-none transition-all duration-300 appearance-none cursor-pointer font-medium ${errors.niche
+                            ? 'border-red-500/50 focus:border-red-500'
+                            : 'border-white/10 focus:border-blue-500/50 focus:bg-white/10'
                             }`}
                         style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                             backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'right 1rem center',
-                            backgroundSize: '1.5rem',
+                            backgroundPosition: 'right 1.5rem center',
+                            backgroundSize: '1.25rem',
                         }}
                     >
-                        <option value="">Select your niche</option>
+                        <option value="" className="bg-[#1a1f2e]">Select your niche</option>
                         {NICHE_OPTIONS.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
+                            <option key={opt.value} value={opt.value} className="bg-[#1a1f2e]">
                                 {opt.label}
                             </option>
                         ))}
@@ -392,7 +401,7 @@ function NicheSlide({
                         <motion.p
                             initial={{ opacity: 0, y: -5 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mt-2 text-sm text-red-500"
+                            className="mt-3 text-sm text-red-400 font-semibold"
                         >
                             {errors.niche}
                         </motion.p>
@@ -401,29 +410,29 @@ function NicheSlide({
 
                 {/* Sub-Niche Dropdown */}
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3 px-1">
                         Sub-Niche
                     </label>
                     <select
                         value={subNiche}
                         onChange={(e) => onSubNicheChange(e.target.value)}
                         disabled={!niche}
-                        className={`w-full px-5 py-4 text-base border-2 rounded-xl bg-slate-50/50 focus:bg-white outline-none transition-all duration-200 appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${errors.subNiche
-                            ? 'border-red-300 focus:border-red-400'
-                            : 'border-slate-200 focus:border-[#1e3a5f]'
+                        className={`w-full px-6 py-4 text-lg rounded-2xl bg-white/5 border-2 outline-none transition-all duration-300 appearance-none cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed font-medium ${errors.subNiche
+                            ? 'border-red-500/50 focus:border-red-500'
+                            : 'border-white/10 focus:border-blue-500/50 focus:bg-white/10'
                             }`}
                         style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                             backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'right 1rem center',
-                            backgroundSize: '1.5rem',
+                            backgroundPosition: 'right 1.5rem center',
+                            backgroundSize: '1.25rem',
                         }}
                     >
-                        <option value="">
+                        <option value="" className="bg-[#1a1f2e]">
                             {niche ? 'Select your specialization' : 'First select a niche'}
                         </option>
                         {availableSubNiches.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
+                            <option key={opt.value} value={opt.value} className="bg-[#1a1f2e]">
                                 {opt.label}
                             </option>
                         ))}
@@ -432,7 +441,7 @@ function NicheSlide({
                         <motion.p
                             initial={{ opacity: 0, y: -5 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mt-2 text-sm text-red-500"
+                            className="mt-3 text-sm text-red-400 font-semibold"
                         >
                             {errors.subNiche}
                         </motion.p>

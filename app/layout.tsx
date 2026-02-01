@@ -5,6 +5,7 @@ import { AnalysisProvider } from "./context/AnalysisContext";
 import { QueryProvider } from "./providers/QueryProvider";
 import { ThemeProvider } from "./context/ThemeContext";
 import AnalysingIndicator from "./components/AnalysingIndicator";
+import SmoothScroll from "./components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Trendsta - Content Research Tool",
@@ -23,8 +24,10 @@ export default function RootLayout({
           <QueryProvider>
             <AnalysisProvider>
               <SidebarProvider>
-                <AnalysingIndicator />
-                {children}
+                <SmoothScroll>
+                  <AnalysingIndicator />
+                  {children}
+                </SmoothScroll>
               </SidebarProvider>
             </AnalysisProvider>
           </QueryProvider>

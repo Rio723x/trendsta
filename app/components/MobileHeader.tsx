@@ -62,15 +62,16 @@ export default function MobileHeader(): React.JSX.Element {
 
     return (
         <div className="md:hidden flex items-center justify-between p-4 neu-convex sticky top-0 z-40 mb-4 rounded-b-2xl border-b border-white/20">
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
                 <Image
-                    src={"/logo3.png"}
-                    width={150}
-                    height={40}
+                    src="/T_logo.png"
+                    width={28}
+                    height={28}
                     alt="logo"
-                    style={{ objectFit: 'contain' }}
+                    className="drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
                 />
-            </div>
+                <span className="text-xl font-black text-theme-primary tracking-tighter">Trendsta</span>
+            </Link>
             <div className="relative flex items-center gap-2" ref={menuRef}>
                 <ThemeToggle />
                 <button

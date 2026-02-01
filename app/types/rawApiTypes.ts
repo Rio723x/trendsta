@@ -95,6 +95,99 @@ export interface RawViralHookFormula {
     why_works: string;
 }
 
+export interface RawTopPerformingHook {
+    hook: string;
+    rank: number;
+    reelcaption: string;
+    sourceusername: string;
+}
+
+export interface RawProductionSpecSheet {
+    audio_mood: string;
+    target_wpm: string;
+    target_duration: string;
+    visual_style_guide: string;
+}
+
+export interface RawExperimentOfTheWeek {
+    hypothesis: string;
+    how_to_test: string;
+}
+
+export interface RawScheduleEntry {
+    day: string;
+    time: string;
+    content_focus: string;
+}
+
+export interface RawExecutionPlan {
+    production_spec_sheet: RawProductionSpecSheet;
+    experiment_of_the_week: RawExperimentOfTheWeek;
+    upcoming_schedule_7_days: RawScheduleEntry[];
+    immediate_action_checklist: string[];
+}
+
+export interface RawDashboardGraphs {
+    pie_chart_content_diet: {
+        insight: string;
+        segments: {
+            percentage: number;
+            category_label: string;
+        }[];
+    };
+    bubble_chart_topic_gaps: {
+        bubbles: {
+            topic: string;
+            z_volume_size: number;
+            y_viral_potential: number;
+            x_competition_level: number;
+        }[];
+        insight: string;
+    };
+    stacked_bar_consistency: {
+        stacks: {
+            entity: string;
+            viral_pct: number;
+            average_pct: number;
+            underperf_pct: number;
+        }[];
+        insight: string;
+    };
+    treemap_topic_dominance: {
+        blocks: {
+            keyword: string;
+            frequency_count: number;
+            value_avg_views: number;
+        }[];
+        insight: string;
+    };
+    heatmap_opportunity_clock: {
+        insight: string;
+        top_slots: {
+            day: string;
+            time: string;
+            source: string;
+            heat_score: number;
+        }[];
+    };
+    bar_chart_hook_leaderboard: {
+        data: {
+            pattern_name: string;
+            engagement_score: number;
+        }[];
+        insight: string;
+    };
+    scatter_plot_viral_sweet_spot: {
+        insight: string;
+        data_points: {
+            label: string;
+            status: string;
+            y_pace_wpm: number;
+            x_duration_sec: number;
+        }[];
+    };
+}
+
 export interface RawOverallStrategy {
     instagram_niche_insights: RawInstagramNicheInsight[];
     twitter_trend_analysis: RawTwitterTrendAnalysis[];
@@ -103,6 +196,10 @@ export interface RawOverallStrategy {
     content_gap: RawContentGap;
     posting_strategy: RawPostingStrategy;
     viral_hook_formula: RawViralHookFormula;
+    execution_plan?: RawExecutionPlan;
+    top_performing_hooks?: RawTopPerformingHook[];
+    dashboard_graphs?: RawDashboardGraphs;
+    hooks?: any[];
 }
 
 // --- Common Reel Audio ---

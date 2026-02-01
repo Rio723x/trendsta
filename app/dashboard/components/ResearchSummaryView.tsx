@@ -93,14 +93,14 @@ export default function ResearchSummaryView({ summary }: ResearchSummaryProps) {
                                             <div className="w-0.5 bg-blue-500/50 self-stretch rounded-full" />
                                             <div>
                                                 <p className="text-[10px] uppercase text-blue-600 font-bold mb-1">Hypothesis</p>
-                                                <p className="text-slate-600 text-sm leading-relaxed italic">"{execution_plan.experiment_this.hypothesis}"</p>
+                                                <p className="text-slate-600 text-sm leading-relaxed italic">"{execution_plan.experiment_of_the_week?.hypothesis || "No active experiment"}"</p>
                                             </div>
                                         </div>
                                         <div className="flex gap-4">
                                             <div className="w-0.5 bg-emerald-500/50 self-stretch rounded-full" />
                                             <div>
                                                 <p className="text-[10px] uppercase text-emerald-600 font-bold mb-1">Test Protocol</p>
-                                                <p className="text-slate-600 text-sm leading-relaxed">{execution_plan.experiment_this.how_to_test}</p>
+                                                <p className="text-slate-600 text-sm leading-relaxed">{execution_plan.experiment_of_the_week?.how_to_test || "N/A"}</p>
                                             </div>
                                         </div>
                                     </div>
