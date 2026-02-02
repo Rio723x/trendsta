@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://trendsta.in
+
+# Sitemaps
+Sitemap: https://trendsta.in/sitemap.xml
