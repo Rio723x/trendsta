@@ -26,8 +26,8 @@ import { DebugLogger, estimateTokenCount } from '@/lib/consultant/debugLogger';
 
 interface ChatRequest {
     message: string;
-    conversationId?: string; // Changed from chatId
-    modelMode?: ModelMode;  // 'fast' | 'thinking'
+    conversationId?: string;
+    modelMode?: ModelMode;  // 'fast' | 'thinking' | 'deep'
 }
 
 export async function POST(request: NextRequest) {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         const userId = session.user.id;
 
         const body: ChatRequest = await request.json();
-        const { message: userMessage, conversationId, modelMode = 'thinking' } = body;
+        const { message: userMessage, conversationId, modelMode = 'fast' } = body;
 
         if (!userMessage || typeof userMessage !== 'string') {
             return NextResponse.json({ error: 'Message is required' }, { status: 400 });
@@ -71,11 +71,15 @@ export async function POST(request: NextRequest) {
 
 
         // --- STELLA COST & ALLOWANCE LOGIC ---
-        // 1. Determine Cost
+        // 1. Determine Cost based on mode
         const { STELLA_COSTS } = await import('@/lib/aiConfig');
-        const cost = modelMode === 'thinking' ? STELLA_COSTS.THINKING : STELLA_COSTS.FAST;
+        const cost =
+            modelMode === 'deep' ? STELLA_COSTS.DEEP :
+                modelMode === 'thinking' ? STELLA_COSTS.THINKING :
+                    STELLA_COSTS.FAST;
 
         // 2. CHECK Eligibility FIRST (Do not consume yet)
+        // Only fast mode qualifies for the free allowance
         let isFreeEligible = false;
         if (modelMode === 'fast') {
             const { checkFreeAllowance } = await import('@/lib/analysis/featureAllowance');
@@ -126,7 +130,7 @@ export async function POST(request: NextRequest) {
         // 4. Fetch dynamic context from DB
         const { getLatestResearch } = await import('@/lib/research/service');
         const researchResult = await getLatestResearch(userId);
-        console.log("research data --------", researchResult);
+        //console.log("research data --------", researchResult);
 
         const allContexts = { user: '', competitor: '', niche: '', twitter: '' };
 

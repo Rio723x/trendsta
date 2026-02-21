@@ -15,11 +15,11 @@ import { Loader2 } from "lucide-react";
 
 const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: Home },
+    { href: "/ai-consultant", label: "AI Consultant", icon: Sparkles },
     { href: "/top-reels", label: "Instagram Reels", icon: Play },
     { href: "/competitors", label: "Competitors", icon: Users },
     { href: "/script-ideas", label: "Script Ideas", icon: FileText },
     { href: "/twitter-insights", label: "Twitter Insights", icon: Hash },
-    { href: "/ai-consultant", label: "AI Consultant", icon: Sparkles },
     { href: "/subscription", label: "Subscription", icon: CreditCard },
     { href: "/referral", label: "Referrals", icon: Gift },
     { href: "/account", label: "Account", icon: Settings },

@@ -220,7 +220,7 @@ export default function AIConsultantPage() {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [hasStartedChat, setHasStartedChat] = useState(false);
-    const [thinkingMode, setThinkingMode] = useState<"flash" | "deep">("flash");
+    const [thinkingMode, setThinkingMode] = useState<"fast" | "thinking" | "deep">("fast");
     const [showHistory, setShowHistory] = useState(false);
     const [chatId, setChatId] = useState<string | null>(null);
 
@@ -531,7 +531,11 @@ export default function AIConsultantPage() {
         }
 
         try {
-            const modelMode = thinkingMode === 'flash' ? 'fast' : 'thinking';
+            // Map UI mode to backend ModelMode
+            const modelMode: 'fast' | 'thinking' | 'deep' =
+                thinkingMode === 'fast' ? 'fast' :
+                    thinkingMode === 'thinking' ? 'thinking' :
+                        'deep';
 
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -637,8 +641,8 @@ export default function AIConsultantPage() {
                                 key={conv.id}
                                 onClick={() => loadConversation(conv.id)}
                                 className={`p-3 rounded-xl cursor-pointer transition-all border group text-left ${chatId === conv.id
-                                        ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'
-                                        : 'bg-[var(--glass-surface)] hover:bg-[var(--glass-surface-hover)] border-[var(--glass-border)]'
+                                    ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'
+                                    : 'bg-[var(--glass-surface)] hover:bg-[var(--glass-surface-hover)] border-[var(--glass-border)]'
                                     }`}
                             >
                                 <p className={`text-sm font-semibold truncate ${chatId === conv.id ? 'text-blue-700 dark:text-blue-300' : 'text-theme-primary group-hover:text-blue-600 dark:group-hover:text-blue-400'
@@ -681,7 +685,9 @@ export default function AIConsultantPage() {
                 </div>
 
                 {/* Main Content Area */}
-                <div className={`flex-1 w-full max-w-4xl flex flex-col overflow-hidden ${hasStartedChat ? 'pb-0' : 'justify-center items-center pb-32'}`}>
+                <div className={`flex-1 min-h-0 w-full max-w-4xl flex flex-col ${hasStartedChat ? 'pb-0' : 'justify-center items-center pb-32 pt-24'}`}>
+
+
 
                     {/* Landing State */}
                     <AnimatePresence>
@@ -767,13 +773,15 @@ export default function AIConsultantPage() {
                                             <Image src="/T_logo.png" alt="Trendsta" width={24} height={24} className="object-contain" />
                                         </div>
                                         <div className="glass-panel px-4 py-3 rounded-2xl rounded-tl-md shadow-sm flex items-center gap-2">
-                                            {thinkingMode === 'flash' ? (
+                                            {thinkingMode === 'fast' ? (
                                                 <Zap size={16} className="text-amber-500 animate-pulse" />
+                                            ) : thinkingMode === 'thinking' ? (
+                                                <BrainCircuit size={16} className="text-violet-500 animate-pulse" />
                                             ) : (
-                                                <BrainCircuit size={16} className="text-purple-500 animate-pulse" />
+                                                <Sparkles size={16} className="text-cyan-500 animate-pulse" />
                                             )}
                                             <span className="text-sm text-theme-muted">
-                                                {thinkingMode === 'flash' ? 'Thinking...' : 'Deep analyzing...'}
+                                                {thinkingMode === 'fast' ? 'Thinking...' : thinkingMode === 'thinking' ? 'Reasoning...' : 'Deep researching...'}
                                             </span>
                                             <span className="flex gap-1">
                                                 <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
@@ -824,37 +832,72 @@ export default function AIConsultantPage() {
                         </div>
                     </div>
 
-                    {/* Mode Toggle */}
-                    <div className="flex justify-center mt-2 gap-2">
+                    {/* Mode Toggle — 3 modes */}
+                    <div className="flex justify-center mt-3 gap-1.5">
+                        {/* Fast */}
                         <button
-                            onClick={() => setThinkingMode('flash')}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${thinkingMode === 'flash' ? 'bg-amber-50 border border-amber-200 text-amber-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+                            onClick={() => setThinkingMode('fast')}
+                            className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 ${thinkingMode === 'fast'
+                                ? 'bg-amber-500/15 border border-amber-500/40 text-amber-400 shadow-sm shadow-amber-500/10'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/8'
+                                }`}
+                            title="Fast — 1 Stella per message"
                         >
-                            <Zap size={14} className={thinkingMode === 'flash' ? 'text-amber-500' : ''} />
-                            Fast Mode
+                            <Zap size={13} className={thinkingMode === 'fast' ? 'text-amber-400' : ''} />
+                            Fast
+                            <span className={`text-[10px] px-1 py-0.5 rounded-md font-mono ${thinkingMode === 'fast' ? 'bg-amber-500/20 text-amber-300' : 'bg-white/5 text-slate-500'
+                                }`}>1✦</span>
                         </button>
 
-                        {/* Pro/Thinking Modes - Locked for Tier 1 & 2 */}
-                        <div className="relative group/mode">
+                        {/* Separator */}
+                        <div className="w-px bg-white/10 self-stretch my-1" />
+
+                        {/* Thinking */}
+                        <button
+                            onClick={() => setThinkingMode('thinking')}
+                            className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 ${thinkingMode === 'thinking'
+                                ? 'bg-violet-500/15 border border-violet-500/40 text-violet-400 shadow-sm shadow-violet-500/10'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/8'
+                                }`}
+                            title="Thinking — 2 Stellas per message"
+                        >
+                            <BrainCircuit size={13} className={thinkingMode === 'thinking' ? 'text-violet-400' : ''} />
+                            Thinking
+                            <span className={`text-[10px] px-1 py-0.5 rounded-md font-mono ${thinkingMode === 'thinking' ? 'bg-violet-500/20 text-violet-300' : 'bg-white/5 text-slate-500'
+                                }`}>2✦</span>
+                        </button>
+
+                        {/* Separator */}
+                        <div className="w-px bg-white/10 self-stretch my-1" />
+
+                        {/* Deep Research — locked below planTier 3 */}
+                        <div className="relative group/deep">
                             <button
                                 onClick={() => {
                                     if (planTier >= 3) setThinkingMode('deep');
                                 }}
                                 disabled={planTier < 3}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${planTier < 3
-                                    ? 'opacity-50 cursor-not-allowed bg-slate-100/5 text-slate-400'
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 ${planTier < 3
+                                    ? 'opacity-40 cursor-not-allowed text-slate-500'
                                     : thinkingMode === 'deep'
-                                        ? 'bg-purple-50 border border-purple-200 text-purple-700 shadow-sm'
-                                        : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                                        ? 'bg-cyan-500/15 border border-cyan-500/40 text-cyan-400 shadow-sm shadow-cyan-500/10'
+                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/8'
                                     }`}
+                                title={planTier < 3 ? 'Requires Platinum Plan' : 'Deep Research — 4 Stellas per message'}
                             >
-                                <BrainCircuit size={14} className={thinkingMode === 'deep' ? 'text-purple-500' : ''} />
+                                <Sparkles size={13} className={thinkingMode === 'deep' && planTier >= 3 ? 'text-cyan-400' : ''} />
                                 Deep Research
-                                {planTier < 3 && <Target size={12} className="ml-1 text-slate-400" />}
+                                {planTier >= 3 && (
+                                    <span className={`text-[10px] px-1 py-0.5 rounded-md font-mono ${thinkingMode === 'deep' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-white/5 text-slate-500'
+                                        }`}>4✦</span>
+                                )}
+                                {planTier < 3 && (
+                                    <span className="text-[10px] px-1 py-0.5 rounded-md bg-white/5 text-slate-500">🔒</span>
+                                )}
                             </button>
                             {planTier < 3 && (
-                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/80 text-white text-[10px] rounded opacity-0 group-hover/mode:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                                    Requires Platinum Plan
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-black/90 text-white text-[10px] rounded-lg opacity-0 group-hover/deep:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-white/10">
+                                    🔒 Requires Platinum Plan
                                 </div>
                             )}
                         </div>

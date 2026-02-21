@@ -58,11 +58,11 @@ export const MEMORY_CONFIG = {
 
     // Model for intent detection (cheap + fast)
     // INTENT_MODEL: 'google/gemini-2.0-flash-001',
-    INTENT_MODEL: 'tngtech/deepseek-r1t2-chimera:free',
+    INTENT_MODEL: 'deepseek/deepseek-r1-0528:free',
 
     // Model for summarization (cheap + fast)
     //SUMMARIZATION_MODEL: 'google/gemini-2.0-flash-001',
-    SUMMARIZATION_MODEL: 'tngtech/deepseek-r1t2-chimera:free',
+    SUMMARIZATION_MODEL: 'deepseek/deepseek-r1-0528:free',
 
     // Rough token estimation (chars / 4)
     CHARS_PER_TOKEN: 4,
