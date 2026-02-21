@@ -13,8 +13,22 @@ import { Analytics } from "./analytics";
 import ReferralTracker from "./components/ReferralTracker";
 
 export const metadata: Metadata = {
-  title: "Trendsta - Content Research Tool",
-  description: "Your daily content strategy dashboard for viral content creation",
+  metadataBase: new URL("https://trendsta.in"),
+  title: {
+    default: "Trendsta – AI Content Research",
+    template: "%s | Trendsta",
+  },
+  description:
+    "Trendsta is your AI-powered content research platform. Discover viral trends, generate script ideas, and grow your audience faster.",
+  openGraph: {
+    siteName: "Trendsta",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@trendsta",
+  },
 };
 
 export default function RootLayout({
