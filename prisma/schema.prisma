@@ -125,7 +125,7 @@ model Research {
   id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   socialAccountId String        @db.Uuid
   socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
-  createdAt       DateTime      @default(now())
+  createdAt       DateTime      @default(now()) @db.Timestamptz(3)
 
   // Relations to research data containers
   scriptSuggestions  ScriptSuggestions?
@@ -502,7 +502,7 @@ model Payment {
 model Wallet {
   id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId  String @unique @db.Uuid
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   monthlyBalance Int @default(0) // Resets on cycle
   topupBalance   Int @default(0) // Permanent
@@ -585,7 +585,7 @@ model Commission {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
   referrerId     String           @db.Uuid
-  referrer       User             @relation(fields: [referrerId], references: [id])
+  referrer       User             @relation(fields: [referrerId], references: [id], onDelete: Cascade)
 
   referredUserId String           @db.Uuid  // The user whose purchase triggered this
 

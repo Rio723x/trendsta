@@ -1507,6 +1507,29 @@ function Footer() {
   );
 }
 
+// --- Shared CTA ---
+
+function ViewDemoCTA() {
+  return (
+  
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <p className="text-slate-400 text-sm md:text-base mb-6 tracking-wide">
+          No credit card required &mdash; explore the full dashboard instantly.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <a
+            href="/dashboard"
+            className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white/5 text-white font-semibold rounded-full border border-white/10 hover:bg-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base"
+          >
+            <Play size={16} className="fill-white" />
+            View Demo
+          </a>
+        </div>
+      </div>
+  
+  );
+}
+
 // --- Main Page ---
 
 export default function LandingPage() {

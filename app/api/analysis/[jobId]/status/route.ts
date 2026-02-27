@@ -156,13 +156,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                 const latestResearch = await prisma.research.findFirst({
                     where: {
                         socialAccountId: job.socialAccountId,
-                        createdAt: { gte : job.createdAt }
+                        createdAt: { gte: job.createdAt }
                     },
                     orderBy: { createdAt: 'desc' }
                 });
 
                 if (latestResearch) {
                     console.log(`[Auto-Complete] Job ${job.id} found research. Completing.`);
+                    console.log("reserach job was found, and it was---------");
+                    console.log(latestResearch);
 
                     // Update DB state
                     job = await prisma.analysisJob.update({

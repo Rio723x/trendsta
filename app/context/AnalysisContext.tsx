@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { RESEARCH_QUERY_KEY } from "@/hooks/useResearch";
 
 type JobStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | null;
@@ -23,6 +24,7 @@ export function AnalysisProvider({ children }: { children: React.ReactNode }) {
     const [error, setError] = useState<string | null>(null);
     const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     const isAnalysing = jobStatus === "PENDING" || jobStatus === "PROCESSING";
 
@@ -35,8 +37,12 @@ export function AnalysisProvider({ children }: { children: React.ReactNode }) {
             setJobStatus(data.status);
 
             if (data.status === "COMPLETED") {
-                // Invalidate research cache to refresh data
-                queryClient.invalidateQueries({ queryKey: RESEARCH_QUERY_KEY });
+                // Reset (not just invalidate) so the cached 404 error is cleared.
+                // This re-enables the query (which was disabled while has404 was true)
+                // and triggers an immediate refetch to show the new dashboard data.
+                await queryClient.resetQueries({ queryKey: RESEARCH_QUERY_KEY });
+                // Also force a server-component refresh so Next.js picks up fresh data.
+                router.refresh();
                 if (pollIntervalRef.current) {
                     clearInterval(pollIntervalRef.current);
                     pollIntervalRef.current = null;
@@ -51,7 +57,7 @@ export function AnalysisProvider({ children }: { children: React.ReactNode }) {
         } catch (err) {
             console.error("Failed to poll job status:", err);
         }
-    }, [queryClient]);
+    }, [queryClient, router]);
 
     // Start analysis
     const startAnalysis = useCallback(async (options: { socialAccountId: string, competitorUsernames?: string[], reelCountTier?: 'LOW' | 'MEDIUM' | 'HIGH', writingStyle?: string, scriptLanguage?: string, captionLanguage?: string }) => {

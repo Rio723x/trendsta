@@ -116,9 +116,9 @@ export async function POST(request: NextRequest) {
 
         // Map Tier to Reel Count
         const reelCountMap = {
-            'LOW': 30,
+            'LOW': 3,
             'MEDIUM': 6,
-            'HIGH': 90
+            'HIGH': 9
         };
         const noOfReelsToScrape = reelCountMap[reelCountTier] || 30;
 
@@ -146,11 +146,13 @@ export async function POST(request: NextRequest) {
         // Determine Model based on Plan
         // Silver -> gemini-2.0-flash-001
         // Gold/Platinum -> gemini-2.0-pro-exp-02-05 (using the user's requested string: google/gemini-3-pro-preview for now if that's what they meant, but checking the prompt "google/gemini-3-pro-preview". I'll use exactly what they asked.)
-        const planNameNormalized = plan.name.toLowerCase();
 
-        const analysisModel = planNameNormalized.includes('silver')
-            ? "google/gemini-2.0-flash-001"
-            : "google/gemini-3-pro-preview";
+        // const analysisModel = plan.tier === 1
+        //     ? "google/gemini-2.0-flash-001"
+        //     : "google/gemini-3-pro-preview";
+        const analysisModel = plan.tier === 1
+            ? "qwen/qwen3.5-35b-a3b"
+            : "qwen/qwen3.5-35b-a3b";
 
         const n8nPayload = {
             creator_niche: user.niche,
@@ -166,7 +168,7 @@ export async function POST(request: NextRequest) {
             reels_per_competitor: isCompetitorAnalysis ? 1 : 0,
             is_user_specific: true,
             client_username: socialAccount.username,
-            user_reels_to_scrape: 1, 
+            user_reels_to_scrape: 1,
             use_apify_transcript: false,
             socialAccountId: socialAccountId,
             apify_key: apifyKey,
@@ -229,7 +231,7 @@ export async function POST(request: NextRequest) {
                     stellaCost,
                 },
             });
-
+            //console.log("new analysis job created", newJob);
             const transactionMetadata = {
                 type: "analysis",
                 socialAccountId,
