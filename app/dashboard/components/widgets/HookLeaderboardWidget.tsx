@@ -20,7 +20,7 @@ export default function HookLeaderboardWidget({ data }: HookLeaderboardProps) {
         if (active && payload && payload.length) {
             return (
                 <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
-                    <p className="font-bold mb-1 text-indigo-400">{payload[0].payload.pattern_name}</p>
+                    <p className="font-bold mb-1 text-orange-500">{payload[0].payload.pattern_name}</p>
                     <p>Score: {payload[0].value}</p>
                 </div>
             );
@@ -56,7 +56,7 @@ export default function HookLeaderboardWidget({ data }: HookLeaderboardProps) {
                         />
                         <Bar dataKey="engagement_score" radius={[0, 4, 4, 0]} barSize={20} isAnimationActive={true}>
                             {data.data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={index === 0 ? '#6366f1' : '#cbd5e1'} />
+                                <Cell key={`cell-${index}`} fill={index === 0 ? '#f97316' : '#cbd5e1'} />
                             ))}
                         </Bar>
                     </BarChart>

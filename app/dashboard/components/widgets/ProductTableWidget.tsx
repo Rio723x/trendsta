@@ -39,7 +39,7 @@ export default function ProductTableWidget({ data }: { data: ProductData[] }) {
                             <tr key={i} className="group hover:bg-slate-50 transition-colors">
                                 <td className="py-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold border border-indigo-100">
+                                        <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600 font-bold border border-orange-100">
                                             {item.name[0]}
                                         </div>
                                         <div>
@@ -62,7 +62,7 @@ export default function ProductTableWidget({ data }: { data: ProductData[] }) {
                                     </div>
                                 </td>
                                 <td className="py-6 text-right">
-                                    <button className="text-sm font-bold text-slate-900 hover:text-indigo-600 flex items-center justify-end gap-1 ml-auto">
+                                    <button className="text-sm font-bold text-slate-900 hover:text-orange-600 flex items-center justify-end gap-1 ml-auto">
                                         Details <span>&gt;</span>
                                     </button>
                                 </td>

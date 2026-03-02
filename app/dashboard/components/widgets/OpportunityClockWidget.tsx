@@ -34,25 +34,25 @@ export default function OpportunityClockWidget({ data }: OpportunityClockProps) 
                     return (
                         <div key={index} className={`relative overflow-hidden neu-convex-sm rounded-xl p-3 flex items-center justify-between transition-all cursor-default`}>
                             {/* Background Elements */}
-                            <div className={`absolute right-0 top-0 w-20 h-20 rounded-full blur-xl opacity-20 -mr-4 -mt-4 ${isUser ? 'bg-indigo-400' : 'bg-violet-400'}`}></div>
+                            <div className={`absolute right-0 top-0 w-20 h-20 rounded-full blur-xl opacity-20 -mr-4 -mt-4 ${isUser ? 'bg-orange-400' : 'bg-amber-400'}`}></div>
 
                             <div className="flex items-center gap-3 relative z-10 min-w-0 flex-1">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isUser ? 'bg-indigo-500/20 text-indigo-400' : 'bg-violet-500/20 text-violet-400'}`}>
-                                    <Clock size={14} />
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isUser ? 'bg-orange-500/20 text-orange-500' : 'bg-amber-500/20 text-amber-500'}`}>
+                                    <Clock size={16} />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <h4 className={`text-xs font-bold truncate ${isUser ? 'text-indigo-500' : 'text-violet-500'}`}>{slot.day} @ {slot.time}</h4>
-                                    <p className={`text-[9px] font-medium uppercase tracking-wider truncate ${isUser ? 'text-indigo-400' : 'text-violet-400'}`}>
+                                <div className="min-w-0">
+                                    <h4 className={`text-xs font-bold truncate ${isUser ? 'text-orange-600' : 'text-amber-600'}`}>{slot.day} @ {slot.time}</h4>
+                                    <p className={`text-[9px] font-medium uppercase tracking-wider truncate ${isUser ? 'text-orange-500/80' : 'text-amber-500/80'}`}>
                                         {isUser ? 'Your Prime Time' : 'Competitor Spike'}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="text-right relative z-10 flex-shrink-0 pl-2">
-                                <div className={`text-lg font-black ${isUser ? 'text-indigo-400' : 'text-violet-400'}`}>
+                            <div className="text-right flex flex-col justify-end items-end h-full mt-auto">
+                                <div className={`text-lg font-black ${isUser ? 'text-orange-500' : 'text-amber-500'}`}>
                                     {slot.heat_score}
                                 </div>
-                                <div className={`text-[9px] font-medium ${isUser ? 'text-indigo-500/80' : 'text-violet-500/80'}`}>Score</div>
+                                <div className={`text-[9px] font-medium ${isUser ? 'text-orange-500/80' : 'text-amber-500/80'}`}>Score</div>
                             </div>
                         </div>
                     );

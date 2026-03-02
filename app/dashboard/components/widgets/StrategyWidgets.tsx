@@ -20,6 +20,7 @@ export function ViralTriggerWidget({ data }: ViralTriggerProps) {
             <div className="flex items-center gap-3 mb-5">
                 <div className="w-10 h-10 rounded-xl neu-pressed flex items-center justify-center shrink-0">
                     <Target size={20} className="text-indigo-500" />
+                    <Target size={20} className="text-orange-500" />
                 </div>
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">Viral Triggers</h3>
             </div>
@@ -28,7 +29,7 @@ export function ViralTriggerWidget({ data }: ViralTriggerProps) {
                 {data.map((item, idx) => (
                     <div key={idx} className="p-4 glass-inset rounded-2xl transition-all shadow-sm group hover:bg-white/5">
                         <div className="flex gap-3">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs font-bold mt-0.5">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-500 flex items-center justify-center text-xs font-bold mt-0.5">
                                 {idx + 1}
                             </span>
                             <div className="min-w-0 flex-1">
@@ -63,7 +64,7 @@ export function ContentGapWidget({ data }: ContentGapProps) {
         <div className="neu-convex p-6 flex flex-col h-full animate-fadeInUp group">
             <div className="flex items-center gap-3 mb-5">
                 <div className="w-10 h-10 rounded-xl neu-pressed flex items-center justify-center shrink-0">
-                    <Target size={20} className="text-blue-500" />
+                    <Target size={20} className="text-orange-500" />
                 </div>
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">Content Gap</h3>
             </div>
@@ -79,7 +80,7 @@ export function ContentGapWidget({ data }: ContentGapProps) {
                 </div>
 
                 <div className="mt-auto pt-4 border-t border-slate-200/50">
-                    <div className="flex items-center gap-2 text-xs font-bold text-blue-600 neu-pressed w-fit px-3 py-1.5 rounded-full inline-flex max-w-full">
+                    <div className="flex items-center gap-2 text-xs font-bold text-orange-600 neu-pressed w-fit px-3 py-1.5 rounded-full inline-flex max-w-full">
                         <TrendingUp size={14} className="shrink-0" />
                         <span className="truncate">High Demand, Low Supply</span>
                     </div>

@@ -163,24 +163,24 @@ export default function OnboardingPage() {
     const availableSubNiches = formData.niche ? SUB_NICHE_MAPPING[formData.niche] || [] : [];
 
     return (
-        <div data-theme="dark" className="min-h-screen bg-[#020617] text-white flex flex-col relative overflow-hidden">
+        <div className="min-h-screen bg-[#fafafa] text-gray-900 font-sans flex flex-col relative overflow-hidden">
             {/* Frosted Background Effects */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '8s' }} />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '10s' }} />
-                <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDuration: '7s' }} />
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-500/10 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '8s' }} />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-gray-400/20 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '10s' }} />
+                <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-orange-200/20 blur-[120px] rounded-full animate-pulse" style={{ animationDuration: '7s' }} />
             </div>
 
             {/* Header - Centered Logo */}
-            <header className="w-full py-10 flex justify-center items-center gap-4 relative z-10">
+            <header className="w-full py-10 flex justify-center items-center gap-3 relative z-10">
                 <Image
                     src="/T_logo.png"
                     width={42}
                     height={42}
                     alt="Trendsta"
-                    className="drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]"
+                    className="drop-shadow-sm"
                 />
-                <span className="text-4xl font-extrabold text-white tracking-tighter">Trendsta</span>
+                <span className="text-3xl font-black font-sans tracking-[-0.05em] uppercase text-gray-900">Trendsta</span>
             </header>
 
             {/* Main Content */}
@@ -197,15 +197,15 @@ export default function OnboardingPage() {
                                 <div
                                     key={i}
                                     className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === currentStep
-                                        ? 'w-12 bg-gradient-to-r from-orange-400 to-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.5)]'
+                                        ? 'w-12 bg-gradient-to-r from-orange-400 to-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.3)]'
                                         : i + 1 < currentStep
-                                            ? 'w-4 bg-blue-500/50'
-                                            : 'w-4 bg-white/5'
+                                            ? 'w-4 bg-orange-500/30'
+                                            : 'w-4 bg-gray-200'
                                         }`}
                                 />
                             ))}
                         </div>
-                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">
+                        <span className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">
                             Progress: {currentStep} / {TOTAL_STEPS}
                         </span>
                     </motion.div>
@@ -225,7 +225,7 @@ export default function OnboardingPage() {
                                 animate="center"
                                 exit="exit"
                                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="glass-panel p-8 md:p-12"
+                                className="bg-white/80 backdrop-blur-md shadow-xl border border-black/5 rounded-3xl p-8 md:p-12"
                             >
                                 {currentStep === 1 && (
                                     <InstagramSlide
@@ -262,7 +262,7 @@ export default function OnboardingPage() {
                                     {currentStep > 1 ? (
                                         <button
                                             onClick={handleBack}
-                                            className="px-6 py-3.5 text-slate-400 hover:text-white font-semibold rounded-xl transition-all border border-white/5 hover:bg-white/5"
+                                            className="px-6 py-3.5 text-gray-500 hover:text-gray-900 font-semibold rounded-xl transition-all border border-gray-200 bg-white hover:bg-gray-50 shadow-sm"
                                         >
                                             Back
                                         </button>
@@ -307,10 +307,10 @@ function InstagramSlide({ value, onChange, error }: InstagramSlideProps) {
 
     return (
         <motion.div {...fadeInUp} transition={{ duration: 0.4 }}>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-[60px] leading-[0.85] font-bold tracking-[-0.05em] font-mono text-gray-900 uppercase mb-6">
                 What's your Instagram username?
             </h2>
-            <p className="text-slate-400 mb-10 text-lg leading-relaxed">
+            <p className="text-gray-500 mb-10 text-lg leading-relaxed font-medium">
                 We'll use this to analyze your content performance and identify growth opportunities.
             </p>
 
@@ -320,9 +320,9 @@ function InstagramSlide({ value, onChange, error }: InstagramSlideProps) {
                     value={value}
                     onChange={handleChange}
                     placeholder="@yourusername"
-                    className={`w-full px-6 py-5 text-xl rounded-2xl bg-white/5 border-2 outline-none transition-all duration-300 font-medium ${error
-                        ? 'border-red-500/50 focus:border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
-                        : 'border-white/10 focus:border-blue-500/50 focus:bg-white/10 shadow-inner'
+                    className={`w-full px-6 py-5 text-xl rounded-2xl bg-white border outline-none transition-all duration-300 font-medium text-gray-900 ${error
+                        ? 'border-red-400 focus:border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+                        : 'border-gray-200 focus:border-orange-400 focus:ring-4 focus:ring-orange-500/10 shadow-sm'
                         }`}
                 />
                 {error && (
@@ -363,25 +363,25 @@ function NicheSlide({
 }: NicheSlideProps) {
     return (
         <motion.div {...fadeInUp} transition={{ duration: 0.4 }}>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-[60px] leading-[0.85] font-bold tracking-[-0.05em] font-mono text-gray-900 uppercase mb-6">
                 What do you create?
             </h2>
-            <p className="text-slate-400 mb-10 text-lg leading-relaxed">
+            <p className="text-gray-500 mb-10 text-lg leading-relaxed font-medium">
                 This helps us curate relevant insights and competitor benchmarks for your space.
             </p>
 
             <div className="space-y-6">
                 {/* Niche Dropdown */}
                 <div>
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3 px-1">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 px-1">
                         Core Niche
                     </label>
                     <select
                         value={niche}
                         onChange={(e) => onNicheChange(e.target.value)}
-                        className={`w-full px-6 py-4 text-lg rounded-2xl bg-white/5 border-2 outline-none transition-all duration-300 appearance-none cursor-pointer font-medium ${errors.niche
-                            ? 'border-red-500/50 focus:border-red-500'
-                            : 'border-white/10 focus:border-blue-500/50 focus:bg-white/10'
+                        className={`w-full px-6 py-4 text-lg rounded-2xl bg-white border outline-none transition-all duration-300 appearance-none cursor-pointer font-medium text-gray-900 ${errors.niche
+                            ? 'border-red-400 focus:border-red-500'
+                            : 'border-gray-200 focus:border-orange-400 focus:ring-4 focus:ring-orange-500/10 shadow-sm'
                             }`}
                         style={{
                             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -410,16 +410,16 @@ function NicheSlide({
 
                 {/* Sub-Niche Dropdown */}
                 <div>
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3 px-1">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 px-1">
                         Sub-Niche
                     </label>
                     <select
                         value={subNiche}
                         onChange={(e) => onSubNicheChange(e.target.value)}
                         disabled={!niche}
-                        className={`w-full px-6 py-4 text-lg rounded-2xl bg-white/5 border-2 outline-none transition-all duration-300 appearance-none cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed font-medium ${errors.subNiche
-                            ? 'border-red-500/50 focus:border-red-500'
-                            : 'border-white/10 focus:border-blue-500/50 focus:bg-white/10'
+                        className={`w-full px-6 py-4 text-lg rounded-2xl bg-white border outline-none transition-all duration-300 appearance-none cursor-pointer disabled:opacity-50 disabled:bg-gray-50 disabled:cursor-not-allowed font-medium text-gray-900 ${errors.subNiche
+                            ? 'border-red-400 focus:border-red-500'
+                            : 'border-gray-200 focus:border-orange-400 focus:ring-4 focus:ring-orange-500/10 shadow-sm'
                             }`}
                         style={{
                             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -571,7 +571,7 @@ function CompletionState() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-2xl md:text-3xl font-bold text-[#1e3a5f] mb-3"
+                className="text-2xl md:text-4xl font-mono tracking-[-0.05em] font-bold uppercase text-gray-900 mb-3"
             >
                 Building Your Dashboard
             </motion.h2>
@@ -580,7 +580,7 @@ function CompletionState() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-slate-500"
+                className="text-gray-500 font-medium"
             >
                 We're configuring your personalized insights...
             </motion.p>

@@ -39,24 +39,31 @@ export default function KeyMetricsRow({ data }: KeyMetricsRowProps) {
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500/80 rounded-l-2xl shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
             </div>
 
-            {/* 2. TARGET PACE (Purple Theme) */}
-            <div className="relative overflow-hidden neu-convex p-5 md:p-6 group transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
-
-                <div className="relative z-10">
-                    <h3 className="text-[10px] font-bold text-purple-300/80 uppercase tracking-widest mb-2 truncate">Target Pace</h3>
-                    <div className="flex flex-wrap items-baseline gap-2 mb-2">
-                        <span className="text-2xl md:text-3xl font-black text-theme-primary">{data.target_pace}</span>
-                        <span className="text-xs text-theme-secondary font-medium">WPM</span>
+            {/* 2. TARGET PACE (Orange Theme) */}
+            <div className="relative overflow-hidden neu-convex p-5 md:p-6 group flex flex-col justify-between h-full transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(249,115,22,0.2)]">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                <div className="relative z-10 flex-1 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0 neu-pressed group-hover:scale-110 transition-transform">
+                            <Zap size={14} className="text-orange-500" />
+                        </div>
+                        <h3 className="text-[10px] font-bold text-orange-600/80 uppercase tracking-widest truncate">Target Pace</h3>
                     </div>
-                    <div className="flex items-center gap-2 text-purple-400">
-                        <Zap size={12} className="text-purple-400 shrink-0" />
-                        <span className="text-xs font-bold truncate">{data.pace_detail}</span>
+
+                    <div className="flex items-baseline gap-2 mb-1 pl-1">
+                        <span className="text-2xl md:text-3xl font-black text-theme-primary tracking-tighter drop-shadow-sm">{data.target_pace}</span>
+                        <span className="text-xs font-bold text-theme-secondary">WPM</span>
                     </div>
                 </div>
 
-                {/* Left Side Accent Bar */}
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500/80 rounded-l-2xl shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+                <div className="relative z-10 mt-auto pt-3 border-t border-slate-700/50">
+                    <div className="flex items-center gap-2 text-orange-500">
+                        <span className="text-[10px] font-bold uppercase tracking-wider">High Energy</span>
+                    </div>
+                </div>
+
+                {/* Left accent bar */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-orange-500/50 rounded-l-2xl shadow-[0_0_10px_rgba(249,115,22,0.3)]"></div>
             </div>
 
             {/* 3. TOP VIRAL TRIGGER (Red/Rose Theme) */}
@@ -78,23 +85,25 @@ export default function KeyMetricsRow({ data }: KeyMetricsRowProps) {
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-rose-500/80 rounded-l-2xl shadow-[0_0_10px_rgba(244,63,94,0.5)]"></div>
             </div>
 
-            {/* 4. CONTENT GAP (Blue/Cyan Theme) */}
-            <div className="relative overflow-hidden neu-convex p-5 md:p-6 group transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
+            {/* 4. DRIVING TOPIC (Gray/Black Theme) */}
+            <div className="relative overflow-hidden neu-convex p-5 md:p-6 group flex flex-col justify-between h-full transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(75,85,99,0.2)]">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gray-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
 
-                <div className="relative z-10">
-                    <h3 className="text-[10px] font-bold text-blue-300/80 uppercase tracking-widest mb-2 truncate">Content Gap</h3>
-                    <div className="mb-2">
-                        <span className="text-lg md:text-xl font-black text-theme-primary leading-tight block break-words">{data.content_gap}</span>
+                <div className="relative z-10 flex-1 flex flex-col justify-center">
+                    <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Driving Topic</h3>
+
+                    <div className="text-lg md:text-xl font-black text-theme-primary leading-tight mb-2 drop-shadow-sm truncate-2-lines">
+                        {data.content_gap}
                     </div>
-                    <div className="flex items-center gap-2 text-blue-400">
-                        <Car size={12} className="text-blue-400 shrink-0" />
-                        <span className="text-xs font-bold line-clamp-1 break-all">{data.gap_detail}</span>
+
+                    <div className="flex items-center gap-2 text-gray-500 mt-auto">
+                        <TrendingUp size={12} className="text-gray-500 shrink-0" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider truncate">High viral potential</span>
                     </div>
                 </div>
 
-                {/* Left Side Accent Bar */}
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500/80 rounded-l-2xl shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                {/* Left accent bar */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gray-600/80 rounded-l-2xl shadow-[0_0_10px_rgba(75,85,99,0.3)]"></div>
             </div>
         </div>
     );

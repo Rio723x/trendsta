@@ -16,7 +16,7 @@ interface ContentDietProps {
 }
 
 export default function ContentDietWidget({ data }: ContentDietProps) {
-    const COLORS = ['#6366f1', '#10b981', '#f59e0b']; // Indigo, Emerald, Amber
+    const COLORS = ['#f97316', '#475569', '#cbd5e1']; // Orange, Slate, Light Gray
 
     const CustomTooltip = ({ active, payload }: any) => {
         if (active && payload && payload.length) {

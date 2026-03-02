@@ -16,7 +16,7 @@ interface TopicDominanceProps {
     };
 }
 
-const COLORS = ['#6366f1', '#8b5cf6', '#a855f7', '#d946ef']; // Indigo/Purple spectrum
+const COLORS = ['#f97316', '#fb923c', '#9ca3af', '#4b5563']; // Orange/Gray spectrum
 
 const CustomContent = (props: any) => {
     const { root, depth, x, y, width, height, index, name, value, colors } = props;

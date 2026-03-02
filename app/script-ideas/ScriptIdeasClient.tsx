@@ -11,7 +11,69 @@ import { useScriptSuggestions } from "@/hooks/useResearch";
 import { transformScriptSuggestion } from "@/lib/transformers";
 import { useSession } from "@/lib/auth-client";
 import { useSocialAccount } from "@/hooks/useSocialAccount";
+import { useInView } from "framer-motion";
+import { useRef, useEffect } from "react";
 import GuestIndicator from "../components/GuestIndicator";
+
+function AnimatedCircularProgressBar({ score }: { score: number }) {
+    const [displayScore, setDisplayScore] = useState(0);
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-50px" });
+
+    useEffect(() => {
+        if (inView) {
+            let startTime: number;
+            const duration = 1200; // 1.2s to match the framer example
+            let animationFrame: number;
+
+            const animate = (currentTime: number) => {
+                if (!startTime) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Easing out cubic for smooth deceleration
+                const ease = 1 - Math.pow(1 - progress, 3);
+                setDisplayScore(Math.floor(ease * score));
+
+                if (progress < 1) {
+                    animationFrame = requestAnimationFrame(animate);
+                } else {
+                    setDisplayScore(score);
+                }
+            };
+
+            animationFrame = requestAnimationFrame(animate);
+            return () => cancelAnimationFrame(animationFrame);
+        }
+    }, [inView, score]);
+
+    const radius = 40; // match existing ScriptIdeas radius
+    const circumference = 2 * Math.PI * radius;
+
+    return (
+        <div ref={ref} className="relative w-28 h-28 mb-4">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r={radius} fill="none" stroke="#1e293b" strokeWidth="8" />
+                <motion.circle
+                    cx="50"
+                    cy="50"
+                    r={radius}
+                    fill="none"
+                    stroke="#a855f7"
+                    strokeWidth="8"
+                    strokeDasharray={circumference}
+                    initial={{ strokeDashoffset: circumference }}
+                    animate={inView ? { strokeDashoffset: circumference - (circumference * score) / 100 } : { strokeDashoffset: circumference }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    strokeLinecap="round"
+                />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-3xl font-black text-theme-primary">{displayScore}</span>
+            </div>
+        </div>
+    );
+}
 
 export default function ScriptIdeasClient() {
     const { data: rawData, isLoading, error, isNoResearch } = useScriptSuggestions();
@@ -145,21 +207,7 @@ export default function ScriptIdeasClient() {
                                                     </div>
                                                 </div>
 
-                                                <div className="relative w-28 h-28 mb-4">
-                                                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                                                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="currentColor" strokeWidth="8" className="text-slate-300 dark:text-slate-700" />
-                                                        <circle
-                                                            cx="50" cy="50" r="40" fill="transparent" stroke="#a855f7" strokeWidth="8"
-                                                            strokeDasharray={`${2 * Math.PI * 40}`}
-                                                            strokeDashoffset={`${2 * Math.PI * 40 * (1 - viralScore / 100)}`}
-                                                            strokeLinecap="round"
-                                                            className="transition-all duration-1000 ease-out"
-                                                        />
-                                                    </svg>
-                                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                                        <span className="text-3xl font-black text-theme-primary">{viralScore}</span>
-                                                    </div>
-                                                </div>
+                                                <AnimatedCircularProgressBar score={viralScore} />
 
                                                 <div className="w-full space-y-3">
                                                     <div className="text-xs font-bold text-theme-secondary mb-1">Why This Works</div>

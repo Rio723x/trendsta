@@ -23,7 +23,7 @@ export default function TopicGapsWidget({ data }: TopicGapsProps) {
             const d = payload[0].payload;
             return (
                 <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs max-w-[200px]">
-                    <p className="font-bold mb-2 text-indigo-400">{d.topic}</p>
+                    <p className="font-bold mb-2 text-orange-500">{d.topic}</p>
                     <div className="space-y-1 text-slate-300">
                         <p>Competition: {d.x_competition_level}/100</p>
                         <p>Viral Potential: {d.y_viral_potential}/100</p>
@@ -71,9 +71,9 @@ export default function TopicGapsWidget({ data }: TopicGapsProps) {
                             cursor={{ strokeDasharray: '3 3' }}
                             wrapperStyle={{ outline: 'none' }}
                         />
-                        <Scatter data={data.bubbles} fill="#6366f1" isAnimationActive={true}>
+                        <Scatter data={data.bubbles} fill="#f97316" isAnimationActive={true}>
                             {data.bubbles.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={index === 0 ? '#6366f1' : index === 1 ? '#8b5cf6' : '#a78bfa'} />
+                                <Cell key={`cell-${index}`} fill={index === 0 ? '#ea580c' : index === 1 ? '#f97316' : '#fb923c'} />
                             ))}
                         </Scatter>
                     </ScatterChart>

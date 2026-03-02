@@ -23,8 +23,8 @@ export default function ViralSweetSpotWidget({ data }: ViralSweetSpotProps) {
     const avgPoint = data.data_points.find(d => d.status !== 'user_viral' && d.status !== 'competitor_viral') || { x_duration_sec: 0, y_pace_wpm: 0 };
 
     const formatData = (metric: 'duration' | 'pace') => [
-        { name: 'You', value: metric === 'duration' ? userPoint.x_duration_sec : userPoint.y_pace_wpm, color: '#6366f1' }, // Indigo-500
-        { name: 'Comp', value: metric === 'duration' ? compPoint.x_duration_sec : compPoint.y_pace_wpm, color: '#8b5cf6' }, // Violet-500
+        { name: 'You', value: metric === 'duration' ? userPoint.x_duration_sec : userPoint.y_pace_wpm, color: '#f97316' }, // Orange-500
+        { name: 'Comp', value: metric === 'duration' ? compPoint.x_duration_sec : compPoint.y_pace_wpm, color: '#9ca3af' }, // Gray-400
         { name: 'Avg', value: metric === 'duration' ? avgPoint.x_duration_sec : avgPoint.y_pace_wpm, color: '#cbd5e1' }, // Slate-300
     ];
 
@@ -75,13 +75,13 @@ export default function ViralSweetSpotWidget({ data }: ViralSweetSpotProps) {
             </div>
 
             <div className="flex justify-center gap-4 mt-2">
-                <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-500"></div>
-                    <span className="text-[10px] text-slate-400 font-medium">You</span>
+                <div className="flex items-center gap-4">
+                    <div className="w-2.5 h-2.5 rounded-full bg-orange-500"></div>
+                    <span className="text-[10px] font-bold text-gray-600">You</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-violet-500"></div>
-                    <span className="text-[10px] text-slate-400 font-medium">Competitor</span>
+                <div className="flex items-center gap-4">
+                    <div className="w-2.5 h-2.5 rounded-full bg-gray-400"></div>
+                    <span className="text-[10px] font-bold text-gray-600">Competitor</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div>

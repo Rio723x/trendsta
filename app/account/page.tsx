@@ -219,7 +219,7 @@ export default function AccountPage() {
     const selectedPhoneCode = countryCodes.find((c) => c.code === phoneCode);
 
     return (
-        <div className="min-h-screen relative selection:bg-blue-200">
+        <div className="min-h-screen relative selection:bg-orange-200 bg-[#fafafa]">
             <Sidebar />
 
             <main
@@ -229,16 +229,15 @@ export default function AccountPage() {
                 <div className="max-w-4xl mx-auto px-6 py-8">
                     {/* Header */}
                     <div className="mb-8">
-                        <div className="flex items-center gap-2 text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
+                        <div className="flex items-center gap-2 text-sm mb-2 text-gray-500">
                             <ChevronDown className="w-4 h-4 rotate-90" />
-                            <span>Settings</span>
+                            <span className="uppercase tracking-wider font-bold">Settings</span>
                         </div>
-                        <h1 className="text-3xl font-bold text-theme-primary">Account Settings</h1>
-                        <p className="text-sm text-theme-secondary mt-1">
+                        <h1 className="text-4xl md:text-5xl font-mono tracking-[-0.05em] uppercase font-bold text-gray-900">Account Settings</h1>
+                        <p className="text-sm text-gray-500 mt-2 font-medium">
                             Manage your preferences, security, and connected tools all in one place.
                         </p>
                     </div>
-
 
 
                     {/* Content */}

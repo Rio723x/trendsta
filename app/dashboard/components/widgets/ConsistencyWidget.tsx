@@ -22,10 +22,10 @@ export default function ConsistencyWidget({ data }: ConsistencyProps) {
         if (active && payload && payload.length) {
             return (
                 <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
-                    <p className="font-bold mb-2 text-indigo-400">{label}</p>
-                    <div className="space-y-1">
-                        <p className="text-emerald-400">Viral: {payload[0].value}%</p>
-                        <p className="text-indigo-400">Average: {payload[1].value}%</p>
+                    <p className="font-bold mb-2 text-orange-500">{label}</p>
+                    <div className="space-y-1 text-slate-300">
+                        <p>Consistency: {payload[0].value}%</p>
+                        <p className="text-orange-500">Average: {payload[1].value}%</p>
                         <p className="text-slate-400">Underperform: {payload[2].value}%</p>
                     </div>
                 </div>
@@ -73,8 +73,8 @@ export default function ConsistencyWidget({ data }: ConsistencyProps) {
                             iconSize={8}
                             wrapperStyle={{ fontSize: '10px', top: -10, right: 0 }}
                         />
-                        <Bar dataKey="viral_pct" name="Viral" stackId="a" fill="#10b981" radius={[0, 0, 4, 4]} isAnimationActive={true} />
-                        <Bar dataKey="average_pct" name="Average" stackId="a" fill="#6366f1" isAnimationActive={true} />
+                        <Bar dataKey="viral_pct" name="Viral" stackId="a" fill="#f97316" radius={[0, 0, 4, 4]} isAnimationActive={true} />
+                        <Bar dataKey="average_pct" name="Average" stackId="a" fill="#9ca3af" isAnimationActive={true} />
                         <Bar dataKey="underperf_pct" name="Underperform" stackId="a" fill="#cbd5e1" radius={[4, 4, 0, 0]} isAnimationActive={true} />
                     </BarChart>
                 </ResponsiveContainer>

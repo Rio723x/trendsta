@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
 import { SidebarProvider } from "./context/SidebarContext";
