@@ -54,7 +54,7 @@ const prismaWithAutoId = new Proxy(prisma, {
 
 export const dodoPayments = new DodoPayments({
     bearerToken: process.env.DODO_PAYMENTS_API_KEY!,
-    environment: "test_mode", // or "live_mode" for production
+    environment: process.env.DODO_PAYMENTS_ENVIRONMENT! as "test_mode" | "live_mode",
 });
 
 export const auth = betterAuth({
