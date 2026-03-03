@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma";
 import path from "path";
 import fs from "fs";
+import { STELLA_BUNDLES } from "../lib/constants/products";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
@@ -14,26 +15,12 @@ async function main() {
     // ============================================
     console.log("\n💎 Seeding Stella Bundles...");
 
-    const bundles = [
-        {
-            name: "Small",
-            stellaAmount: 100,
-            price: 2900, // $29.00
-            providerProductId: "pdt_0NXuwtHgh0yJWU85Rye2P"
-        },
-        {
-            name: "Growth",
-            stellaAmount: 300,
-            price: 6900, // $69.00
-            providerProductId: "pdt_0NXuxbMQsgY22ZezqfDDL"
-        },
-        {
-            name: "Pro",
-            stellaAmount: 600,
-            price: 11900, // $119.00
-            providerProductId: "pdt_0NXuxfPPKAUuiQqNOgr7H"
-        }
-    ];
+    const bundles = STELLA_BUNDLES.map(b => ({
+        name: b.name,
+        stellaAmount: b.stellas,
+        price: b.price,
+        providerProductId: b.id
+    }));
 
     for (const b of bundles) {
         console.log(`  ↳ Upserting Stella Bundle: ${b.name}`);

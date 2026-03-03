@@ -22,6 +22,7 @@ import {
     usage,
 } from "@dodopayments/better-auth";
 import DodoPayments from "dodopayments";
+import { AUTH_PRODUCTS } from "@/lib/constants/products";
 
 // Custom Prisma wrapper that removes null/undefined id fields from create operations
 // This allows PostgreSQL's gen_random_uuid() default to take over
@@ -80,16 +81,7 @@ export const auth = betterAuth({
             createCustomerOnSignUp: true,
             use: [
                 checkout({
-                    products: [
-                        // Basic Plan - $25/month
-                        { productId: "pdt_0NWyeKym8LDKoNKB9E7do", slug: "basic-monthly" },
-                        // Creator Plan - $45/month
-                        { productId: "pdt_0NXHnRHE2WZEePYoiQlyI", slug: "creator-monthly" },
-                        // Pro Plan - $99/month
-                        { productId: "pdt_0NXHnX4Wd2XdAz47FRiof", slug: "pro-monthly" },
-                        // 100 Stellas Pack - $50 one-time
-                        { productId: "pdt_0NWvdNgnGXCcADDk4MJDH", slug: "stellas-100" },
-                    ],
+                    products: AUTH_PRODUCTS,
                     successUrl: "/dashboard/success",
                     authenticatedUsersOnly: true,
                 }),

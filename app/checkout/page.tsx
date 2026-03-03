@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SUBSCRIPTION_PLANS } from "@/lib/constants/products";
 
 /**
  * Example Checkout Component
@@ -13,7 +14,7 @@ export default function CheckoutExample() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-   
+
 
     // Example 2: Checkout Session (POST) - Recommended
     const handleSessionCheckout = async () => {
@@ -25,7 +26,7 @@ export default function CheckoutExample() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    productId: "pdt_0NWyeKym8LDKoNKB9E7do",
+                    productId: SUBSCRIPTION_PLANS[0].productId,
                     quantity: 1,
                     email: "aizendrio@gmail.com",
                     name: "Rio Chatterjee",

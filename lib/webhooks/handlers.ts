@@ -24,6 +24,7 @@ import {
     CommissionStatus,
 } from "../../generated/prisma";
 import { ensureIdempotent } from "./idempotency";
+import { getStellaBundleById } from "@/lib/constants/products";
 // Note: Prisma Decimal fields accept numeric strings directly.
 
 // ============================================
@@ -235,20 +236,13 @@ export async function handlePaymentSucceeded(payload: any) {
         }
 
         const productId = productCart[0].product_id;
-        const paymentProduct = await findPaymentProduct(productId);
-        if (!paymentProduct) return;
-
-        if (paymentProduct.type !== PaymentType.ONE_TIME) {
-            console.log("[Webhook] Product type is not ONE_TIME. Skipping.");
+        const bundleProduct = getStellaBundleById(productId);
+        if (!bundleProduct) {
+            console.error(`[Webhook] ONE_TIME product ${productId} is not a known stella bundle`);
             return;
         }
 
-        if (!paymentProduct.bundle) {
-            console.error("[Webhook] ONE_TIME product has no bundle associated");
-            return;
-        }
-
-        const stellaAmount = paymentProduct.bundle.stellaAmount;
+        const stellaAmount = bundleProduct.stellas;
 
         await prisma.$transaction(async (tx) => {
             // Create transaction record
@@ -263,7 +257,7 @@ export async function handlePaymentSucceeded(payload: any) {
                     metadata: {
                         dodoPaymentId: data.payment_id,
                         dodoProductId: productId,
-                        bundleName: paymentProduct.bundle!.name,
+                        bundleName: bundleProduct.name,
                     },
                 },
             });

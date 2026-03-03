@@ -6,6 +6,7 @@ import { Zap, Check, ChevronDown, CreditCard, Star, Sparkles } from "lucide-reac
 import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
 import { useSidebar } from "../context/SidebarContext";
+import { STELLA_BUNDLES } from "@/lib/constants/products";
 
 interface Plan {
     id: string;
@@ -616,11 +617,7 @@ export default function SubscriptionPage() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                            {[
-                                { id: 'pdt_0NXuwtHgh0yJWU85Rye2P', name: 'Small', stellas: 100, price: 2900, color: 'blue' },
-                                { id: 'pdt_0NXuxbMQsgY22ZezqfDDL', name: 'Growth', stellas: 300, price: 6900, bestValue: true, color: 'amber' },
-                                { id: 'pdt_0NXuxfPPKAUuiQqNOgr7H', name: 'Pro', stellas: 600, price: 11900, color: 'purple' }
-                            ].map((bundle) => {
+                            {STELLA_BUNDLES.map((bundle) => {
                                 const isBestValue = bundle.bestValue;
                                 return (
                                     <div

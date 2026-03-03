@@ -1,4 +1,3 @@
-
 import {DodoPayments} from "dodopayments";
 import { NextResponse } from "next/server";
 

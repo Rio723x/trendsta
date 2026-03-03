@@ -10,10 +10,10 @@ function CheckoutResultContent() {
     const searchParams = useSearchParams();
     const [countdown, setCountdown] = useState(5);
 
-    // Dodo Payments appends ?status=success on successful payment.
-    // If the param is absent or anything else, treat it as a failure/cancellation.
+    // Dodo Payments might not append ?status=success on successful payment.
+    // Since the route itself is /dashboard/success, we treat it as success unless explicitly failed.
     const status = searchParams.get("status");
-    const isSuccess = status === "success";
+    const isSuccess = status !== "failed" && status !== "cancelled";
 
     useEffect(() => {
         let count = 5;
