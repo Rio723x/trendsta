@@ -5,19 +5,26 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Sparkles, TrendingUp, Zap, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function SignUp() {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [name, setName] = useState("");
     const [error, setError] = useState<string | null>(null);
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const router = useRouter();
     const { data: session } = useSession();
 
     // Redirect to dashboard if already logged in
     useEffect(() => {
-        if (session?.user) {
+        if (session?.user && !(session.user as any).isAnonymous) {
             router.push("/dashboard");
         }
     }, [session, router]);
@@ -31,12 +38,8 @@ export default function SignUp() {
                 provider: "google",
                 callbackURL: "/dashboard",
             }, {
-                onRequest: () => {
-                    setIsLoading(true);
-                },
-                onSuccess: () => {
-                    router.push("/dashboard");
-                },
+                onRequest: () => setIsLoading(true),
+                onSuccess: () => router.push("/dashboard"),
                 onError: (ctx) => {
                     setError(ctx.error.message);
                     setIsLoading(false);
@@ -50,6 +53,12 @@ export default function SignUp() {
 
     const handleEmailSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
 
@@ -60,12 +69,8 @@ export default function SignUp() {
                 name,
                 callbackURL: "/dashboard",
             }, {
-                onRequest: () => {
-                    setIsLoading(true);
-                },
-                onSuccess: () => {
-                    router.push("/dashboard");
-                },
+                onRequest: () => setIsLoading(true),
+                onSuccess: () => router.push("/dashboard"),
                 onError: (ctx) => {
                     setError(ctx.error.message);
                     setIsLoading(false);
@@ -78,127 +83,179 @@ export default function SignUp() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-100 via-slate-50 to-white p-5">
-            {/* Centered Logo */}
-            <div className="mb-10 flex items-center gap-4">
-                <Image
-                    src="/T_logo.png"
-                    width={42}
-                    height={42}
-                    alt="Trendsta"
-                    className="drop-shadow-[0_0_10px_rgba(30,58,95,0.2)]"
-                />
-                <span className="text-4xl font-black text-[#1e3a5f] tracking-tighter">Trendsta</span>
+        <div data-theme="dark" className="min-h-screen relative flex flex-col lg:flex-row bg-[#020617] text-white overflow-x-hidden">
+            {/* Global Frosted Background Effects */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-orange-600/10 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '8s' }} />
+                <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full animate-pulse" style={{ animationDuration: '10s' }} />
+                <div className="absolute inset-0 backdrop-blur-[1px] bg-black/10" />
             </div>
 
-            {/* Card */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-10 max-w-md w-full shadow-xl shadow-slate-200/50">
-                <div className="text-center mb-8">
-                    <h1 className="text-2xl font-bold text-[#1e3a5f] mb-2">Create your account</h1>
-                    <p className="text-sm text-slate-500">
-                        Get AI-powered insights to grow your content
+            {/* Left Panel - Branding */}
+            <div className="hidden lg:flex lg:w-1/2 relative z-10 items-center justify-center p-12 border-r border-white/5 backdrop-blur-[2px]">
+                {/* Branding Content */}
+                <div className="relative text-center max-w-lg flex flex-col items-center">
+                    <div className="flex items-center gap-5 mb-16 group">
+                        <Image
+                            src="/T_logo.png"
+                            width={54}
+                            height={54}
+                            alt="Trendsta"
+                            className="drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <span className="text-6xl font-black text-white tracking-tighter">Trendsta</span>
+                    </div>
+
+                    <h2 className="text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
+                        Start Growing <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500">Today</span>
+                    </h2>
+                    <p className="text-slate-400 text-xl leading-relaxed font-medium px-4">
+                        Join thousands of creators using AI-powered insights to stay ahead of the curve and create viral content.
                     </p>
                 </div>
+            </div>
 
-                {error && (
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-6 text-red-600 text-sm">
-                        {error}
-                    </div>
-                )}
-
-                <button
-                    onClick={handleGoogleSignIn}
-                    disabled={isLoading}
-                    className={`w-full flex items-center justify-center gap-3 px-6 py-3.5 text-base font-medium text-slate-700 bg-white border-2 border-slate-200 rounded-xl transition-all duration-200 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98]"
-                        }`}
+            {/* Right Panel - Responsive Glass Form */}
+            <div className="flex-1 min-h-screen relative z-10 flex items-center justify-center p-4 sm:p-8 lg:p-12">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="w-full max-w-md md:max-w-[480px] glass-panel !bg-black/20 !backdrop-blur-[20px] !border-white/10 p-8 sm:p-10 !rounded-[2.5rem] shadow-2xl"
                 >
-                    {isLoading ? (
-                        <div className="w-5 h-5 border-2 border-slate-300 border-t-[#f97316] rounded-full animate-spin"></div>
-                    ) : (
-                        <svg className="w-5 h-5" viewBox="0 0 24 24">
-                            <path
-                                fill="#4285F4"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                            />
-                            <path
-                                fill="#34A853"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                            />
-                            <path
-                                fill="#FBBC05"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                            />
-                            <path
-                                fill="#EA4335"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                            />
-                        </svg>
+                    {/* Brand Header (Mobile) */}
+                    <div className="lg:hidden flex items-center justify-center gap-3 mb-12">
+                        <Image src="/T_logo.png" alt="Trendsta" width={32} height={32} className="drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
+                        <span className="text-3xl font-black text-white tracking-tighter">Trendsta</span>
+                    </div>
+
+                    <div className="mb-8 text-center sm:text-left">
+                        <h1 className="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight">Create Account</h1>
+                        <p className="text-slate-400 text-base sm:text-lg font-medium">Get AI-powered insights to grow your content.</p>
+                    </div>
+
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 mb-6 text-red-400 text-sm font-semibold flex items-center gap-3"
+                        >
+                            <div className="min-w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                            {error}
+                        </motion.div>
                     )}
-                    <span>{isLoading ? "Signing in..." : "Continue with Google"}</span>
-                </button>
 
-                <div className="my-6 flex items-center justify-center relative">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-slate-200"></div>
-                    </div>
-                    <div className="relative z-10 bg-white px-4 text-xs text-slate-400 uppercase tracking-wider">
-                        Or continue with email
-                    </div>
-                </div>
+                    <form onSubmit={handleEmailSignUp} className="space-y-5">
+                        <div>
+                            <label className="block text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Full Name</label>
+                            <input
+                                type="text"
+                                placeholder="John Doe"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full px-5 py-3.5 rounded-xl bg-white/5 border-2 border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/10 transition-all font-medium text-sm sm:text-base"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Email Address</label>
+                            <input
+                                type="email"
+                                placeholder="you@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-5 py-3.5 rounded-xl bg-white/5 border-2 border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/10 transition-all font-medium text-sm sm:text-base"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Secure Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full px-5 py-3.5 pr-12 rounded-xl bg-white/5 border-2 border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/10 transition-all font-medium text-sm sm:text-base"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
 
-                <form onSubmit={handleEmailSignUp} className="space-y-4">
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Full Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#1e3a5f] focus:bg-white transition-all duration-200"
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="email"
-                            placeholder="Email address"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#1e3a5f] focus:bg-white transition-all duration-200"
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#1e3a5f] focus:bg-white transition-all duration-200"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className={`w-full py-3.5 rounded-xl font-semibold bg-gradient-to-r from-[#f97316] to-[#ea580c] text-white shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-300 active:scale-[0.98] transition-all duration-200 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-105"
-                            }`}
-                    >
-                        {isLoading ? "Creating account..." : "Create account"}
-                    </button>
-                </form>
+                        <div>
+                            <label className="block text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Confirm Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="w-full px-5 py-3.5 pr-12 rounded-xl bg-white/5 border-2 border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/10 transition-all font-medium text-sm sm:text-base"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
 
-                <p className="mt-6 text-xs text-center text-slate-500 leading-relaxed">
-                    By continuing, you agree to our{" "}
-                    <a href="/terms" className="text-[#1e3a5f] hover:text-[#f97316] transition-colors font-medium">Terms of Service</a>
-                    {" "}and{" "}
-                    <a href="/privacy" className="text-[#1e3a5f] hover:text-[#f97316] transition-colors font-medium">Privacy Policy</a>
-                </p>
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-4 mt-2 rounded-2xl font-black text-white bg-gradient-to-r from-orange-500 to-orange-600 shadow-[0_8px_20px_rgba(234,88,12,0.2)] hover:shadow-[0_12px_30px_rgba(234,88,12,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest border border-white/10 text-sm sm:text-base"
+                        >
+                            {isLoading ? "Creating..." : "Create Account"}
+                        </button>
+                    </form>
 
-                <div className="mt-8 pt-6 border-t border-slate-200 text-center">
-                    <p className="text-sm text-slate-500">
-                        Already have an account?{" "}
-                        <Link href="/signin" className="text-[#f97316] font-semibold hover:text-[#ea580c] transition-colors">
-                            Sign in
-                        </Link>
+                    <p className="mt-5 text-xs text-center text-slate-500 leading-relaxed font-medium">
+                        By continuing, you agree to our{" "}
+                        <a href="/terms" className="text-white hover:text-orange-400 transition-colors font-bold tracking-widest uppercase text-[10px]">Terms</a>
+                        {" "}and{" "}
+                        <a href="/privacy" className="text-white hover:text-orange-400 transition-colors font-bold tracking-widest uppercase text-[10px]">Privacy Policy</a>
                     </p>
-                </div>
+
+                    {/* Divider */}
+                    <div className="my-8 flex items-center gap-4">
+                        <div className="flex-1 h-px bg-white/5" />
+                        <span className="text-[10px] text-slate-600 font-black uppercase tracking-[0.2em]">Or continue with</span>
+                        <div className="flex-1 h-px bg-white/5" />
+                    </div>
+
+                    {/* Social Login */}
+                    <div className="flex justify-center">
+                        <button
+                            onClick={handleGoogleSignIn}
+                            disabled={isLoading}
+                            className="w-full py-3.5 sm:py-4 rounded-2xl border-2 border-white/10 flex items-center justify-center gap-3 hover:bg-white/5 transition-all disabled:opacity-50 font-bold text-white text-sm sm:text-base"
+                        >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            Google
+                        </button>
+                    </div>
+
+                    {/* Sign Up Link */}
+                    <div className="mt-8 text-center">
+                        <p className="text-slate-500 font-medium text-sm">
+                            Already have an account?{" "}
+                            <Link href="/signin" className="text-orange-400 font-black hover:text-orange-300 transition-colors uppercase tracking-widest ml-1">
+                                Sign In
+                            </Link>
+                        </p>
+                    </div>
+                </motion.div>
             </div>
         </div>
     );

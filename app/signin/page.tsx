@@ -5,13 +5,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, TrendingUp, Zap } from "lucide-react";
+import { Sparkles, TrendingUp, Zap, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function SignIn() {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const { data: session } = useSession();
@@ -154,13 +155,22 @@ export default function SignIn() {
                         </div>
                         <div>
                             <label className="block text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Secure Password</label>
-                            <input
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-5 py-3.5 sm:py-4 rounded-2xl bg-white/5 border-2 border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/10 transition-all font-medium text-sm sm:text-base"
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full px-5 py-3.5 sm:py-4 pr-12 rounded-2xl bg-white/5 border-2 border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 focus:bg-white/10 transition-all font-medium text-sm sm:text-base"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex justify-end pt-1">

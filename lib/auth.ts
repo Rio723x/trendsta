@@ -23,6 +23,7 @@ import {
 } from "@dodopayments/better-auth";
 import DodoPayments from "dodopayments";
 import { AUTH_PRODUCTS } from "@/lib/constants/products";
+import { sendPasswordResetEmail, sendWelcomeEmail } from "@/lib/email/resend";
 
 // Custom Prisma wrapper that removes null/undefined id fields from create operations
 // This allows PostgreSQL's gen_random_uuid() default to take over
@@ -62,7 +63,13 @@ export const auth = betterAuth({
     database: prismaAdapter(prismaWithAutoId as typeof prisma, {
         provider: "postgresql",
     }),
-    emailAndPassword: { enabled: true },
+    emailAndPassword: {
+        enabled: true,
+        sendResetPassword: async ({ user, url, token }, request) => {
+            // Send the actual reset email via Resend
+            await sendPasswordResetEmail(user.email, url);
+        }
+    },
     socialProviders: {
 
         google: {
@@ -74,6 +81,16 @@ export const auth = betterAuth({
         database: {
             generateId: false, // Let PostgreSQL generate UUIDs via gen_random_uuid()
         },
+    },
+    databaseHooks: {
+        user: {
+            create: {
+                after: async (user) => {
+                    // Send welcome email asynchronously so it doesn't block the sign-up request
+                    sendWelcomeEmail(user.email, user.name || "Trendsta User").catch(console.error);
+                }
+            }
+        }
     },
     plugins: [
         dodopayments({

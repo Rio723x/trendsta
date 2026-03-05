@@ -65,6 +65,16 @@ export default function AccountPage() {
     const router = useRouter();
     const { data: session } = useSession();
 
+    const isGuest = !session?.user;
+
+    // Redirect guest to signin immediately
+    useEffect(() => {
+        // give authClient time to load, if we don't have a session at all, we can't redirect instantly
+        if (session !== undefined && isGuest) {
+            router.push("/signin");
+        }
+    }, [isGuest, session, router]);
+
     const [firstName, setFirstName] = useState("John");
     const [lastName, setLastName] = useState("Doe");
     const [email, setEmail] = useState("john.doe@example.com");
@@ -427,21 +437,23 @@ export default function AccountPage() {
                         </div>
 
                         {/* ── Danger Zone (Logout) ─────────────────────────────────── */}
-                        <div className="glass-panel overflow-hidden border border-red-500/20 mt-8 mb-8">
-                            <div className="flex flex-col sm:flex-row items-center justify-between p-5 gap-4">
-                                <div>
-                                    <h2 className="text-base font-semibold text-theme-primary">Account Session</h2>
-                                    <p className="text-sm text-theme-secondary">Log out of your current session on this device.</p>
+                        {!isGuest && (
+                            <div className="glass-panel overflow-hidden border border-red-500/20 mt-8 mb-8">
+                                <div className="flex flex-col sm:flex-row items-center justify-between p-5 gap-4">
+                                    <div>
+                                        <h2 className="text-base font-semibold text-theme-primary">Account Session</h2>
+                                        <p className="text-sm text-theme-secondary">Log out of your current session on this device.</p>
+                                    </div>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-semibold hover:bg-red-500 hover:text-white transition-colors shadow-sm shrink-0"
+                                    >
+                                        <LogOut size={18} />
+                                        Logout
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={handleLogout}
-                                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-red-500/10 text-red-500 rounded-xl font-semibold hover:bg-red-500 hover:text-white transition-colors shadow-sm shrink-0"
-                                >
-                                    <LogOut size={18} />
-                                    Logout
-                                </button>
                             </div>
-                        </div>
+                        )}
 
                     </div>
                 </div>
