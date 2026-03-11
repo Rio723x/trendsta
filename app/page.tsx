@@ -336,7 +336,7 @@ function Hero() {
           {/* Punchline under buttons */}
           <div className="max-w-[500px] md:max-w-[700px] text-left mt-6">
             <p className="text-xl md:text-3xl text-gray-200 leading-[1.3] font-medium tracking-tight">
-              Your personal AI consultant for growth. Custom AI solutions, built for the content innovators of tomorrow.
+              Your AI consultant for content growth.
             </p>
           </div>
 
@@ -896,7 +896,7 @@ function HoverListFeaturesSection() {
           </ShutterReveal>
         </div>
         <p className="text-lg md:text-2xl lg:text-3xl text-gray-500 leading-tight font-medium max-w-2xl mt-4 md:mt-6 px-2">
-          In the content wilderness,<br className="hidden sm:block" />creators find our AI tools truly invaluable.
+          Everything you need to grow faster.
         </p>
       </div>
 
@@ -907,12 +907,12 @@ function HoverListFeaturesSection() {
           textSide="left"
           badge="Analytics Dashboard"
           title={<><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-400">Real-time</span> data,{" "}optimised for you</>}
-          description="Your personal growth command centre. Trendsta pulls live data from your niche, analyses every metric that matters, and surfaces the exact actions that will scale your channel."
+          description="Live niche data, analysed automatically. Posting time, content gaps, and competitor pace — surfaced every session."
           bullets={[
-            "Picks up real-time trend & competitor data every session",
-            "Analyses your pace, hook style, and content gaps automatically",
-            "Gives you the best posting time, topic, and audio recommendations",
-            "Deep-dive into any insight with one click â€” know more, grow faster",
+            "Real-time trend & competitor data, every session",
+            "Pace, hook style, and content gap analysis",
+            "Best posting time, topic, and audio — instantly",
+            "One-click deep-dives into any insight",
           ]}
           graphic={
             <DashboardGraphic />
@@ -927,12 +927,12 @@ function HoverListFeaturesSection() {
           textSide="right"
           badge="AI Consultant"
           title={<>Your personal<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">AI strategist</span></>}
-          description="Go beyond dashboards. Have a real conversation with your data. Ask any growth question and get a personalised answer built from your channel's unique history and real-time trends."
+          description="Chat with your data. Ask any growth question and get a personalised answer built on your channel history and live trends."
           bullets={[
-            "Context-aware â€” understands your specific niche and history",
-            "Proactive Strategy â€” suggests your next move before you ask",
-            "Real-time trend correlation mapped to your engagement",
-            "Six specialised modes: Trending, Viral Ideas, Competitors, and more",
+            "Knows your niche, history, and competitors",
+            "Proactively suggests your next move",
+            "Live trends mapped to your engagement",
+            "6 modes: Trending, Viral Ideas, Competitors & more",
           ]}
           graphic={
             <>
@@ -1001,12 +1001,12 @@ function HoverListFeaturesSection() {
           textSide="left"
           badge="Twitter / X Insights"
           title={<>Spot trends<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500">before they peak</span></>}
-          description="Monitor the Twitter/X pulse in real time. Track viral hashtags, top creators in your niche, and audience sentiment â€” then ride the wave with perfectly timed content."
+          description="Track viral hashtags, top creators, and audience sentiment in real time — so you always post at the right moment."
           bullets={[
-            "Real-time trending hashtags with volume & velocity data",
-            "Top tweet analysis: hooks, engagement patterns, and reach",
-            "Audience sentiment breakdown â€” positive, neutral, negative",
-            "Competitor growth tracking mapped day-by-day",
+            "Trending hashtags with volume & velocity",
+            "Top tweet hook and engagement analysis",
+            "Sentiment breakdown: positive, neutral, negative",
+            "Day-by-day competitor growth tracking",
           ]}
           graphic={
             <div className="relative z-20 rounded-2xl overflow-hidden shadow-2xl border border-black/10 bg-[#0d0d0d]">
@@ -1028,7 +1028,7 @@ function HoverListFeaturesSection() {
                         <div>
                           <p className="font-bold text-white text-xs">{t.name}</p>
                           <div className="flex items-center gap-1 text-gray-500 text-[10px]">
-                            <span>{t.handle}</span><span>â€¢</span>
+                            <span>{t.handle}</span><span>·</span>
                             <span className="flex items-center gap-0.5"><Zap size={8} className="text-gray-500" /> {t.score}</span>
                           </div>
                         </div>
@@ -1064,12 +1064,12 @@ function HoverListFeaturesSection() {
           textSide="right"
           badge="Script Ideas"
           title={<>Never run out<br />of <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">viral ideas</span></>}
-          description="Trendsta generates ready-to-use script ideas scored by viral potential, built on real-time trend data. Each idea comes with a hook, payoff, and audio recommendation."
+          description="AI-generated scripts scored for viral potential, each with a hook, payoff, and audio recommendation — ready to shoot."
           bullets={[
-            "Scored 0â€“100 for viral potential based on your niche data",
-            "Complete hook + payoff structure for every idea",
-            "Audio vibe and target length recommendations included",
-            "Pinpoints market gaps your competitors are missing",
+            "Scored 0–100 for viral potential",
+            "Hook + payoff structure included",
+            "Audio vibe and target length per idea",
+            "Flags gaps your competitors are missing",
           ]}
           graphic={
             <ScriptIdeas3DCards />
@@ -1084,12 +1084,12 @@ function HoverListFeaturesSection() {
           textSide="left"
           badge="Instagram Insights"
           title={<>Know exactly what<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400">works on Instagram</span></>}
-          description="Trendsta dissects your Instagram niche in real time — analysing hashtags, content types, and engagement patterns so you post with precision, not guesswork."
+          description="Real-time Instagram analysis — hashtags, content types, and engagement patterns so you post with precision, not guesswork."
           bullets={[
-            "Hashtag velocity: which tags drive reach vs community",
-            "Content-type breakdown: reels vs carousels vs stories",
-            "Speaking pace benchmarks vs top creators in your niche",
-            "Actionable recommendations tied directly to data signals",
+            "Hashtag velocity: reach vs community",
+            "Reels vs carousels vs stories breakdown",
+            "Pace benchmarks vs top creators",
+            "Recommendations tied to live data",
           ]}
           graphic={<InstagramInsights3DCards />}
         />
@@ -1102,12 +1102,12 @@ function HoverListFeaturesSection() {
           textSide="right"
           badge="Competitor Analysis"
           title={<>Reverse-engineer<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">your competition</span></>}
-          description="See exactly why your top competitors are winning. Trendsta decodes their formats, hooks, and narrative strategies so you can adopt what works and fill what they miss."
+          description="See exactly why your competitors are winning — Trendsta decodes their hooks and formats so you can adopt what works."
           bullets={[
-            "Frame-by-frame breakdown of competitor storytelling style",
-            "Pace, density, and emotional hook analysis",
-            "Surface content formats your rivals haven't tried yet",
-            "Actionable copy-and-improve strategies for each competitor",
+            "Storytelling style and hook breakdown",
+            "Pace, density, and emotional trigger analysis",
+            "Formats your rivals haven't tried yet",
+            "Copy-and-improve strategy per competitor",
           ]}
           graphic={<CompetitorAnalysis3DCards />}
         />
@@ -1495,7 +1495,7 @@ function FAQSection() {
                   {faq.question}
                 </span>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${openIndex === index ? "bg-indigo-500/20 text-indigo-400" : "bg-black/5 text-gray-500"}`}>
-                  {openIndex === index ? <X size={16} className="rotate-45" /> : <X size={16} className="rotate-0" />}
+                  {openIndex === index ? <X size={16} className="rotate-0" /> : <X size={16} className="rotate-45" />}
                   {/* Using X rotate logic or Plus/Minus if imported. Using X since it is imported and Plus/Minus arent */}
                 </div>
               </button>

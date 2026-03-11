@@ -50,6 +50,7 @@ export default function OnboardingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [direction, setDirection] = useState(0);
     const [formData, setFormData] = useState<OnboardingFormData>(INITIAL_FORM_DATA);
+    const [customSubNiche, setCustomSubNiche] = useState('');
     const [isCompleting, setIsCompleting] = useState(false);
     const [errors, setErrors] = useState<Partial<OnboardingFormData>>({});
     const [apiError, setApiError] = useState<string>('');
@@ -95,6 +96,9 @@ export default function OnboardingPage() {
             if (!formData.subNiche) {
                 newErrors.subNiche = 'Please select your sub-niche';
             }
+            if (formData.subNiche === 'other' && !customSubNiche.trim()) {
+                newErrors.subNiche = 'Please describe your sub-niche';
+            }
         }
 
         setErrors(newErrors);
@@ -128,13 +132,14 @@ export default function OnboardingPage() {
         setApiError('');
 
         try {
+            const finalSubNiche = formData.subNiche === 'other' ? customSubNiche.trim() : formData.subNiche;
             const response = await fetch('/api/user/onboarding', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     instagramUsername: formData.instagramUsername,
                     niche: formData.niche,
-                    subNiche: formData.subNiche,
+                    subNiche: finalSubNiche,
                 }),
             });
 
@@ -238,9 +243,11 @@ export default function OnboardingPage() {
                                     <NicheSlide
                                         niche={formData.niche}
                                         subNiche={formData.subNiche}
+                                        customSubNiche={customSubNiche}
                                         availableSubNiches={availableSubNiches}
                                         onNicheChange={(val) => updateField('niche', val)}
                                         onSubNicheChange={(val) => updateField('subNiche', val)}
+                                        onCustomSubNicheChange={setCustomSubNiche}
                                         errors={{ niche: errors.niche, subNiche: errors.subNiche }}
                                     />
                                 )}
@@ -347,18 +354,22 @@ function InstagramSlide({ value, onChange, error }: InstagramSlideProps) {
 interface NicheSlideProps {
     niche: string;
     subNiche: string;
+    customSubNiche: string;
     availableSubNiches: { value: string; label: string }[];
     onNicheChange: (value: string) => void;
     onSubNicheChange: (value: string) => void;
+    onCustomSubNicheChange: (value: string) => void;
     errors: { niche?: string; subNiche?: string };
 }
 
 function NicheSlide({
     niche,
     subNiche,
+    customSubNiche,
     availableSubNiches,
     onNicheChange,
     onSubNicheChange,
+    onCustomSubNicheChange,
     errors,
 }: NicheSlideProps) {
     return (
@@ -436,7 +447,21 @@ function NicheSlide({
                                 {opt.label}
                             </option>
                         ))}
+                        {niche && (
+                            <option value="other" className="bg-[#1a1f2e]">Other (specify below)</option>
+                        )}
                     </select>
+                    {subNiche === 'other' && (
+                        <motion.input
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            type="text"
+                            value={customSubNiche}
+                            onChange={(e) => onCustomSubNicheChange(e.target.value)}
+                            placeholder="e.g. AI-powered no-code tools"
+                            className="mt-3 w-full px-6 py-4 text-lg rounded-2xl bg-white border border-gray-200 outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-500/10 shadow-sm font-medium text-gray-900"
+                        />
+                    )}
                     {errors.subNiche && (
                         <motion.p
                             initial={{ opacity: 0, y: -5 }}

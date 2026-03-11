@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import MobileHeader from "../components/MobileHeader";
 import NoResearchState from "../components/NoResearchState";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";  
 import { StatsOverview } from "./components/StatsOverview";
 import ResearchSummaryView from "./components/ResearchSummaryView";
 import { ScriptIdeasLink, QuickActions } from "./components/DashboardCards";
@@ -101,21 +101,15 @@ export default function DashboardClient() {
 
     // Prepare Metrics Data
     const metricsData = {
-        best_time: summaryData.posting_strategy?.best_times?.[0] || summaryData.posting_strategy?.bestPostingTimes?.[0] || "10:00 AM",
+        best_time: summaryData.posting_strategy?.best_times?.[0] || summaryData.posting_strategy?.bestPostingTimes?.[0],
         best_days: (summaryData.posting_strategy?.best_days || summaryData.posting_strategy?.bestPostingDays || []).join(" & "),
-        target_pace: "190+",
-        pace_detail: "High Energy Required",
-        viral_trigger: summaryData.viral_triggers?.[0]?.trigger || "Unknown",
-        trigger_detail: "VS Competitor",
-        content_gap: summaryData.content_gap?.gap || "Unknown",
-        gap_detail: summaryData.content_gap?.opportunity || "High Demand",
+        target_pace: summaryData.execution_plan?.production_spec_sheet?.target_wpm || summaryData.execution_plan?.productionSpecSheet?.targetWpm,
+        pace_detail: summaryData.execution_plan?.production_spec_sheet?.audio_mood || summaryData.execution_plan?.productionSpecSheet?.audioMood,
+        viral_trigger: summaryData.viral_triggers?.[0]?.trigger,
+        trigger_detail: summaryData.viral_triggers?.[0]?.why_works,
+        content_gap: summaryData.content_gap?.gap,
+        gap_detail: summaryData.content_gap?.opportunity,
     };
-
-    // Override with specific data if available
-    if (summaryData.execution_plan?.production_spec_sheet?.target_wpm || summaryData.execution_plan?.productionSpecSheet?.targetWpm) {
-        const targetWpm = summaryData.execution_plan?.production_spec_sheet?.target_wpm || summaryData.execution_plan?.productionSpecSheet?.targetWpm;
-        metricsData.target_pace = typeof targetWpm === 'string' ? targetWpm.split(' ')[0] : String(targetWpm);
-    }
 
     // Show loading state
     if (isLoading && !isGuest) {

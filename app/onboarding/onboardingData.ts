@@ -35,6 +35,7 @@ export const SUB_NICHE_MAPPING: SubNicheMapping = {
         { value: 'developer-tools', label: 'Developer Tools & Productivity' },
         { value: 'cybersecurity', label: 'Cybersecurity & Privacy' },
         { value: 'hardware-gadgets', label: 'Hardware & Gadgets' },
+        { value: 'blockchain-web3', label: 'Blockchain & Web3' },
     ],
     'business-startups': [
         { value: 'entrepreneurship', label: 'Entrepreneurship & Founders' },
@@ -109,12 +110,12 @@ export interface OnboardingFormData {
     instagramUsername: string;
     niche: string;
     subNiche: string;
-   
+
 }
 
 export const INITIAL_FORM_DATA: OnboardingFormData = {
     instagramUsername: '',
     niche: '',
     subNiche: '',
-   
+
 };

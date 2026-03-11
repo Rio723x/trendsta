@@ -27,7 +27,7 @@ export default function KeyMetricsRow({ data }: KeyMetricsRowProps) {
                     <h3 className="text-[10px] font-bold text-emerald-300/80 uppercase tracking-widest mb-2 truncate">Best Time to Post</h3>
                     <div className="flex flex-wrap items-baseline gap-2 mb-2">
                         <span className="text-2xl md:text-3xl font-black text-theme-primary">{data.best_time}</span>
-                        <span className="text-xs text-theme-secondary font-medium">(2 PM)</span>
+                        {/* <span className="text-xs text-theme-secondary font-medium">(2 PM)</span> */}
                     </div>
                     <div className="flex items-center gap-2 text-emerald-400">
                         <Clock size={12} className="text-emerald-400 shrink-0" />
@@ -58,7 +58,7 @@ export default function KeyMetricsRow({ data }: KeyMetricsRowProps) {
 
                 <div className="relative z-10 mt-auto pt-3 border-t border-slate-700/50">
                     <div className="flex items-center gap-2 text-orange-500">
-                        <span className="text-[10px] font-bold uppercase tracking-wider">High Energy</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider">{data.pace_detail}</span>
                     </div>
                 </div>
 
@@ -75,9 +75,9 @@ export default function KeyMetricsRow({ data }: KeyMetricsRowProps) {
                     <div className="mb-2">
                         <span className="text-lg md:text-xl font-black text-theme-primary leading-tight block break-words">{data.viral_trigger}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-rose-400">
-                        <AlertTriangle size={12} className="text-rose-400 shrink-0" />
-                        <span className="text-xs font-bold line-clamp-1 break-all">{data.trigger_detail}</span>
+                    <div className="flex items-start gap-2 text-rose-400">
+                        <AlertTriangle size={12} className="text-rose-400 shrink-0 mt-0.5" />
+                        <span className="text-[10px] font-semibold leading-snug line-clamp-3">{data.trigger_detail}</span>
                     </div>
                 </div>
 
@@ -96,9 +96,9 @@ export default function KeyMetricsRow({ data }: KeyMetricsRowProps) {
                         {data.content_gap}
                     </div>
 
-                    <div className="flex items-center gap-2 text-gray-500 mt-auto">
-                        <TrendingUp size={12} className="text-gray-500 shrink-0" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider truncate">High viral potential</span>
+                    <div className="flex items-start gap-2 text-gray-500 mt-auto">
+                        <TrendingUp size={12} className="text-gray-500 shrink-0 mt-0.5" />
+                        <span className="text-[10px] font-semibold uppercase tracking-wide leading-snug line-clamp-3">{data.gap_detail}</span>
                     </div>
                 </div>
 

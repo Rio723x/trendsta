@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { useSidebar } from "../context/SidebarContext";
 import { useRouter } from "next/navigation";
@@ -36,18 +36,6 @@ interface Subscription {
     };
 }
 
-const countryCodes = [
-    { code: "+1", country: "US", flag: "🇺🇸" },
-    { code: "+1", country: "CA", flag: "🇨🇦" },
-    { code: "+44", country: "UK", flag: "🇬🇧" },
-    { code: "+91", country: "IN", flag: "🇮🇳" },
-    { code: "+86", country: "CN", flag: "🇨🇳" },
-    { code: "+81", country: "JP", flag: "🇯🇵" },
-    { code: "+49", country: "DE", flag: "🇩🇪" },
-    { code: "+33", country: "FR", flag: "🇫🇷" },
-    { code: "+61", country: "AU", flag: "🇦🇺" },
-    { code: "+971", country: "AE", flag: "🇦🇪" },
-];
 
 const chevronSvg = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`;
 const selectBg = {
@@ -63,23 +51,20 @@ const labelCls = "block text-sm font-medium text-theme-primary mb-2";
 export default function AccountPage() {
     const { isCollapsed } = useSidebar();
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, isPending } = useSession();
 
     const isGuest = !session?.user;
 
-    // Redirect guest to signin immediately
+    // Wait for auth to load before deciding to redirect
     useEffect(() => {
-        // give authClient time to load, if we don't have a session at all, we can't redirect instantly
-        if (session !== undefined && isGuest) {
+        if (!isPending && isGuest) {
             router.push("/signin");
         }
-    }, [isGuest, session, router]);
+    }, [isPending, isGuest, router]);
 
     const [firstName, setFirstName] = useState("John");
     const [lastName, setLastName] = useState("Doe");
     const [email, setEmail] = useState("john.doe@example.com");
-    const [phoneCode, setPhoneCode] = useState("+1");
-    const [phoneNumber, setPhoneNumber] = useState("555-0123");
     const [isSaving, setIsSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
@@ -87,6 +72,7 @@ export default function AccountPage() {
     const [instagramUsername, setInstagramUsername] = useState("");
     const [niche, setNiche] = useState("");
     const [subNiche, setSubNiche] = useState("");
+    const [customSubNiche, setCustomSubNiche] = useState('');
 
     const [autoCompetitors, setAutoCompetitors] = useState<string[]>([]);
     const [autoNewCompetitor, setAutoNewCompetitor] = useState("");
@@ -95,8 +81,6 @@ export default function AccountPage() {
     const [autoCaptionLanguage, setAutoCaptionLanguage] = useState("English");
 
     const [currentSubscription, setCurrentSubscription] = useState<Subscription | null>(null);
-    const [showPhoneCodeDropdown, setShowPhoneCodeDropdown] = useState(false);
-    const phoneDropdownRef = useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         if (session?.user) {
@@ -108,7 +92,17 @@ export default function AccountPage() {
                 .then((r) => r.json())
                 .then((data) => {
                     if (data.niche) setNiche(data.niche);
-                    if (data.subNiche) setSubNiche(data.subNiche);
+                    if (data.subNiche) {
+                        // If the saved sub-niche isn't in the standard list, treat it as a custom value
+                        const allSubNiches = Object.values(SUB_NICHE_MAPPING).flat();
+                        const isKnown = allSubNiches.some(o => o.value === data.subNiche);
+                        if (isKnown) {
+                            setSubNiche(data.subNiche);
+                        } else {
+                            setSubNiche('other');
+                            setCustomSubNiche(data.subNiche);
+                        }
+                    }
                     if (data.instagramUsername) setInstagramUsername(data.instagramUsername);
                     if (data.automationSettings) {
                         setAutoCompetitors(data.automationSettings.competitors || []);
@@ -121,14 +115,6 @@ export default function AccountPage() {
         }
     }, [session]);
 
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (phoneDropdownRef.current && !phoneDropdownRef.current.contains(e.target as Node))
-                setShowPhoneCodeDropdown(false);
-        };
-        if (showPhoneCodeDropdown) document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [showPhoneCodeDropdown]);
 
     useEffect(() => {
         fetch("/api/subscription/current")
@@ -152,11 +138,12 @@ export default function AccountPage() {
         setIsSaving(true);
         setSaveError(null);
         try {
+            const finalSubNiche = subNiche === 'other' ? customSubNiche.trim() : subNiche;
             const res = await fetch("/api/user/update", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    firstName, lastName, phoneNumber, niche, subNiche, instagramUsername,
+                    firstName, lastName, niche, subNiche: finalSubNiche, instagramUsername,
                     automationSettings: {
                         competitors: autoCompetitors,
                         writingStyle: autoWritingStyle,
@@ -178,8 +165,6 @@ export default function AccountPage() {
         }
     };
 
-    const selectedPhoneCode = countryCodes.find((c) => c.code === phoneCode);
-
     const handleLogout = async () => {
         await authClient.signOut({
             fetchOptions: {
@@ -189,6 +174,14 @@ export default function AccountPage() {
             }
         });
     };
+
+    if (isPending) {
+        return (
+            <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-gradient)" }}>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500" />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen relative selection:bg-orange-200" style={{ background: "var(--bg-gradient)" }}>
@@ -202,6 +195,7 @@ export default function AccountPage() {
                 >
                     <ArrowLeft size={18} />
                 </Link>
+
                 <div className="flex items-center gap-2 flex-1">
                     <Image src="/T_logo.png" alt="Trendsta" width={24} height={24} className="object-contain" />
                     <span className="text-base font-bold text-theme-primary tracking-tight">Account Settings</span>
@@ -232,7 +226,7 @@ export default function AccountPage() {
                     <div className="space-y-5">
 
                         {/* ── Personal Information ───────────────────────────────── */}
-                        <div className="glass-panel overflow-hidden">
+                        <div className="glass-panel">
                             <div className="px-5 py-4 border-b border-white/10">
                                 <h2 className="text-base font-semibold text-theme-primary">Personal Information</h2>
                                 <p className="text-sm text-theme-secondary">Edit your personal information</p>
@@ -247,44 +241,13 @@ export default function AccountPage() {
                                         <label className={labelCls}>Last name <span className="text-red-500">*</span></label>
                                         <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Enter last name" />
                                     </div>
-                                    <div>
+                                    <div className="sm:col-span-2">
                                         <label className={labelCls}>Email <span className="text-red-500">*</span></label>
                                         <input type="email" value={email} disabled placeholder="example@email.com" className="opacity-50 cursor-not-allowed" />
                                         <p className="text-xs text-theme-muted mt-1">Email cannot be changed</p>
                                     </div>
-                                    <div>
-                                        <label className={labelCls}>Phone number</label>
-                                        <div className="flex gap-2">
-                                            <div className="relative" ref={phoneDropdownRef}>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowPhoneCodeDropdown(!showPhoneCodeDropdown)}
-                                                    className="flex items-center gap-1.5 px-3 py-3 rounded-xl border glass-inset min-w-[88px] transition-colors"
-                                                    style={{ borderColor: "var(--glass-border)" }}
-                                                >
-                                                    <span className="text-lg">{selectedPhoneCode?.flag}</span>
-                                                    <span className="text-sm text-theme-secondary font-medium">{phoneCode}</span>
-                                                    <ChevronDown size={13} className="text-theme-muted" />
-                                                </button>
-                                                {showPhoneCodeDropdown && (
-                                                    <div className="absolute top-full left-0 mt-1 w-40 glass-panel z-50 max-h-48 overflow-y-auto !rounded-xl">
-                                                        {countryCodes.map((country) => (
-                                                            <button
-                                                                key={country.country}
-                                                                onClick={() => { setPhoneCode(country.code); setShowPhoneCodeDropdown(false); }}
-                                                                className="w-full flex items-center gap-2 px-3 py-2 text-left hover:opacity-80 transition-opacity"
-                                                            >
-                                                                <span className="text-lg">{country.flag}</span>
-                                                                <span className="text-sm text-theme-primary font-medium">{country.code}</span>
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="000 000-0000" className="flex-1" />
-                                        </div>
-                                    </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -320,7 +283,17 @@ export default function AccountPage() {
                                         <select value={subNiche} onChange={(e) => setSubNiche(e.target.value)} disabled={!niche} style={selectBg} className="disabled:opacity-50 disabled:cursor-not-allowed">
                                             <option value="">{niche ? "Select your specialization" : "First select a niche"}</option>
                                             {availableSubNiches.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                                            {niche && <option value="other">Other (specify below)</option>}
                                         </select>
+                                        {subNiche === 'other' && (
+                                            <input
+                                                type="text"
+                                                value={customSubNiche}
+                                                onChange={(e) => setCustomSubNiche(e.target.value)}
+                                                placeholder="Describe your sub-niche..."
+                                                className="mt-2"
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>
