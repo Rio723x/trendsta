@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -139,67 +139,32 @@ function Navbar() {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="fixed top-6 inset-x-0 z-50 flex justify-center pointer-events-none"
-      >
-        {/* Main Navbar Pill */}
-        <div
-          className="pointer-events-auto flex items-center justify-between h-14 px-2 pr-3 rounded-[20px] bg-[#1a1c1d]/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transition-all duration-300 gap-2"
-          style={{ width: "min(700px, 93vw)" }}
-        >
-          {/* Logo */}
-          <a href="#home-page" className="relative flex items-center justify-center w-10 h-10 rounded-xl overflow-hidden group shrink-0 transition-opacity hover:opacity-80">
-            <Image src="/T_logo.png" alt="Trendsta" width={32} height={32} className="object-contain" />
+      <nav id="mainNav">
+        <div className="nav-inner">
+          <a href="/" className="nav-logo flex items-center gap-4">
+            <Image src="/T_logo.png" alt="Trendsta Logo" width={40} height={40} className="rounded-xl drop-shadow-sm blur-none transition-transform group-hover:scale-105" />
+            <span className="hidden sm:inline-block tracking-tight text-2xl font-body font-bold text-ink">Trendsta</span>
           </a>
 
-          {/* Desktop Nav Links — flow left after logo */}
-          <div className="hidden sm:flex items-center gap-6 ml-6 text-white/75 font-medium text-sm tracking-wide">
-            <a href="#features" className="hover:text-white transition-colors duration-200">Services</a>
-            <a href="#reviews" className="hover:text-white transition-colors duration-200">Testimonials</a>
-            <a href="#faq" className="hover:text-white transition-colors duration-200">FAQs</a>
+          <ul className="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#stories">Stories</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+
+          <div className="flex items-center gap-3">
+            <a href="https://www.trendsta.in/login" className="hidden sm:inline-flex px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-900 font-bold text-[16px] hover:bg-gray-50 transition-all shadow-sm">Log in</a>
+            <a href="https://www.trendsta.in/signup" className="px-6 py-3 rounded-full bg-linear-to-r from-[#ff5900] to-[#ffb800] text-white font-bold text-[16px] hover:scale-105 hover:shadow-[0_8px_24px_-6px_rgba(255,89,0,0.5)] transition-all">Get started</a>
           </div>
 
-          {/* Spacer pushes CTAs to the right */}
-          <div className="hidden sm:block flex-1" />
-
-          {/* Spacer for mobile */}
-          <div className="flex-1 sm:hidden" />
-
-          {/* Desktop CTA buttons */}
-          <div className="hidden sm:flex items-center gap-2 shrink-0">
-            <a
-              href="/signup"
-              className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl hover:opacity-90 transition-opacity"
-            >
-              Get Started
-            </a>
-            <a
-              href="/dashboard"
-              className="px-4 py-2 text-sm font-semibold text-white/80 bg-white/10 rounded-xl border border-white/10 hover:bg-white/15 transition-colors"
-            >
-              View Demo
-            </a>
-          </div>
-
-          {/* Hamburger (mobile only) */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="sm:hidden w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/5 flex flex-col items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-white/20"
-          >
-            <motion.div
-              animate={isMobileMenuOpen ? { rotate: 45, y: 4, backgroundColor: "#fff" } : { rotate: 0, y: 0, backgroundColor: "#fff" }}
-              className="w-4 h-[1.5px] rounded-full origin-center"
-            />
-            <motion.div
-              animate={isMobileMenuOpen ? { rotate: -45, y: -3.5, backgroundColor: "#fff" } : { rotate: 0, y: 0, backgroundColor: "#fff" }}
-              className="w-4 h-[1.5px] rounded-full origin-center"
-            />
+          <button className="nav-mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Menu">
+            <span style={{ transform: isMobileMenuOpen ? "rotate(45deg) translateY(4px)" : "none" }}></span>
+            <span style={{ opacity: isMobileMenuOpen ? 0 : 1 }}></span>
+            <span style={{ transform: isMobileMenuOpen ? "rotate(-45deg) translateY(-4px)" : "none" }}></span>
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Mobile Menu Dropdown */}
       <AnimatePresence>
@@ -209,39 +174,36 @@ function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 w-[min(340px,90vw)] bg-white/96 backdrop-blur-2xl z-40 border border-black/10 rounded-2xl shadow-2xl p-5"
+            className="fixed top-24 left-1/2 -translate-x-1/2 w-[min(340px,90vw)] bg-[#F5F3EE]/95 backdrop-blur-2xl z-40 border border-[#E4E2DC] rounded-2xl shadow-2xl p-5"
           >
-            {/* Nav links */}
             <div className="flex flex-col gap-1 mb-4">
               {[
-                { label: "Services", href: "#features" },
-                { label: "Testimonials", href: "#reviews" },
-                { label: "FAQs", href: "#faq" },
+                { label: "Features", href: "#features" },
+                { label: "How It Works", href: "#how" },
+                { label: "FAQ", href: "#faq" },
               ].map(({ label, href }) => (
                 <a
                   key={href}
                   href={href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center px-4 py-3 rounded-xl text-gray-800 font-semibold text-sm hover:bg-gray-100 transition-colors"
+                  className="flex items-center px-4 py-3 rounded-xl text-[#1A1A1A] font-semibold text-sm hover:bg-black/5 transition-colors"
                 >
                   {label}
                 </a>
               ))}
             </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col gap-2 pt-4 border-t border-black/10">
+            <div className="flex flex-col gap-2 pt-4 border-t border-[#E4E2DC]">
               <a
-                href="/signup"
+                href="https://www.trendsta.in/signup"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity"
+                className="btn btn-primary btn-orange w-full"
               >
                 Get Started
               </a>
               <a
-                href="/dashboard"
+                href="https://www.trendsta.in/dashboard"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-6 py-3 bg-black/5 border border-black/10 text-gray-900 text-sm font-semibold rounded-xl hover:bg-black/10 transition-colors"
+                className="btn btn-ghost w-full"
               >
                 View Demo
               </a>
@@ -255,126 +217,146 @@ function Navbar() {
 
 
 function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  const opacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
-
   return (
-    <section ref={containerRef} className="relative w-full overflow-hidden flex flex-col items-center min-h-[100svh] px-4 sm:px-8 py-8 md:py-12 bg-[#0a0a0a]">
+    <section className="hero relative pt-32 pb-0 md:pt-40 lg:pt-48 overflow-hidden bg-cream flex flex-col items-center justify-center text-center z-10 w-full border-b border-black/5">
+      {/* Floating gradient blobs like Patreon */}
+      <div className="hero-blob blob-1"></div>
+      <div className="hero-blob blob-2"></div>
 
-      {/* Background Image with Overlay */}
-      <motion.div
-        className="absolute inset-0 w-full h-full z-0 pointer-events-none"
-        style={{ opacity }}
-      >
-        <img
-          src="/trendsta_background_24fps.webp"
-          alt="Background"
-          className="object-cover w-full h-full opacity-70"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent" />
-      </motion.div>
-
-      {/* Main Content Area */}
-      <div className="w-full h-full flex flex-col justify-end relative z-20 flex-1">
-
-        {/* Giant Main Title (Left Aligned) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full"
+      {/* Content Container */}
+      <div className="relative max-w-4xl mx-auto px-4 z-20 flex flex-col items-center">
+        {/* Eyebrow */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.5, ease: "easeOut" }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-medium mb-10 shadow-sm"
         >
-          <motion.h1
-            className="text-[12vw] sm:text-[10vw] md:text-[80px] leading-[0.9] tracking-[-0.03em] font-sans font-black m-0 p-0 text-white"
-            style={{
-              background: "linear-gradient(90deg, #ffffffff, #ffffffff, #f97316, #ea580c, #ffffffff, #ffffffff)",
-              backgroundSize: "400% 100%",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              display: "inline-block",
-            }}
-            animate={{ backgroundPosition: ["100% 50%", "-300% 50%"] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear", repeatType: "loop" }}
-          >
-            TRENDSTA
-          </motion.h1>
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white shadow-sm"></span>
+          Trusted by 10,000+ creators
         </motion.div>
 
+        {/* Headline */}
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          className="text-6xl md:text-8xl lg:text-[110px] leading-[0.9] font-display font-normal text-gray-900 tracking-[-0.04em] mb-6"
+        >
+          Know what goes <span className="text-[#ff5900] italic pr-1">viral</span><br/>before it does.
+        </motion.h1>
+
+        {/* Subheadline */}
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10 font-medium tracking-tight"
+        >
+          Trendsta gives you real-time AI intelligence on what to post, when to post, and how to beat your competitors — on Instagram and X.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4 w-full sm:w-auto z-20"
+        >
+          <a href="https://www.trendsta.in/signup" className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-linear-to-r from-[#ff5900] to-[#ffb800] text-white font-bold text-lg hover:scale-[1.03] hover:shadow-[0_12px_30px_-8px_rgba(255,89,0,0.7)] transition-all duration-300">
+            Start for free
+          </a>
+          <a href="https://www.trendsta.in/dashboard" className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white border border-gray-200 text-gray-900 font-bold text-lg hover:bg-gray-50 hover:scale-[1.02] transition-all duration-300 shadow-sm">
+            Watch demo →
+          </a>
+        </motion.div>
+
+        {/* Hint */}
+        <motion.p 
+          initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-xs text-gray-400 font-medium mb-8"
+        >
+          No credit card required · Cancel anytime
+        </motion.p>
 
 
-        {/* Bottom Section (Buttons & Text stacked left) */}
-        <div className="mt-4 w-full flex flex-col items-start gap-8 pb-12 pt-40 md:pt-0">
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto relative z-20">
-            <a
-              href="/signup"
-              className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold rounded-full hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] transition-all hover:scale-105 active:scale-95 text-base md:text-lg flex justify-center"
-            >
-              Get Started
-            </a>
-            <a
-              href="/dashboard"
-              className="w-full sm:w-auto px-8 py-3.5 bg-transparent text-white border border-white/50 text-sm font-bold tracking-wider uppercase transition-all hover:bg-white/10 hover:-translate-y-0.5"
-            >
-              View Demo
-            </a>
+        {/* Social Proof Row */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
+          className="flex flex-wrap justify-center items-center gap-4 text-sm font-medium"
+        >
+          <span className="text-gray-400">Works on</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm text-gray-700 font-semibold transition-all hover:-translate-y-0.5 hover:shadow-md">
+            <Instagram size={16} className="text-[#E1306C]" />
+            <span>Instagram</span>
           </div>
-
-          {/* Punchline under buttons */}
-          <div className="max-w-[500px] md:max-w-[700px] text-left mt-6">
-            <p className="text-xl md:text-3xl text-gray-200 leading-[1.3] font-medium tracking-tight">
-              Your AI consultant for content growth.
-            </p>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm text-gray-700 font-semibold transition-all hover:-translate-y-0.5 hover:shadow-md">
+            <svg viewBox="0 0 24 24" className="w-4 h-4 text-black fill-current">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <span>Twitter / X</span>
           </div>
+        </motion.div>
+      </div>
 
+      {/* Hero Product Preview (Peek) */}
+      <motion.div 
+        initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
+        className="hero-preview mt-12 mb-[-160px] md:mb-[-220px] lg:mb-[-280px] z-20"
+      >
+        <div className="preview-topbar">
+          <div className="preview-dots">
+            <div className="preview-dot"></div>
+            <div className="preview-dot"></div>
+            <div className="preview-dot"></div>
+          </div>
+          <div className="preview-url">trendsta.in/dashboard</div>
         </div>
-
-      </div>
-
-
-      {/* Scroll Indicator — elegantly centered at bottom of hero */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30">
-        <ScrollIndicator color="#e5e7eb" duration={2.5} />
-      </div>
-
-    </section>
-  );
-}
-
-function TrustStrip() {
-  const logos = [
-    { Icon: Instagram, name: "Instagram" },
-    { Icon: Twitter, name: "Twitter / X" },
-  ];
-
-  return (
-    <section className="pt-6 md:pt-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4 md:mb-8">
-          Optimized for Growth on
-        </p>
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-          {logos.map((logo, i) => (
-            <div key={i} className="flex items-center gap-2 group cursor-pointer hover:opacity-100 transition-opacity">
-              <logo.Icon className="text-gray-900 group-hover:text-gray-900 transition-colors" size={20} />
-              <span className="font-semibold text-base md:text-lg text-gray-600 group-hover:text-gray-900 transition-colors">{logo.name}</span>
+        <div className="preview-body text-left">
+          <div className="preview-sidebar">
+            <div className="preview-sidebar-title">Menu</div>
+            <div className="sidebar-item active">Analytics</div>
+            <div className="sidebar-item">AI Consultant</div>
+            <div className="sidebar-item">Script Ideas</div>
+            <div className="sidebar-item">Competitors</div>
+            <div className="sidebar-item">Instagram Insights</div>
+            <div className="sidebar-item">Twitter Insights</div>
+          </div>
+          <div className="preview-main">
+            <div className="preview-main-header">
+              <span className="preview-main-title">Live Analytics Dashboard</span>
+              <span className="preview-live-badge"><span className="preview-live-dot"></span> LIVE</span>
             </div>
-          ))}
+            <div className="metric-grid">
+              <div className="metric-card">
+                <div className="metric-card-label">Best Post Time</div>
+                <div className="metric-card-val orange">10:00 AM</div>
+                <div className="metric-card-sub">High engagement window</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-card-label">Target Pace</div>
+                <div className="metric-card-val green">194 WPM</div>
+                <div className="metric-card-sub">Viral sweet spot</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-card-label">Content Gap</div>
+                <div className="metric-card-val" style={{fontSize:"16px", paddingTop:"3px"}}>AI Ethics</div>
+                <div className="metric-card-sub">Zero niche coverage</div>
+              </div>
+            </div>
+            <div className="sparkline-row">
+              <div className="sparkline-header">
+                <span className="sparkline-label">Engagement trend — past 7 days</span>
+                <span className="sparkline-badge">↑ +38% this week</span>
+              </div>
+              <svg width="100%" height="56" viewBox="0 0 560 56" fill="none" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FF5C1A" stopOpacity=".25"/>
+                    <stop offset="100%" stopColor="#FF5C1A" stopOpacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0 48 L80 44 L160 36 L240 38 L320 22 L400 14 L480 8 L560 4 L560 56 L0 56Z" fill="url(#sg)"/>
+                <path d="M0 48 L80 44 L160 36 L240 38 L320 22 L400 14 L480 8 L560 4" stroke="#FF5C1A" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                <circle cx="480" cy="8" r="4" fill="#FF5C1A"/>
+                <circle cx="560" cy="4" r="4" fill="#FFB800"/>
+              </svg>
+            </div>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -447,14 +429,16 @@ function ServicePanel({
   title,
   description,
   bullets,
+  conclusion,
   graphic,
 }: {
   id: string;
   textSide?: "left" | "right";
-  badge: string;
+  badge?: string;
   title: React.ReactNode;
-  description: string;
+  description: React.ReactNode;
   bullets: string[];
+  conclusion?: React.ReactNode;
   graphic: React.ReactNode;
 }) {
   const graphicRef = useRef<HTMLDivElement>(null);
@@ -467,21 +451,23 @@ function ServicePanel({
     <div className="flex flex-col justify-center gap-5 md:py-0">
 
       {/* Animated subheading — Space Mono, motion reveal */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: false, margin: "-60px" }}
-        className="flex items-center gap-3"
-      >
-        <div className="h-px w-8 bg-orange-500 flex-shrink-0" />
-        <span
-          className="text-[13px] font-bold tracking-[0.2em] uppercase text-gray-500"
-          style={{ fontFamily: "var(--font-space-mono)" }}
+      {badge && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: false, margin: "-60px" }}
+          className="flex items-center gap-3"
         >
-          {badge}
-        </span>
-      </motion.div>
+          <div className="h-px w-8 bg-orange-500 flex-shrink-0" />
+          <span
+            className="text-[13px] font-bold tracking-[0.2em] uppercase text-gray-500"
+            style={{ fontFamily: "var(--font-space-mono)" }}
+          >
+            {badge}
+          </span>
+        </motion.div>
+      )}
 
       {/* Title — Space Mono */}
       <motion.div
@@ -495,7 +481,7 @@ function ServicePanel({
         {title}
       </motion.div>
 
-      <motion.p
+      <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
@@ -503,7 +489,7 @@ function ServicePanel({
         className="text-lg text-gray-500 leading-relaxed max-w-md"
       >
         {description}
-      </motion.p>
+      </motion.div>
 
       <motion.ul
         initial={{ opacity: 0, y: 10 }}
@@ -519,6 +505,18 @@ function ServicePanel({
           </li>
         ))}
       </motion.ul>
+
+      {conclusion && (
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: false, margin: "-60px" }}
+          className="text-lg font-bold text-gray-800 leading-relaxed max-w-md mt-2"
+        >
+          {conclusion}
+        </motion.p>
+      )}
     </div>
   );
 
@@ -882,237 +880,328 @@ function ScriptIdeas3DCards() {
 
 // ------------ Main Services Section ------------
 
-function HoverListFeaturesSection() {
+function AIChatUI() {
   return (
-    <section id="features" className="relative bg-[#fafafa]">
-
-      {/* Section Header – non-sticky, just an intro */}
-      <div className="flex flex-col items-center justify-center text-center w-full pt-12 md:pt-20 px-4 bg-[#fafafa]">
-        <div className="w-full overflow-hidden flex justify-center">
-          <ShutterReveal bgColor="#fafafa">
-            <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[110px] leading-[0.85] font-bold font-mono text-gray-900 flex flex-col uppercase items-center">
-              <span>services</span>
-            </h2>
-          </ShutterReveal>
+    <div className="w-full flex flex-col gap-4">
+      {/* Mobile Graphic */}
+      <div className="md:hidden relative z-20 rounded-4xl overflow-hidden shadow-xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center pt-10 px-6 pb-8 select-none scale-[0.8] origin-top">
+        <div className="mb-4">
+          <Image src="/T_logo.png" alt="Trendsta" width={44} height={44} className="object-contain" />
         </div>
-        <p className="text-lg md:text-2xl lg:text-3xl text-gray-500 leading-tight font-medium max-w-2xl mt-4 md:mt-6 px-2">
-          Everything you need to grow faster.
-        </p>
-      </div>
-
-      {/* ——— Dashboard ——— */}
-      <div>
-        <ServicePanel
-          id="service-dashboard"
-          textSide="left"
-          badge="Analytics Dashboard"
-          title={<><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-400">Real-time</span> data,{" "}optimised for you</>}
-          description="Live niche data, analysed automatically. Posting time, content gaps, and competitor pace — surfaced every session."
-          bullets={[
-            "Real-time trend & competitor data, every session",
-            "Pace, hook style, and content gap analysis",
-            "Best posting time, topic, and audio — instantly",
-            "One-click deep-dives into any insight",
-          ]}
-          graphic={
-            <DashboardGraphic />
-          }
-        />
-      </div>
-
-      {/* â€”â€”â€” AI Consultant â€”â€”â€” */}
-      <div>
-        <ServicePanel
-          id="service-ai-consultant"
-          textSide="right"
-          badge="AI Consultant"
-          title={<>Your personal<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">AI strategist</span></>}
-          description="Chat with your data. Ask any growth question and get a personalised answer built on your channel history and live trends."
-          bullets={[
-            "Knows your niche, history, and competitors",
-            "Proactively suggests your next move",
-            "Live trends mapped to your engagement",
-            "6 modes: Trending, Viral Ideas, Competitors & more",
-          ]}
-          graphic={
-            <>
-              {/* Mobile Graphic */}
-              <div className="md:hidden relative z-20 rounded-[2rem] overflow-hidden shadow-2xl border border-white/5 bg-[#0a0a0a] flex flex-col items-center pt-10 px-6 pb-8 select-none">
-                <div className="mb-4">
-                  <Image src="/T_logo.png" alt="Trendsta" width={44} height={44} className="object-contain" />
-                </div>
-                <div className="text-center mb-5">
-                  <h3 className="text-base md:text-lg font-medium text-[#8F9BB3] font-sans tracking-tight leading-snug">
-                    Your AI-powered content strategist.<br />Ask me anything about reels, trends, and growth.
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 rounded-full text-xs text-[#636C7A] mb-6 font-sans">
-                  <BarChart3 size={12} className="text-indigo-400" />
-                  <span>Results based on data from 06/02/2026.</span>
-                </div>
-                <div className="grid grid-cols-3 gap-3 w-full max-w-lg mb-5">
-                  {[{ c: "#2D9CDB", Icon: TrendingUp, label: "Trending" }, { c: "#F2994A", Icon: Lightbulb, label: "Viral Ideas" }, { c: "#DE5EAC", Icon: Users, label: "Competitors" }, { c: "#27AE60", Icon: BarChart3, label: "Performance" }, { c: "#EB5757", Icon: Hash, label: "Hashtags" }, { c: "#9B51E0", Icon: PenTool, label: "Scripts" }].map(({ c, Icon, label }, i) => (
-                    <div key={i} className="bg-[#141414] border border-white/5 rounded-xl p-3 flex flex-col gap-2 cursor-pointer hover:border-white/10 transition-colors">
-                      <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white" style={{ background: c }}><Icon size={14} /></div>
-                      <span className="text-[#8F9BB3] text-xs font-medium font-sans">{label}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="w-full max-w-lg">
-                  <div className="w-full bg-[#141414] border border-white/10 rounded-2xl flex items-center p-2">
-                    <div className="flex-1 px-3 text-[#636C7A] text-sm font-sans">Ask Trendsta anything...</div>
-                    <div className="flex items-center gap-2">
-                      <button className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5"><Mic size={16} /></button>
-                      <button className="w-8 h-8 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-white"><ArrowRight size={16} /></button>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 text-xs font-sans mt-3 justify-center">
-                    <div className="flex items-center gap-1.5 px-4 py-1.5 bg-[#FFF2DE] text-[#CA8215] rounded-full font-bold">
-                      <Zap size={11} fill="currentColor" /> Fast Mode
-                    </div>
-                    <div className="flex items-center gap-1.5 px-4 py-1.5 text-gray-500 font-medium">
-                      <Cpu size={11} /> Deep Research
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Desktop Video */}
-              <div className="hidden md:flex relative z-20 rounded-[2rem] shadow-2xl overflow-hidden shadow-xl" style={{ backgroundColor: "#0a0a0a" }}>
-                <video
-                  src="/landing/AI_CONSULTANT%20(1).mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="none"
-                  className="w-full h-auto object-cover rounded-[2rem]"
-                />
-              </div>
-            </>
-          }
-        />
-      </div>
-
-      {/* â€”â€”â€” Twitter Insights â€”â€”â€” */}
-      <div>
-        <ServicePanel
-          id="service-twitter"
-          textSide="left"
-          badge="Twitter / X Insights"
-          title={<>Spot trends<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500">before they peak</span></>}
-          description="Track viral hashtags, top creators, and audience sentiment in real time — so you always post at the right moment."
-          bullets={[
-            "Trending hashtags with volume & velocity",
-            "Top tweet hook and engagement analysis",
-            "Sentiment breakdown: positive, neutral, negative",
-            "Day-by-day competitor growth tracking",
-          ]}
-          graphic={
-            <div className="relative z-20 rounded-2xl overflow-hidden shadow-2xl border border-black/10 bg-[#0d0d0d]">
-              <div className="flex items-center gap-3 px-5 pt-5 pb-3 border-b border-white/5 text-sm font-semibold">
-                <button className="flex items-center gap-2 px-3 py-1.5 bg-orange-500/10 text-orange-500 rounded-lg border border-orange-500/20 text-xs">
-                  <Zap size={12} fill="currentColor" /> Top Tweets
-                </button>
-                <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/5 text-gray-400 rounded-lg text-xs transition-colors">Latest</button>
-              </div>
-              <div className="p-5 space-y-4">
-                {[
-                  { name: "Banxcartoons", handle: "@Banxcartoons", score: "8.2", text: 'From today\'s @FT #ElonMusk #SpaceX #ArtificialIntelligence', likes: "30", retweets: "10", views: "472", grad: "from-green-400 to-cyan-500" },
-                  { name: "Ronald_vanLoon", handle: "@Ronald_vanLoon", score: "3.3", text: '7 #Skills #AI Can\'t Replace (Yet) â€” #ArtificialIntelligence #MachineLearning', likes: "210", retweets: "54", views: "12K", grad: "from-blue-400 to-purple-500" },
-                ].map((t, i) => (
-                  <div key={i} className="bg-[#161819] border border-white/5 rounded-xl p-4 hover:border-white/10 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${t.grad} flex-shrink-0`} />
-                        <div>
-                          <p className="font-bold text-white text-xs">{t.name}</p>
-                          <div className="flex items-center gap-1 text-gray-500 text-[10px]">
-                            <span>{t.handle}</span><span>·</span>
-                            <span className="flex items-center gap-0.5"><Zap size={8} className="text-gray-500" /> {t.score}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <ExternalLink size={14} className="text-gray-500" />
-                    </div>
-                    <p className="text-[12px] text-white/80 leading-relaxed mb-3">{t.text}</p>
-                    <div className="flex items-center gap-4 text-gray-400 text-[10px]">
-                      <span className="flex items-center gap-1"><Heart size={12} /> {t.likes}</span>
-                      <span className="flex items-center gap-1"><Repeat2 size={12} /> {t.retweets}</span>
-                      <span className="flex items-center gap-1"><Eye size={12} /> {t.views}</span>
-                    </div>
-                  </div>
-                ))}
-                <div className="grid grid-cols-3 gap-3 mt-2">
-                  {[["#AI", "2.4M"], ["#SpaceX", "1.1M"], ["#Startups", "890K"]].map(([tag, vol], i) => (
-                    <div key={i} className="bg-white/5 border border-white/5 rounded-xl px-3 py-2 flex flex-col gap-1">
-                      <span className="font-bold text-orange-400 text-sm">{tag}</span>
-                      <span className="text-gray-400 text-[10px] flex items-center gap-1">{vol} <TrendingUp size={10} className="text-green-500" /></span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        <div className="text-center mb-5">
+          <h3 className="text-base md:text-lg font-medium text-[#8F9BB3] font-sans tracking-tight leading-snug">
+            Your AI-powered content strategist.<br />Ask me anything about reels, trends, and growth.
+          </h3>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 rounded-full text-xs text-[#636C7A] mb-6 font-sans">
+          <BarChart3 size={12} className="text-indigo-400" />
+          <span>Results based on data from 06/02/2026.</span>
+        </div>
+        <div className="grid grid-cols-3 gap-3 w-full max-w-lg mb-5">
+          {[{ c: "#2D9CDB", Icon: TrendingUp, label: "Trending" }, { c: "#F2994A", Icon: Lightbulb, label: "Viral Ideas" }, { c: "#DE5EAC", Icon: Users, label: "Competitors" }, { c: "#27AE60", Icon: BarChart3, label: "Performance" }, { c: "#EB5757", Icon: Hash, label: "Hashtags" }, { c: "#9B51E0", Icon: PenTool, label: "Scripts" }].map(({ c, Icon, label }, i) => (
+            <div key={i} className="bg-[#141414] border border-white/5 rounded-xl p-3 flex flex-col gap-2 cursor-pointer hover:border-white/10 transition-colors">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white" style={{ background: c }}><Icon size={14} /></div>
+              <span className="text-[#8F9BB3] text-xs font-medium font-sans">{label}</span>
             </div>
-          }
-        />
+          ))}
+        </div>
+        <div className="w-full max-w-lg">
+          <div className="w-full bg-[#141414] border border-white/10 rounded-2xl flex items-center p-2">
+            <div className="flex-1 px-3 text-[#636C7A] text-sm font-sans">Ask Trendsta anything...</div>
+            <div className="flex items-center gap-2">
+              <button className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5"><Mic size={16} /></button>
+              <button className="w-8 h-8 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-white"><ArrowRight size={16} /></button>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-sans mt-3 justify-center">
+            <div className="flex items-center gap-1.5 px-4 py-1.5 bg-[#FFF2DE] text-[#CA8215] rounded-full font-bold">
+              <Zap size={11} fill="currentColor" /> Fast Mode
+            </div>
+            <div className="flex items-center gap-1.5 px-4 py-1.5 text-gray-500 font-medium">
+              <Cpu size={11} /> Deep Research
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* â€”â€”â€” Script Ideas â€”â€”â€” */}
-      <div>
-        <ServicePanel
-          id="service-scripts"
-          textSide="right"
-          badge="Script Ideas"
-          title={<>Never run out<br />of <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">viral ideas</span></>}
-          description="AI-generated scripts scored for viral potential, each with a hook, payoff, and audio recommendation — ready to shoot."
-          bullets={[
-            "Scored 0–100 for viral potential",
-            "Hook + payoff structure included",
-            "Audio vibe and target length per idea",
-            "Flags gaps your competitors are missing",
-          ]}
-          graphic={
-            <ScriptIdeas3DCards />
-          }
+      {/* Desktop Video */}
+      <div className="hidden md:flex relative w-full h-[280px] z-20 rounded-4xl shadow-2xl overflow-hidden" style={{ backgroundColor: "#0a0a0a" }}>
+        <video
+          src="/landing/AI_CONSULTANT%20(1).mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          className="w-full h-full object-cover"
         />
       </div>
+    </div>
+  );
+}
 
-      {/* ——— Instagram Insights ——— */}
-      <div>
-        <ServicePanel
-          id="service-instagram"
-          textSide="left"
-          badge="Instagram Insights"
-          title={<>Know exactly what<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400">works on Instagram</span></>}
-          description="Real-time Instagram analysis — hashtags, content types, and engagement patterns so you post with precision, not guesswork."
-          bullets={[
-            "Hashtag velocity: reach vs community",
-            "Reels vs carousels vs stories breakdown",
-            "Pace benchmarks vs top creators",
-            "Recommendations tied to live data",
-          ]}
-          graphic={<InstagramInsights3DCards />}
-        />
+function TwitterInsightsUI() {
+  return (
+    <div className="relative z-20 rounded-2xl overflow-hidden shadow-2xl border border-black/10 bg-[#0d0d0d] scale-[0.85] origin-top lg:origin-left">
+      <div className="flex items-center gap-3 px-5 pt-5 pb-3 border-b border-white/5 text-sm font-semibold">
+        <button className="flex items-center gap-2 px-3 py-1.5 bg-orange-500/10 text-orange-500 rounded-lg border border-orange-500/20 text-xs">
+          <Zap size={12} fill="currentColor" /> Top Tweets
+        </button>
+        <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/5 text-gray-400 rounded-lg text-xs transition-colors">Latest</button>
       </div>
-
-      {/* ——— Competitor Analysis ——— */}
-      <div>
-        <ServicePanel
-          id="service-competitors"
-          textSide="right"
-          badge="Competitor Analysis"
-          title={<>Reverse-engineer<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">your competition</span></>}
-          description="See exactly why your competitors are winning — Trendsta decodes their hooks and formats so you can adopt what works."
-          bullets={[
-            "Storytelling style and hook breakdown",
-            "Pace, density, and emotional trigger analysis",
-            "Formats your rivals haven't tried yet",
-            "Copy-and-improve strategy per competitor",
-          ]}
-          graphic={<CompetitorAnalysis3DCards />}
-        />
+      <div className="p-5 space-y-4">
+        {[
+          { name: "Banxcartoons", handle: "@Banxcartoons", score: "8.2", text: 'From today\'s @FT #ElonMusk #SpaceX #ArtificialIntelligence', likes: "30", retweets: "10", views: "472", grad: "from-green-400 to-cyan-500" },
+          { name: "Ronald_vanLoon", handle: "@Ronald_vanLoon", score: "3.3", text: '7 #Skills #AI Can\'t Replace (Yet) — #ArtificialIntelligence #MachineLearning', likes: "210", retweets: "54", views: "12K", grad: "from-blue-400 to-purple-500" },
+        ].map((t, i) => (
+          <div key={i} className="bg-[#161819] border border-white/5 rounded-xl p-4 hover:border-white/10 transition-colors">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full bg-linear-to-br ${t.grad} shrink-0`} />
+                <div>
+                  <p className="font-bold text-white text-xs">{t.name}</p>
+                  <div className="flex items-center gap-1 text-gray-500 text-[10px]">
+                    <span>{t.handle}</span><span>·</span>
+                    <span className="flex items-center gap-0.5"><Zap size={8} className="text-gray-500" /> {t.score}</span>
+                  </div>
+                </div>
+              </div>
+              <ExternalLink size={14} className="text-gray-500" />
+            </div>
+            <p className="text-[12px] text-white/80 leading-relaxed mb-3">{t.text}</p>
+            <div className="flex items-center gap-4 text-gray-400 text-[10px]">
+              <span className="flex items-center gap-1"><Heart size={12} /> {t.likes}</span>
+              <span className="flex items-center gap-1"><Repeat2 size={12} /> {t.retweets}</span>
+              <span className="flex items-center gap-1"><Eye size={12} /> {t.views}</span>
+            </div>
+          </div>
+        ))}
+        <div className="grid grid-cols-3 gap-3 mt-2">
+          {[["#AI", "2.4M"], ["#SpaceX", "1.1M"], ["#Startups", "890K"]].map(([tag, vol], i) => (
+            <div key={i} className="bg-white/5 border border-white/5 rounded-xl px-3 py-2 flex flex-col gap-1">
+              <span className="font-bold text-orange-400 text-sm">{tag}</span>
+              <span className="text-gray-400 text-[10px] flex items-center gap-1">{vol} <TrendingUp size={10} className="text-green-500" /></span>
+            </div>
+          ))}
+        </div>
       </div>
+    </div>
+  );
+}
 
+function InteractiveFeatureTree() {
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [activeMobileTab, setActiveMobileTab] = useState<string>("dashboard");
+
+  const leafNodes = [
+    {
+      id: "dashboard",
+      icon: "📊",
+      title: "Dashboard",
+      question: "Wanna see what's actually working?",
+      description: "Trendsta shows real-time niche analytics so you know what content is winning, what hooks are performing, and what topics are trending — before everyone else.",
+      graphic: <div className="mt-4 lg:mt-8 w-full lg:w-[460px] max-w-full"><DashboardGraphic /></div>
+    },
+    {
+      id: "scripts",
+      icon: "📝",
+      title: "Scripts",
+      question: "Still confused what to post?",
+      description: "Trendsta converts live data into ready-to-post content ideas, including hooks, structure, and viral angles.",
+      graphic: <div className="mt-4 lg:mt-8 w-full lg:w-[460px] max-w-full"><ScriptIdeas3DCards /></div>
+    },
+    {
+      id: "competitors",
+      icon: "🔍",
+      title: "Competitors",
+      question: "Why are your competitors growing faster?",
+      description: "See what they post, when they post, and what's working for them — then beat them.",
+      graphic: <div className="mt-4 lg:mt-8 w-full lg:w-[460px] max-w-full"><CompetitorAnalysis3DCards /></div>
+    },
+    {
+      id: "ai",
+      icon: "🤖",
+      title: "AI Consultant",
+      question: "Need guidance? Just ask.",
+      description: "Your 24/7 AI content strategist that understands your niche, competitors, and trends — and tells you exactly what to do.",
+      graphic: <div className="mt-4 lg:mt-8 w-full lg:w-[460px] max-w-full"><AIChatUI /></div>
+    },
+    {
+      id: "instagram",
+      icon: "📷",
+      title: "Instagram",
+      question: "Want to understand your Instagram better?",
+      description: "Trendsta analyzes your Instagram and tells you what content works, what doesn't, and how to grow faster.",
+      graphic: <div className="mt-4 lg:mt-8 w-full lg:w-[460px] max-w-full"><InstagramInsights3DCards /></div>
+    },
+    {
+      id: "twitter",
+      icon: "𝕏",
+      title: "Twitter",
+      question: "Growing on Twitter but not sure what's working?",
+      description: "Trendsta analyzes your tweets, engagement patterns, and trending topics in your niche.",
+      graphic: <div className="mt-4 lg:mt-8 w-full lg:w-[460px] max-w-full"><TwitterInsightsUI /></div>
+    }
+  ];
+
+  return (
+    <section className="features-section" id="features">
+      <div className="section-inner w-full max-w-[1440px] px-auto">
+        {/* Header Block */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }}
+          className="flex flex-col items-center text-center px-4 mb-16 md:mb-24"
+        >
+          <div className="section-tag mx-auto mb-6 text-sm md:text-base">⚡ Everything you need</div>
+          <h2 className="text-6xl md:text-8xl lg:text-[110px] leading-[0.95] font-display font-normal text-ink tracking-[-0.03em] mb-8">
+            Built for creators<br/>
+            who want to <em className="italic text-transparent bg-clip-text bg-[linear-gradient(135deg,#FF5C1A_0%,#FF8C00_60%,#FFB800_100%)]">win.</em>
+          </h2>
+          <p className="text-muted text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+            Every tool Trendsta gives you is powered by real-time AI analysis — so every decision is data-backed.
+          </p>
+        </motion.div>
+
+        {/* Tree Layout logic */}
+        <div className="w-full mt-10 md:mt-20">
+          <div className="hidden lg:flex flex-col items-center w-full mb-6">
+            <div className="bg-orange-50 text-orange-600 font-bold px-6 py-3 rounded-full border border-orange-200 shadow-sm z-10 font-sans tracking-wide">
+              Trendsta Intelligence
+            </div>
+            
+            {/* Tree Branch lines */}
+            <div className="w-[85%] h-8 border-t-2 border-l-2 border-r-2 border-border-patreon rounded-t-[30px] mt-4 relative">
+              <div className="absolute top-0 left-[20%] h-full w-0 border-l-2 border-border-patreon"></div>
+              <div className="absolute top-0 left-[40%] h-full w-0 border-l-2 border-border-patreon"></div>
+              <div className="absolute top-0 left-[60%] h-full w-0 border-l-2 border-border-patreon"></div>
+              <div className="absolute top-0 left-[80%] h-full w-0 border-l-2 border-border-patreon"></div>
+            </div>
+          </div>
+
+          {/* Mobile Layout (Tabs) */}
+          <div className="flex flex-col lg:hidden w-full gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full">
+              {leafNodes.map((node) => {
+                const isActive = activeMobileTab === node.id;
+                return (
+                  <button
+                    key={`mobile-tab-${node.id}`}
+                    onClick={() => setActiveMobileTab(node.id)}
+                    className={`flex items-center justify-center gap-2 px-3 py-3 rounded-xl border transition-all text-sm font-bold font-sans shadow-sm ${
+                      isActive 
+                        ? 'bg-white border-orange-400 text-orange-600' 
+                        : 'bg-cream border-border-patreon text-gray-500 hover:border-orange-300'
+                    }`}
+                  >
+                    <span className="text-lg">{node.icon}</span>
+                    <span className="whitespace-nowrap">{node.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Mobile Pane */}
+            <div className="w-full bg-white rounded-3xl border border-border-patreon p-6 sm:p-8 flex flex-col shadow-sm">
+              <AnimatePresence mode="wait">
+                {leafNodes.map((node) => {
+                  if (activeMobileTab !== node.id) return null;
+                  return (
+                    <motion.div
+                      key={`mobile-pane-${node.id}`}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.15 } }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      className="flex flex-col"
+                    >
+                      <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[linear-gradient(135deg,#FF5C1A,#FF8C00)] text-white text-xl mb-6 shadow-md shadow-orange-500/30">
+                        {node.icon}
+                      </div>
+                      <h3 className="text-[26px] sm:text-[28px] font-bold font-sans tracking-tight text-ink mb-4 leading-tight">
+                        {node.question}
+                      </h3>
+                      <p className="text-muted leading-relaxed font-body text-base mb-8">
+                        {node.description}
+                      </p>
+                      <div className="w-full relative flex items-center justify-center overflow-hidden">
+                        {node.graphic}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Desktop Layout (Expanding Cards) */}
+          <div className="hidden lg:flex flex-row gap-3 w-full h-[620px] items-stretch">
+            {leafNodes.map((node) => {
+              const isActive = hoveredNode === node.id;
+              
+              return (
+                <motion.div
+                  key={node.id}
+                  layout
+                  onMouseEnter={() => setHoveredNode(node.id)}
+                  onMouseLeave={() => setHoveredNode(null)}
+                  onClick={() => setHoveredNode(isActive ? null : node.id)}
+                  animate={{
+                    flexGrow: isActive ? 6 : 1,
+                    scale: isActive ? 1.02 : 1,
+                  }}
+                  transition={{ type: "spring", stiffness: 350, damping: 35 }}
+                  className={`relative flex flex-col justify-start overflow-hidden rounded-[24px] bg-white border cursor-pointer min-h-full
+                    ${isActive ? 'border-orange-400 shadow-[0_8px_32px_rgba(255,115,0,0.15)] z-20' : 'border-border-patreon shadow-sm z-10 hover:border-orange-300'}`}
+                  style={{ flexBasis: "0" }}
+                >
+                  {/* Minimized State overlay */}
+                  <motion.div 
+                    initial={false}
+                    animate={{ opacity: isActive ? 0 : 1 }}
+                    className="absolute inset-0 flex flex-col items-center justify-start pt-10 gap-4 p-6 pb-10 select-none z-30"
+                    style={{ pointerEvents: isActive ? 'none' : 'auto' }}
+                  >
+                    <div className="flex items-center justify-center w-[72px] h-[72px] shrink-0 rounded-[18px] bg-cream border border-border-patreon text-[32px]">
+                      {node.icon}
+                    </div>
+                    <span className="font-bold text-ink font-sans text-xl [writing-mode:vertical-lr] uppercase tracking-widest mt-6 whitespace-nowrap">{node.title}</span>
+                  </motion.div>
+
+                  {/* Expanded State content */}
+                  <motion.div 
+                    initial={false}
+                    animate={{ opacity: isActive ? 1 : 0 }}
+                    className="flex flex-col w-full h-full p-12 z-20 min-w-[400px] absolute inset-0 overflow-hidden items-start"
+                    style={{ pointerEvents: isActive ? 'auto' : 'none' }}
+                  >
+                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[linear-gradient(135deg,#FF5C1A,#FF8C00)] text-white text-xl mb-6 shadow-md shadow-orange-500/30 shrink-0">
+                      {node.icon}
+                    </div>
+                    <h3 className="text-[40px] font-bold font-sans tracking-[-0.04em] text-ink mb-4 leading-[1.05] shrink-0">
+                      {node.question}
+                    </h3>
+                    <p className="text-muted leading-relaxed font-body text-lg mb-8 max-w-[400px] shrink-0">
+                      {node.description}
+                    </p>
+                    
+                    <motion.div 
+                      className="mt-6 relative w-full flex-1 flex flex-col justify-start shrink-0 pointer-events-auto"
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={isActive ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+                      transition={{ delay: 0.1, duration: 0.4 }}
+                    >
+                      {node.graphic}
+                    </motion.div>
+                    
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -1194,7 +1283,7 @@ function InsightCard({ card }: { card: typeof INSTAGRAM_CARDS[0] }) {
 
       {/* Data signal */}
       <div className="flex items-start gap-2 z-10">
-        <span className="w-2 h-2 rounded-full bg-pink-500 flex-shrink-0 mt-1" />
+        <span className="w-2 h-2 rounded-full bg-pink-500 shrink-0 mt-1" />
         <p className="text-[11px] leading-snug">
           <span className="text-pink-400 font-bold uppercase tracking-wider text-[9px]">Data Signal: </span>
           <span className="text-cyan-300">{card.signal} →</span>
@@ -1207,7 +1296,7 @@ function InsightCard({ card }: { card: typeof INSTAGRAM_CARDS[0] }) {
         style={{ background: card.actionBg }}
       >
         {/* Target icon */}
-        <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
           style={{ background: "linear-gradient(135deg, #ec4899, #f43f5e)" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="1" fill="white" /></svg>
         </div>
@@ -1296,134 +1385,161 @@ function CompetitorAnalysis3DCards() {
   return <Insight3DStack cards={COMPETITOR_CARDS} />;
 }
 
-function TestimonialsSection() {
-  const testimonials = [
+function HowItWorksSection() {
+  const steps = [
     {
-      quote: "We needed intelligent automation — and they nailed it. Every step was collaborative, transparent, and focused on delivering the best outcome for us.",
-      author: "Brendan",
-      role: "Marketing Director at StratIQ",
-      image: "https://framerusercontent.com/images/cZ9VBNOcSpg8RiRzIkAXdz6ScF4.png",
-      rating: 5
+      num: "01",
+      title: "Connect your profile",
+      desc: "Link your Instagram or Twitter/X account. Trendsta ingests your history, niche, and competitors in seconds.",
     },
     {
-      quote: "Their team helped us identify key opportunities for AI, then built tools that boosted both our speed and accuracy. We're already seeing results.",
-      author: "Lena M",
-      role: "Manager at NovaTech",
-      image: "https://framerusercontent.com/images/PG5vQAQIzOrDyrT8NDWpDNTPoY.png",
-      rating: 5
+      num: "02",
+      title: "Get your intelligence brief",
+      desc: "Every session, Trendsta delivers a live brief — best post time, viral topics, content gaps, competitor moves, and ready-to-shoot scripts.",
     },
     {
-      quote: "From ideation to final delivery, they were incredibly proactive and sharp. Our new AI-powered assistant reduced manual work and improved user satisfaction.",
-      author: "Eli R",
-      role: "COO at GridFrame",
-      image: "https://framerusercontent.com/images/gcvmIxm2XRx6NG3kYAPz3zZXc6E.jpg",
-      rating: 5
+      num: "03",
+      title: "Post. Grow. Repeat.",
+      desc: "Use your brief to create with confidence. Watch your engagement climb as every post is backed by data — not guesswork.",
     }
   ];
 
-  const stats = [
-    { value: "10k+", label: "Creators Onboarded" },
-    { value: "95%", label: "Engagement Boost" },
-    { value: "2M+", label: "Scripts Generated" }
-  ];
-
   return (
-    <section id="reviews" className="py-16 md:py-24 bg-[#fafafa] relative overflow-hidden">
+    <section className="py-24 bg-white relative overflow-hidden" id="how">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/5 border border-black/10 text-gray-600 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" className="w-4 h-4 text-gray-500 fill-current">
-              <path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z" />
+        
+        {/* Header Block */}
+        <div className="mb-16 md:mb-24">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ff5900]/10 border border-[#ff5900]/20 text-[#ff5900] text-xs font-semibold tracking-wide mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#ff5900]">
+              <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
+              <path d="M15 5.764v15"></path>
+              <path d="M9 3.236v15"></path>
             </svg>
-            CUSTOMERS
+            Simple process
           </div>
-          <div className="w-full overflow-hidden flex justify-center">
-            <ShutterReveal bgColor="#fafafa">
-              <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[110px] leading-[0.85] font-bold tracking-[-0.06em] font-mono text-gray-900 mb-4 md:mb-6 flex flex-col uppercase items-center">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-700">
-                  what our
-                </span>
-                <span>clients say</span>
-              </h2>
-            </ShutterReveal>
-          </div>
-          <p className="text-lg text-gray-500">
-            Join customers who trust AI to transform their business.
-          </p>
+          <h2 className="text-5xl md:text-7xl lg:text-[100px] leading-[0.95] font-display font-normal text-[#1a1a1a] tracking-[-0.03em]">
+            From sign-up to<br/>
+            <span className="text-[#ff5900] italic">going viral</span>{" "}
+            <span className="font-display tracking-tight text-4xl md:text-6xl lg:text-[80px]">— in 3 steps.</span>
+          </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 items-stretch mb-10 md:mb-20">
-
-          {/* Main Hero Testimonial */}
-          <div className="flex-1 w-full bg-black/5 border border-black/10 rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center shadow-inner relative overflow-hidden">
-
-            <h4 className="text-lg md:text-3xl font-bold text-gray-900 leading-snug text-center max-w-2xl relative z-10">
-              Their <span className="text-indigo-500">AI-driven</span> approach helped us reach the right audience and <span className="text-indigo-500">grow faster</span> with smarter insights—streamlining our strategy, improving engagement, and <span className="text-indigo-500">delivering results</span> we couldn't achieve before.
-            </h4>
-            <div className="absolute opacity-5 -top-10 -left-10 w-64 h-64 text-black">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
-                <path d="M116,72v88a48.05,48.05,0,0,1-48,48,8,8,0,0,1,0-16,32,32,0,0,0,32-32v-8H40a16,16,0,0,1-16-16V72A16,16,0,0,1,40,56h60A16,16,0,0,1,116,72ZM216,56H156a16,16,0,0,0-16,16v64a16,16,0,0,0,16,16h60v8a32,32,0,0,1-32,32,8,8,0,0,0,0,16,48.05,48.05,0,0,0,48-48V72A16,16,0,0,0,216,56Z" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Hero Banner Image */}
-          <div className="w-full lg:w-[45%] h-48 sm:h-64 md:h-80 lg:h-auto rounded-3xl overflow-hidden shadow-2xl relative border border-black/10 shrink-0">
-            <Image
-              src="https://framerusercontent.com/images/LQKuaHoocBNNOUwcuUIayGZ8z8.png"
-              alt="Customer Success Banner"
-              fill
-              className="object-cover"
-            />
-          </div>
-        </div>
-
-        {/* 3 Column Grid */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-20">
-          {testimonials.map((test, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-xl border border-black/5 flex flex-col justify-between hover:-translate-y-1 transition-transform">
-              <div>
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(test.rating)].map((_, idx) => (
-                    <svg key={idx} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" className="w-5 h-5 text-gray-900 fill-current">
-                      <path d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
-                    </svg>
-                  ))}
+        {/* 3 Steps Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+          {steps.map((step, i) => (
+            <div key={i} className="relative group">
+              {/* The Card */}
+              <div className="h-full bg-cream border border-black/5 rounded-4xl p-8 md:p-10 flex flex-col justify-start relative z-10 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+                {/* Number */}
+                <div className="text-[120px] md:text-[140px] leading-[0.7] font-display italic text-black/4 mb-4 select-none drop-shadow-sm">
+                  {step.num}
                 </div>
-                <p className="text-gray-500 leading-relaxed text-sm mb-6">
-                  {test.quote}
-                </p>
-              </div>
-
-              <div>
-                <div className="border-t-[3px] border-dotted border-black/20 w-full mb-4" />
-                <div className="flex gap-4 items-center">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden relative shadow-sm border border-black/10 shrink-0">
-                    <Image src={test.image} alt={test.author} fill className="object-cover" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-900 text-sm">{test.author}</p>
-                    <p className="text-xs text-gray-500 font-medium">{test.role}</p>
-                  </div>
+                {/* Text Content */}
+                <div className="mt-4 md:mt-6">
+                  <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">{step.title}</h3>
+                  <p className="text-muted text-sm md:text-base leading-relaxed font-medium">
+                    {step.desc}
+                  </p>
                 </div>
               </div>
+
+              {/* The Bridging Arrow (only between 1-2 and 2-3 on desktop) */}
+              {i < 2 && (
+                <div className="hidden lg:flex absolute top-1/2 -right-6 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white border border-gray-100 shadow-sm items-center justify-center text-gray-400 group-hover:text-indigo-500 group-hover:border-indigo-100 transition-colors duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </div>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Bottom Stats Line */}
-        <div className="flex flex-row flex-wrap justify-around items-center gap-6 md:gap-4 pt-8 md:pt-10 border-t border-black/10">
-          {stats.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <h3 className="text-3xl md:text-4xl font-mono font-bold text-gray-900 tracking-[-0.05em] mb-1">
-                {stat.value}
-              </h3>
-              <p className="text-gray-500 text-sm underline decoration-gray-300 underline-offset-4">
-                {stat.label}
-              </p>
+      </div>
+    </section>
+  );
+}
+
+function SuccessStoriesSection() {
+  const stories = [
+    {
+      name: "Arjun Mehta",
+      role: "Tech & AI Creator · Instagram",
+      initial: "A",
+      bgClass: "bg-gradient-to-br from-orange-400 to-[#ff5900]",
+      stat: "+340% reach in 6 weeks",
+      quote: `"Trendsta told me about AI Ethics before it hit 2M hashtag views. I posted first. 800K views on that reel."`
+    },
+    {
+      name: "Sara Okafor",
+      role: "Finance Creator · Twitter / X",
+      initial: "S",
+      bgClass: "bg-gradient-to-br from-[#00b4ff] to-[#0084ff]",
+      stat: "+22K followers in 60 days",
+      quote: `"The hook leaderboard alone is worth the subscription. I went from 2% to 9% engagement rate by switching my opening style."`
+    },
+    {
+      name: "Maya Patel",
+      role: "Lifestyle · Instagram Reels",
+      initial: "M",
+      bgClass: "bg-gradient-to-br from-[#a855f7] to-[#ec4899]",
+      stat: "First reel hit 1.2M views",
+      quote: `"I used to spend hours researching what to post. Now Trendsta does it in seconds — better than I ever could."`
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-cream relative overflow-hidden" id="stories">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Header Block */}
+        <div className="mb-16 md:mb-24">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ff5900]/10 border border-[#ff5900]/20 text-[#ff5900] text-xs font-semibold tracking-wide mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#ff5900]">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            Success stories
+          </div>
+          <h2 className="text-5xl md:text-7xl lg:text-[90px] leading-[0.95] font-display font-normal text-[#1a1a1a] tracking-[-0.03em]">
+            Creators who stopped<br/>
+            guessing — and <span className="text-[#ff5900] italic">started winning.</span>
+          </h2>
+        </div>
+
+        {/* Stories Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+          {stories.map((story, i) => (
+            <div key={i} className="flex flex-col bg-white rounded-3xl overflow-hidden shadow-lg border border-black/5 hover:-translate-y-1 transition-transform duration-300">
+              {/* Colored Header */}
+              <div className={`h-32 w-full ${story.bgClass} relative`}>
+                {/* Avatar overlapping */}
+                <div className="absolute -bottom-6 left-6 w-14 h-14 rounded-full bg-[#ff5900] border-4 border-white flex items-center justify-center text-white font-bold text-xl shadow-sm z-10">
+                  {story.initial}
+                </div>
+              </div>
+              
+              {/* Card Body */}
+              <div className="pt-10 pb-8 px-6 flex flex-col flex-1">
+                <h3 className="text-xl font-bold text-ink mb-1">{story.name}</h3>
+                <p className="text-muted text-xs font-medium mb-4">{story.role}</p>
+                
+                {/* Stat Badge */}
+                <div className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded bg-[#10b981]/10 text-[#10b981] text-[11px] font-bold self-start mb-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                  {story.stat}
+                </div>
+                
+                <div className="border-t border-black/5 my-4"></div>
+                
+                <p className="text-muted text-sm italic leading-relaxed mt-auto">
+                  {story.quote}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -1460,20 +1576,24 @@ function FAQSection() {
   ];
 
   return (
-    <section id="faq" className="py-10 md:py-24 bg-[#fafafa] relative border-t border-black/10">
+    <section id="faq" className="py-24 md:py-32 bg-cream relative border-t border-black/5">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-24">
-          <div className="w-full overflow-hidden flex justify-center">
-            <ShutterReveal bgColor="#fafafa">
-              <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[110px] leading-[0.85] font-bold tracking-[-0.06em] font-mono text-gray-900 mb-6 flex flex-col uppercase items-center">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-700">
-                  frequently
-                </span>
-                <span>asked</span>
-              </h2>
-            </ShutterReveal>
+        
+        {/* Header Block */}
+        <div className="mb-16 md:mb-24 text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ff5900]/10 border border-[#ff5900]/20 text-[#ff5900] text-xs font-semibold tracking-wide mb-6 font-sans">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#ff5900]">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Got questions?
           </div>
-          <p className="text-lg md:text-3xl text-gray-600 leading-tight font-medium mt-4 md:mt-6">
+          <h2 className="text-5xl md:text-7xl lg:text-[90px] leading-[0.95] font-display font-normal text-ink tracking-[-0.03em]">
+            Frequently asked<br/>
+            <span className="text-[#ff5900] italic">questions.</span>
+          </h2>
+          <p className="text-muted text-lg md:text-xl font-medium mt-6 font-sans">
             Everything you need to know about growing with Trendsta.
           </p>
         </div>
@@ -1482,21 +1602,20 @@ function FAQSection() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className={`rounded-2xl border transition-all duration-300 ${openIndex === index
-                ? "bg-black/5 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.1)]"
-                : "bg-white/[0.02] border-black/10 hover:bg-white/[0.04]"
+              className={`rounded-3xl border transition-all duration-300 overflow-hidden ${openIndex === index
+                ? "bg-white border-orange-400 shadow-[0_8px_30px_rgba(255,89,0,0.08)]"
+                : "bg-white border-border-patreon hover:border-orange-300 shadow-sm"
                 }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full text-left px-5 py-4 md:px-6 md:py-5 flex items-center justify-between gap-4"
+                className="w-full text-left px-6 py-5 md:px-8 md:py-6 flex items-center justify-between gap-4"
               >
-                <span className={`font-semibold text-base md:text-lg ${openIndex === index ? "text-gray-900" : "text-gray-600"}`}>
+                <span className={`font-bold font-sans tracking-tight text-lg md:text-xl transition-colors ${openIndex === index ? "text-orange-600" : "text-ink"}`}>
                   {faq.question}
                 </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${openIndex === index ? "bg-indigo-500/20 text-indigo-400" : "bg-black/5 text-gray-500"}`}>
-                  {openIndex === index ? <X size={16} className="rotate-0" /> : <X size={16} className="rotate-45" />}
-                  {/* Using X rotate logic or Plus/Minus if imported. Using X since it is imported and Plus/Minus arent */}
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0 ${openIndex === index ? "bg-orange-500/10 text-orange-500" : "bg-cream border border-border-patreon text-muted"}`}>
+                  <X size={20} className={`transition-transform duration-300 ${openIndex === index ? "rotate-0" : "rotate-45"}`} />
                 </div>
               </button>
 
@@ -1509,10 +1628,8 @@ function FAQSection() {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 pb-5 pt-0 md:px-6 md:pb-6 md:pt-0 text-gray-500 leading-relaxed border-t border-black/10 mt-2 text-sm md:text-base">
-                      <div className="pt-4">
-                        {faq.answer}
-                      </div>
+                    <div className="px-6 pb-6 pt-0 md:px-8 md:pb-8 md:pt-0 font-body text-muted leading-relaxed text-base md:text-lg">
+                      {faq.answer}
                     </div>
                   </motion.div>
                 )}
@@ -1527,17 +1644,60 @@ function FAQSection() {
 
 function Footer() {
   return (
-    <footer className="bg-gray-100 border-t border-black/10 py-8 text-gray-500 text-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex items-center gap-3">
-          <Image src="/T_logo.png" width={32} height={32} alt="Trendsta" />
-          <span className="text-xl font-bold text-gray-900 tracking-tight">Trendsta</span>
+    <footer className="bg-[#f6f5f0] border-t border-black/5 py-16 md:py-24 text-gray-500 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          {/* Col 1: Brand */}
+          <div className="flex flex-col gap-6 md:pr-8">
+            <div className="flex items-center gap-3">
+              <Image src="/T_logo.png" alt="Trendsta Logo" width={36} height={36} className="rounded-xl drop-shadow-sm" />
+              <span className="text-xl font-bold text-gray-900 tracking-tight">Trendsta</span>
+            </div>
+            <p className="text-sm text-gray-500 leading-relaxed font-medium">
+              AI-powered content intelligence for creators who want to grow faster, post smarter, and trend harder.
+            </p>
+          </div>
+
+          {/* Col 2: Product */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-bold tracking-wider text-gray-900 uppercase mb-1">Product</h4>
+            <a href="#features" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Features</a>
+            <a href="#how" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">How it works</a>
+            <a href="https://www.trendsta.in/dashboard" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Demo</a>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Pricing</a>
+          </div>
+
+          {/* Col 3: Company */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-bold tracking-wider text-gray-900 uppercase mb-1">Company</h4>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">About</a>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Blog</a>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Careers</a>
+            <a href="mailto:info@trendsta.in" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Contact</a>
+          </div>
+
+          {/* Col 4: Legal */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-bold tracking-wider text-gray-900 uppercase mb-1">Legal</h4>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Privacy Policy</a>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Terms of Service</a>
+            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium">Cookie Policy</a>
+          </div>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-6">
-          <a href="mailto:info@trendsta.in" className="hover:text-gray-900 transition-colors">
-            info@trendsta.in
-          </a>
-          <div>© {new Date().getFullYear()} Trendsta Inc. All rights reserved.</div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8 border-t border-black/5">
+          <div className="text-sm font-medium text-gray-400">© 2026 Trendsta Inc. All rights reserved.</div>
+          <div className="flex items-center gap-3">
+            <a href="#" className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-colors shadow-sm">
+              <Twitter size={14} fill="currentColor" />
+            </a>
+            <a href="#" className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-colors shadow-sm font-bold font-sans text-[13px] leading-none">
+              in
+            </a>
+            <a href="#" className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-colors shadow-sm">
+              <Instagram size={15} />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
@@ -1546,38 +1706,76 @@ function Footer() {
 
 // --- Shared CTA ---
 
-function ViewDemoCTA() {
+function CTASection() {
   return (
+    <section className="py-24 md:py-32 bg-[#0a0a0a] relative overflow-hidden flex flex-col items-center text-center px-4">
+      {/* Soft warm glow effect behind text (Orb Haze) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#ff5900]/15 blur-[160px] rounded-full pointer-events-none opacity-60"></div>
 
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-      <p className="text-slate-400 text-sm md:text-base mb-6 tracking-wide">
-        No credit card required &mdash; explore the full dashboard instantly.
-      </p>
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-        <a
-          href="/dashboard"
-          className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white/5 text-white font-semibold rounded-full border border-white/10 hover:bg-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base"
-        >
-          <Play size={16} className="fill-white" />
-          View Demo
-        </a>
+      <div className="relative z-10 w-full max-w-4xl flex flex-col items-center">
+        <h2 className="text-6xl md:text-8xl lg:text-[100px] leading-[0.95] font-display italic text-[#f5f5f5] mb-6 tracking-tight drop-shadow-sm">
+          <span className="font-normal not-italic tracking-[-0.04em]">Your</span> next post is<br/>
+          a <span className="text-[#ff5900]">viral hit</span><br/>
+          waiting to happen.
+        </h2>
+
+        <p className="text-[#a1a1aa] text-lg md:text-xl font-medium mb-12 max-w-lg leading-relaxed font-sans">
+          Join 10,000+ creators who know what goes viral before they hit publish.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+          <a href="https://www.trendsta.in/signup" className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-[#18181b] font-bold text-lg hover:-translate-y-0.5 transition-transform shadow-[0_4px_14px_0_rgba(255,255,255,0.1)]">
+            Start for free today
+          </a>
+          <a href="https://www.trendsta.in/dashboard" className="w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border border-white/20 text-white font-semibold text-lg hover:bg-white/5 transition-colors">
+            Watch the demo
+          </a>
+        </div>
       </div>
-    </div>
-
+    </section>
   );
 }
 
 // --- Main Page ---
 
+function StatsStrip() {
+  const stats = [
+    { value: "10K+", label: "Creators growing with Trendsta" },
+    { value: "95%", label: "Average engagement boost in 30 days" },
+    { value: "2M+", label: "Viral scripts generated" }
+  ];
+
+  return (
+    <section className="w-full bg-[#111111] py-16 border-y border-white/5 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.08] text-center">
+          {stats.map((stat, i) => (
+            <div key={i} className="flex flex-col items-center justify-center py-8 md:py-0 px-4">
+              <span className="text-6xl md:text-7xl font-display italic text-[#ff5900] mb-3 tracking-tight drop-shadow-sm">
+                {stat.value}
+              </span>
+              <span className="text-gray-400 text-sm md:text-base font-medium">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function LandingPage() {
   return (
-    <div className="min-h-screen font-sans bg-[#fafafa] text-gray-900 selection:bg-violet-500/30">
+    <div className="min-h-screen font-sans bg-[#fafafa] text-gray-900 selection:bg-orange-500/30">
       <Navbar />
       <Hero />
-      <TrustStrip />
-      <HoverListFeaturesSection />
-      <TestimonialsSection />
-      <FAQSection /> {/* Added FAQ Section */}
+      <StatsStrip />
+      <InteractiveFeatureTree />
+      <HowItWorksSection />
+      <SuccessStoriesSection />
+      <FAQSection /> {/* Replaced Testimonials with FAQ */}
+      <CTASection />
       <Footer />
     </div>
   );

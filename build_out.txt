@@ -1,0 +1,50 @@
+
+> trendsta@0.1.0 build
+> prisma generate && next build
+
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+
+✔ Generated Prisma Client (v7.5.0) to .\generated\prisma in 419ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\user\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\user\Desktop\Trendsts\trendsta\package-lock.json
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./Desktop/Trendsts/trendsta/app/globals.css
+Error evaluating Node.js code
+CssSyntaxError: C:\Users\user\Desktop\Trendsts\trendsta\app\globals.css:1320:1: Unknown word </style>
+    at Input.error (Desktop/Trendsts/trendsta/node_modules/postcss/lib/input.js:135:16) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:4651:22]
+    at Parser.unknownWord (Desktop/Trendsts/trendsta/node_modules/postcss/lib/parser.js:595:22) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:5827:26]
+    at Parser.other (Desktop/Trendsts/trendsta/node_modules/postcss/lib/parser.js:437:12) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:5689:18]
+    at Parser.parse (Desktop/Trendsts/trendsta/node_modules/postcss/lib/parser.js:472:16) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:5716:26]
+    at parse (Desktop/Trendsts/trendsta/node_modules/postcss/lib/parse.js:11:12) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:5853:16]
+    at new LazyResult (Desktop/Trendsts/trendsta/node_modules/postcss/lib/lazy-result.js:165:16) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:6105:24]
+    at Processor.process (Desktop/Trendsts/trendsta/node_modules/postcss/lib/processor.js:53:14) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\e29ec_718916cb._.js:6572:20]
+    at transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:51) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\[root-of-the-server]__10022046._.js:146:52]
+    at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:29) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\[root-of-the-server]__0efcf8d4._.js:443:37]
+    at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:115:11) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\[root-of-the-server]__0efcf8d4._.js:464:25]
+
+Import trace:
+  Client Component Browser:
+    ./Desktop/Trendsts/trendsta/app/globals.css [Client Component Browser]
+    ./Desktop/Trendsts/trendsta/app/layout.tsx [Server Component]
+
+
+    at transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:51) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\[root-of-the-server]__10022046._.js:146:52])
+    at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:29) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\[root-of-the-server]__0efcf8d4._.js:443:37])
+    at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:115:11) [C:\Users\user\Desktop\Trendsts\trendsta\.next\build\chunks\[root-of-the-server]__0efcf8d4._.js:464:25])
