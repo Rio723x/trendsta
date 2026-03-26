@@ -1,0 +1,275 @@
+﻿@import "tailwindcss";
+@variant dark (&:is(.dark *));
+
+/* --- GLOBAL THEME VARIABLES --- */
+/* Light mode is the default (:root). Dark mode overrides are in .dark */
+
+:root {
+  --blur-strength: 24px;
+
+  /* Colors */
+  --bg-primary: #ffffff;
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e8f0fe 100%);
+
+  /* Glass Surfaces */
+  --glass-surface: rgba(255, 255, 255, 0.95);
+  --glass-surface-hover: rgba(248, 250, 252, 0.98);
+  --glass-border: rgba(203, 213, 225, 0.6);
+  --glass-border-hover: rgba(148, 163, 184, 0.6);
+  --glass-inset-bg: rgba(248, 250, 252, 0.8);
+  --glass-inset-border: rgba(203, 213, 225, 0.8);
+
+  /* Typography */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  /* Accents */
+  --accent-blue: #1e40af;
+  --accent-emerald: #047857;
+  --accent-purple: #6d28d9;
+  --accent-rose: #be123c;
+
+  /* Shadows */
+  --shadow-ambient: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* DARK MODE ÔÇö applied when next-themes adds the `dark` class to <html> */
+.dark {
+  /* Colors */
+  --bg-primary: #050505;
+  --bg-gradient: radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.15), transparent 25%),
+    radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.1), transparent 40%),
+    #000000;
+
+  /* Glass Surfaces */
+  --glass-surface: rgba(255, 255, 255, 0.03);
+  --glass-surface-hover: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.25);
+  --glass-inset-bg: rgba(0, 0, 0, 0.2);
+  --glass-inset-border: rgba(255, 255, 255, 0.05);
+
+  /* Typography */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Accents */
+  --accent-blue: #3b82f6;
+  --accent-emerald: #10b981;
+  --accent-purple: #8b5cf6;
+  --accent-rose: #f43f5e;
+
+  /* Shadows */
+  --shadow-ambient: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 15px rgba(249, 115, 22, 0.2);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+/* --- GLASS UTILITIES (Shared Logic) --- */
+
+.glass-panel,
+.neu-convex,
+.neu-convex-sm,
+.glass-card,
+.dashboard-container,
+.stat-card {
+  background: var(--glass-surface) !important;
+  backdrop-filter: blur(var(--blur-strength)) !important;
+  -webkit-backdrop-filter: blur(var(--blur-strength)) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--shadow-ambient) !important;
+  border-radius: 1.5rem !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover,
+.glass-card:hover {
+  background: var(--glass-surface-hover) !important;
+  border-color: var(--glass-border-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-ambient), var(--shadow-glow) !important;
+}
+
+.glass-inset,
+.neu-pressed {
+  background: var(--glass-inset-bg) !important;
+  border: 1px solid var(--glass-inset-border) !important;
+  color: var(--text-secondary) !important;
+  border-radius: 1rem;
+}
+
+/* Base resets for transparency */
+.glass-base,
+.bg-transparent-safe {
+  background: transparent !important;
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+  background: var(--glass-inset-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-primary) !important;
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent-blue) !important;
+  box-shadow: 0 0 0 1px var(--accent-blue);
+}
+
+/* Native <option> elements are OS-rendered and don't inherit CSS variables.
+   We must set explicit colors so they're visible in dark mode. */
+option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+.dark option {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Buttons */
+.neu-btn-primary,
+button.primary {
+  background: linear-gradient(135deg, var(--accent-blue), #2563eb) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.neu-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* --- TEXT UTILITY OVERRIDES (For compatibility & New System) --- */
+
+/* 1. Legacy Overrides Removed (Allowing Tailwind native colors to work) */
+/* --- TEXT UTILITIES --- */
+/* Use these semantic classes throughout the app instead of hardcoded dark: variants */
+.text-theme-primary {
+  color: var(--text-primary);
+}
+
+.text-theme-secondary {
+  color: var(--text-secondary);
+}
+
+.text-theme-muted {
+  color: var(--text-muted);
+}
+
+/* Recharts */
+.recharts-cartesian-grid line {
+  stroke: var(--glass-border) !important;
+}
+
+.recharts-text {
+  fill: var(--text-secondary) !important;
+}
+
+/* Animations for Landing Page */
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+@keyframes float-slower {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.animate-float-slower {
+  animation: float-slower 6s ease-in-out infinite;
+}
